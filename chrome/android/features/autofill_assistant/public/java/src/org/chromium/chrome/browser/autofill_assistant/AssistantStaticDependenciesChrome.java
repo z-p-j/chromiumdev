@@ -13,14 +13,11 @@ import androidx.annotation.Nullable;
 import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.chrome.browser.profiles.Profile;
-import org.chromium.chrome.browser.signin.services.IdentityServicesProvider;
 import org.chromium.chrome.browser.ui.TabObscuringHandler;
 import org.chromium.chrome.browser.ui.TabObscuringHandlerSupplier;
 import org.chromium.chrome.browser.util.ChromeAccessibilityUtil;
 import org.chromium.components.autofill_assistant.AssistantAccessTokenUtil;
 import org.chromium.components.autofill_assistant.AssistantDependencies;
-import org.chromium.components.autofill_assistant.AssistantEditorFactory;
-import org.chromium.components.autofill_assistant.AssistantFeedbackUtil;
 import org.chromium.components.autofill_assistant.AssistantInfoPageUtil;
 import org.chromium.components.autofill_assistant.AssistantProfileImageUtil;
 import org.chromium.components.autofill_assistant.AssistantSettingsUtil;
@@ -31,9 +28,6 @@ import org.chromium.components.favicon.LargeIconBridge;
 import org.chromium.components.image_fetcher.ImageFetcher;
 import org.chromium.components.image_fetcher.ImageFetcherConfig;
 import org.chromium.components.image_fetcher.ImageFetcherFactory;
-import org.chromium.components.signin.base.CoreAccountInfo;
-import org.chromium.components.signin.identitymanager.ConsentLevel;
-import org.chromium.components.signin.identitymanager.IdentityManager;
 import org.chromium.content_public.browser.BrowserContextHandle;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.ui.util.AccessibilityUtil;
@@ -75,11 +69,6 @@ public class AssistantStaticDependenciesChrome implements AssistantStaticDepende
     @Override
     public AssistantInfoPageUtil createInfoPageUtil() {
         return new AssistantInfoPageUtilChrome();
-    }
-
-    @Override
-    public AssistantFeedbackUtil createFeedbackUtil() {
-        return new AssistantFeedbackUtilChrome();
     }
 
     @Override
@@ -129,25 +118,14 @@ public class AssistantStaticDependenciesChrome implements AssistantStaticDepende
 
     @Nullable
     public String getSignedInAccountEmailOrNull() {
-        IdentityManager identityManager =
-                IdentityServicesProvider.get().getIdentityManager(getProfile());
-        return CoreAccountInfo.getEmailFrom(
-                identityManager.getPrimaryAccountInfo(ConsentLevel.SYNC));
+        return null;
     }
 
     @Override
     @Nullable
     public AssistantProfileImageUtil createProfileImageUtilOrNull(
             Context context, @DimenRes int imageSizeRedId) {
-        String signedInAccountEmail = getSignedInAccountEmailOrNull();
-        if (signedInAccountEmail == null) return null;
-
-        return new AssistantProfileImageUtilChrome(context, signedInAccountEmail, imageSizeRedId);
-    }
-
-    @Override
-    public AssistantEditorFactory createEditorFactory() {
-        return new AssistantEditorFactoryChrome();
+        return null;
     }
 
     @NativeMethods

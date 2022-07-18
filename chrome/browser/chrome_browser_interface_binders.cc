@@ -117,10 +117,6 @@
 #include "chrome/browser/android/contextualsearch/contextual_search_observer.h"
 #include "chrome/browser/android/dom_distiller/distiller_ui_handle_android.h"
 #include "chrome/browser/offline_pages/android/offline_page_auto_fetcher.h"
-#include "chrome/browser/ui/webui/explore_sites_internals/explore_sites_internals.mojom.h"
-#include "chrome/browser/ui/webui/explore_sites_internals/explore_sites_internals_ui.h"
-#include "chrome/browser/ui/webui/feed_internals/feed_internals.mojom.h"
-#include "chrome/browser/ui/webui/feed_internals/feed_internals_ui.h"
 #include "chrome/common/offline_page_auto_fetcher.mojom.h"
 #include "components/contextual_search/content/browser/contextual_search_js_api_service_impl.h"
 #include "components/contextual_search/content/common/mojom/contextual_search_js_api_service.mojom.h"
@@ -146,8 +142,6 @@
 #include "chrome/browser/ui/webui/app_service_internals/app_service_internals_ui.h"
 #include "chrome/browser/ui/webui/downloads/downloads.mojom.h"
 #include "chrome/browser/ui/webui/downloads/downloads_ui.h"
-#include "chrome/browser/ui/webui/feed/feed.mojom.h"
-#include "chrome/browser/ui/webui/feed/feed_ui.h"
 #include "chrome/browser/ui/webui/image_editor/image_editor.mojom.h"
 #include "chrome/browser/ui/webui/image_editor/image_editor_untrusted_ui.h"
 #include "chrome/browser/ui/webui/realbox/realbox.mojom.h"
@@ -796,9 +790,7 @@ void PopulateChromeWebUIFrameBinders(
 #endif
 
 #if BUILDFLAG(IS_ANDROID)
-  RegisterWebUIControllerInterfaceBinder<
-      explore_sites_internals::mojom::PageHandler,
-      explore_sites::ExploreSitesInternalsUI>(map);
+  // do nothing
 #else
   RegisterWebUIControllerInterfaceBinder<downloads::mojom::PageHandlerFactory,
                                          DownloadsUI>(map);
@@ -1127,16 +1119,6 @@ void PopulateChromeWebUIFrameBinders(
   RegisterWebUIControllerInterfaceBinder<discards::mojom::SiteDataProvider,
                                          DiscardsUI>(map);
 #endif
-
-#if BUILDFLAG(ENABLE_FEED_V2) && BUILDFLAG(IS_ANDROID)
-  RegisterWebUIControllerInterfaceBinder<feed_internals::mojom::PageHandler,
-                                         FeedInternalsUI>(map);
-#endif
-
-#if !BUILDFLAG(IS_ANDROID) && BUILDFLAG(ENABLE_FEED_V2)
-  RegisterWebUIControllerInterfaceBinder<
-      feed::mojom::FeedSidePanelHandlerFactory, feed::FeedUI>(map);
-#endif  // !BUILDFLAG(IS_ANDROID)
 
 #if BUILDFLAG(FULL_SAFE_BROWSING)
   RegisterWebUIControllerInterfaceBinder<::mojom::ResetPasswordHandler,

@@ -20,7 +20,6 @@
 #include "chrome/browser/buildflags.h"
 #include "chrome/browser/captive_portal/captive_portal_service_factory.h"
 #include "chrome/browser/chrome_content_browser_client.h"
-#include "chrome/browser/commerce/shopping_list/shopping_data_provider.h"
 #include "chrome/browser/complex_tasks/task_tab_helper.h"
 #include "chrome/browser/content_settings/host_content_settings_map_factory.h"
 #include "chrome/browser/content_settings/mixed_content_settings_tab_helper.h"
@@ -31,7 +30,6 @@
 #include "chrome/browser/dips/dips_service.h"
 #include "chrome/browser/external_protocol/external_protocol_observer.h"
 #include "chrome/browser/favicon/favicon_utils.h"
-#include "chrome/browser/feed/web_feed_tab_helper.h"
 #include "chrome/browser/file_system_access/file_system_access_permission_request_manager.h"
 #include "chrome/browser/file_system_access/file_system_access_tab_helper.h"
 #include "chrome/browser/history/history_tab_helper.h"
@@ -97,7 +95,6 @@
 #include "chrome/browser/ui/tab_ui_helper.h"
 #include "chrome/browser/ui/thumbnails/thumbnail_tab_helper.h"
 #include "chrome/browser/user_notes/user_notes_tab_helper.h"
-#include "chrome/browser/vr/vr_tab_helper.h"
 #include "chrome/common/buildflags.h"
 #include "chrome/common/chrome_features.h"
 #include "chrome/common/chrome_switches.h"
@@ -149,7 +146,6 @@
 
 #if BUILDFLAG(IS_ANDROID)
 #include "chrome/browser/android/oom_intervention/oom_intervention_tab_helper.h"
-#include "chrome/browser/banners/android/chrome_app_banner_manager_android.h"
 #include "chrome/browser/content_settings/request_desktop_site_web_contents_observer_android.h"
 #include "chrome/browser/flags/android/chrome_feature_list.h"
 #include "chrome/browser/plugins/plugin_observer_android.h"
@@ -409,11 +405,6 @@ void TabHelpers::AttachTabHelpers(WebContents* web_contents) {
   ReputationWebContentsObserver::CreateForWebContents(web_contents);
   SearchEngineTabHelper::CreateForWebContents(web_contents);
   SecurityStateTabHelper::CreateForWebContents(web_contents);
-  if (base::FeatureList::IsEnabled(commerce::kShoppingList)) {
-    shopping_list::ShoppingDataProvider::CreateForWebContents(
-        web_contents,
-        OptimizationGuideKeyedServiceFactory::GetForProfile(profile));
-  }
 #if BUILDFLAG(IS_ANDROID)
   if (base::FeatureList::IsEnabled(commerce::kShoppingPDPMetrics)) {
     commerce::metrics::CommerceMetricsTabHelper::CreateForWebContents(
@@ -440,7 +431,6 @@ void TabHelpers::AttachTabHelpers(WebContents* web_contents) {
   TabUIHelper::CreateForWebContents(web_contents);
   tasks::TaskTabHelper::CreateForWebContents(web_contents);
   ukm::InitializeSourceUrlRecorderForWebContents(web_contents);
-  vr::VrTabHelper::CreateForWebContents(web_contents);
 
   // NO! Do not just add your tab helper here. This is a large alphabetized
   // block; please insert your tab helper above in alphabetical order.
@@ -448,11 +438,6 @@ void TabHelpers::AttachTabHelpers(WebContents* web_contents) {
   // --- Section 2: Platform-specific tab helpers ---
 
 #if BUILDFLAG(IS_ANDROID)
-  {
-    // Remove after fixing https://crbug/905919
-    TRACE_EVENT0("browser", "AppBannerManagerAndroid::CreateForWebContents");
-    webapps::ChromeAppBannerManagerAndroid::CreateForWebContents(web_contents);
-  }
   ContextMenuHelper::CreateForWebContents(web_contents);
   javascript_dialogs::TabModalDialogManager::CreateForWebContents(
       web_contents,
@@ -615,11 +600,6 @@ void TabHelpers::AttachTabHelpers(WebContents* web_contents) {
   if (IsSideSearchEnabled(profile))
     SideSearchTabContentsHelper::CreateForWebContents(web_contents);
 #endif  // BUILDFLAG(ENABLE_SIDE_SEARCH)
-
-#if BUILDFLAG(ENABLE_FEED_V2)
-  if (base::FeatureList::IsEnabled(feed::kWebUiFeed))
-    feed::WebFeedTabHelper::CreateForWebContents(web_contents);
-#endif  // BUILDFLAG(ENABLE_FEED_V2)
 
   // --- Section 4: The warning ---
 

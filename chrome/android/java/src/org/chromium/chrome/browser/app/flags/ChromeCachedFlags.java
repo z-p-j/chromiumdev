@@ -8,10 +8,6 @@ import android.text.TextUtils;
 
 import org.chromium.build.BuildConfig;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
-import org.chromium.chrome.browser.customtabs.CustomTabActivity;
-import org.chromium.chrome.browser.customtabs.CustomTabIntentDataProvider;
-import org.chromium.chrome.browser.feed.FeedPlaceholderLayout;
-import org.chromium.chrome.browser.firstrun.FirstRunUtils;
 import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.CachedFieldTrialParameter;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
@@ -22,7 +18,6 @@ import org.chromium.chrome.browser.paint_preview.StartupPaintPreviewHelper;
 import org.chromium.chrome.browser.paint_preview.services.PaintPreviewTabService;
 import org.chromium.chrome.browser.tasks.ConditionalTabStripUtils;
 import org.chromium.chrome.browser.tasks.ReturnToChromeUtil;
-import org.chromium.chrome.browser.tasks.tab_management.TabUiFeatureUtilities;
 import org.chromium.chrome.browser.theme.ThemeUtils;
 import org.chromium.chrome.features.start_surface.StartSurfaceConfiguration;
 
@@ -42,13 +37,7 @@ public class ChromeCachedFlags {
      * {@link #cacheMinimalBrowserFlags()}.
      */
     private static final List<CachedFieldTrialParameter> MINIMAL_BROWSER_FIELD_TRIALS =
-            new ArrayList<CachedFieldTrialParameter>() {
-                {
-                    // This is used by CustomTabsConnection implementation, which does not
-                    // necessarily start chrome.
-                    add(CustomTabActivity.EXPERIMENTS_FOR_AGSA_PARAMS);
-                }
-            };
+            new ArrayList<CachedFieldTrialParameter>();
 
     /**
      * @return The {@link ChromeCachedFlags} singleton.
@@ -64,14 +53,12 @@ public class ChromeCachedFlags {
      */
     public void cacheNativeFlags() {
         if (mIsFinishedCachingNativeFlags) return;
-        FirstRunUtils.cacheFirstRunPrefs();
 
         // Workaround for crbug.com/1223545: Do not use Arrays.asList().
         List<String> featuresToCache = new ArrayList<String>() {
             {
                 add(ChromeFeatureList.ANONYMOUS_UPDATE_CHECKS);
                 add(ChromeFeatureList.APP_MENU_MOBILE_SITE_OPTION);
-                add(ChromeFeatureList.BACK_GESTURE_REFACTOR);
                 add(ChromeFeatureList.CCT_INCOGNITO);
                 add(ChromeFeatureList.CCT_INCOGNITO_AVAILABLE_TO_THIRD_PARTY);
                 add(ChromeFeatureList.CCT_REMOVE_REMOTE_VIEW_IDS);
@@ -92,7 +79,7 @@ public class ChromeCachedFlags {
                 add(ChromeFeatureList.ELIDE_TAB_PRELOAD_AT_STARTUP);
                 add(ChromeFeatureList.FEED_LOADING_PLACEHOLDER);
                 add(ChromeFeatureList
-                                .GIVE_JAVA_UI_THREAD_DEFAULT_TASK_TRAITS_USER_BLOCKING_PRIORITY);
+                        .GIVE_JAVA_UI_THREAD_DEFAULT_TASK_TRAITS_USER_BLOCKING_PRIORITY);
                 add(ChromeFeatureList.GRID_TAB_SWITCHER_FOR_TABLETS);
                 add(ChromeFeatureList.IMMERSIVE_UI_MODE);
                 add(ChromeFeatureList.INSTANT_START);
@@ -130,13 +117,9 @@ public class ChromeCachedFlags {
                         add(ConditionalTabStripUtils.CONDITIONAL_TAB_STRIP_INFOBAR_LIMIT);
                         add(ConditionalTabStripUtils.CONDITIONAL_TAB_STRIP_INFOBAR_PERIOD);
                         add(ConditionalTabStripUtils.CONDITIONAL_TAB_STRIP_SESSION_TIME_MS);
-                        add(FeedPlaceholderLayout.ENABLE_INSTANT_START_ANIMATION);
                         add(OptimizationGuidePushNotificationManager.MAX_CACHE_SIZE);
                         add(PageAnnotationsServiceConfig.PAGE_ANNOTATIONS_BASE_URL);
                         add(ReturnToChromeUtil.TAB_SWITCHER_ON_RETURN_MS);
-                        add(CustomTabIntentDataProvider.THIRD_PARTIES_DEFAULT_POLICY);
-                        add(CustomTabIntentDataProvider.DENYLIST_ENTRIES);
-                        add(CustomTabIntentDataProvider.ALLOWLIST_ENTRIES);
                         add(StartSurfaceConfiguration.CHECK_SYNC_BEFORE_SHOW_START_AT_STARTUP);
                         add(StartSurfaceConfiguration.FINALE_ANIMATION_ENABLED);
                         add(StartSurfaceConfiguration.HIDE_START_WHEN_LAST_VISITED_TAB_IS_SRP);
@@ -150,7 +133,7 @@ public class ChromeCachedFlags {
                         add(StartSurfaceConfiguration.SHOW_TABS_IN_MRU_ORDER);
                         add(StartSurfaceConfiguration.SIGNIN_PROMO_NTP_COUNT_LIMIT);
                         add(StartSurfaceConfiguration
-                                        .SIGNIN_PROMO_NTP_SINCE_FIRST_TIME_SHOWN_LIMIT_HOURS);
+                                .SIGNIN_PROMO_NTP_SINCE_FIRST_TIME_SHOWN_LIMIT_HOURS);
                         add(StartSurfaceConfiguration.SIGNIN_PROMO_NTP_RESET_AFTER_HOURS);
                         add(StartSurfaceConfiguration.SPARE_RENDERER_DELAY_MS);
                         add(StartSurfaceConfiguration.START_SURFACE_EXCLUDE_MV_TILES);
@@ -166,20 +149,6 @@ public class ChromeCachedFlags {
                         add(StartupPaintPreviewHelper.ACCESSIBILITY_SUPPORT_PARAM);
                         add(PaintPreviewTabService.ALLOW_SRP);
                         add(TabContentManager.ALLOW_TO_REFETCH_TAB_THUMBNAIL_VARIATION);
-                        add(TabUiFeatureUtilities.ENABLE_LAUNCH_BUG_FIX);
-                        add(TabUiFeatureUtilities.ENABLE_LAUNCH_POLISH);
-                        add(TabUiFeatureUtilities.ENABLE_SEARCH_CHIP);
-                        add(TabUiFeatureUtilities.ENABLE_SEARCH_CHIP_ADAPTIVE);
-                        add(TabUiFeatureUtilities.ENABLE_TAB_GROUP_AUTO_CREATION);
-                        add(TabUiFeatureUtilities.SHOW_OPEN_IN_TAB_GROUP_MENU_ITEM_FIRST);
-                        add(TabUiFeatureUtilities.ENABLE_TAB_GROUP_SHARING);
-                        add(TabUiFeatureUtilities.ZOOMING_MIN_MEMORY);
-                        add(TabUiFeatureUtilities.ZOOMING_MIN_SDK);
-                        add(TabUiFeatureUtilities.SKIP_SLOW_ZOOMING);
-                        add(TabUiFeatureUtilities.TAB_GRID_LAYOUT_ANDROID_NEW_TAB_TILE);
-                        add(TabUiFeatureUtilities.THUMBNAIL_ASPECT_RATIO);
-                        add(TabUiFeatureUtilities.GRID_TAB_SWITCHER_FOR_TABLETS_POLISH);
-                        add(TabUiFeatureUtilities.TAB_STRIP_TAB_WIDTH);
                         add(ThemeUtils.ENABLE_FULL_DYNAMIC_COLORS);
                     }
                 };
@@ -204,7 +173,7 @@ public class ChromeCachedFlags {
             omissions.add(trial.getFeatureName() + ":" + trial.getParameterName());
         }
         assert omissions.isEmpty()
-            : "The following trials are not correctly cached: "
+                : "The following trials are not correctly cached: "
                 + TextUtils.join(", ", omissions);
     }
 

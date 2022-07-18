@@ -5,7 +5,6 @@
 import("//build/config/android/config.gni")
 import("//build/config/android/rules.gni")
 import("//build/config/locales.gni")
-import("//device/vr/buildflags/buildflags.gni")
 import("//tools/grit/grit_rule.gni")
 
 android_aidl("common_aidl") {
@@ -325,9 +324,6 @@ android_library("content_full_java") {
     "java/src/org/chromium/content_public/browser/BrowserContextHandle.java",
     "java/src/org/chromium/content_public/browser/ChildProcessLauncherHelper.java",
     "java/src/org/chromium/content_public/browser/ClientDataJson.java",
-    "java/src/org/chromium/content_public/browser/ContactsPicker.java",
-    "java/src/org/chromium/content_public/browser/ContactsPickerDelegate.java",
-    "java/src/org/chromium/content_public/browser/ContactsPickerListener.java",
     "java/src/org/chromium/content_public/browser/ContentFeatureList.java",
     "java/src/org/chromium/content_public/browser/ContentViewStatics.java",
     "java/src/org/chromium/content_public/browser/GestureListenerManager.java",

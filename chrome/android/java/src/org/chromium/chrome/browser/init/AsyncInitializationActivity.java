@@ -37,12 +37,13 @@ import org.chromium.chrome.browser.ChromeBaseAppCompatActivity;
 import org.chromium.chrome.browser.IntentHandler;
 import org.chromium.chrome.browser.LaunchIntentDispatcher;
 import org.chromium.chrome.browser.WarmupManager;
-import org.chromium.chrome.browser.firstrun.FirstRunFlowSequencer;
+import org.chromium.chrome.browser.device.DeviceClassManager;
+import org.chromium.chrome.browser.flags.CachedFeatureFlags;
+import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.lifecycle.ActivityLifecycleDispatcher;
 import org.chromium.chrome.browser.multiwindow.MultiWindowModeStateDispatcher;
 import org.chromium.chrome.browser.multiwindow.MultiWindowModeStateDispatcherImpl;
 import org.chromium.chrome.browser.profiles.Profile;
-import org.chromium.chrome.browser.tasks.tab_management.TabUiFeatureUtilities;
 import org.chromium.chrome.features.start_surface.StartSurfaceConfiguration;
 import org.chromium.ui.base.ActivityIntentRequestTrackerDelegate;
 import org.chromium.ui.base.ActivityWindowAndroid;
@@ -350,13 +351,6 @@ public abstract class AsyncInitializationActivity
             return false;
         }
 
-        if (requiresFirstRunToBeCompleted(intent)
-                && FirstRunFlowSequencer.launch(this, intent, false /* requiresBroadcast */,
-                        shouldPreferLightweightFre(intent))) {
-            abortLaunch(LaunchIntentDispatcher.Action.FINISH_ACTIVITY);
-            return false;
-        }
-
         // Some Samsung devices load fonts from disk, crbug.com/691706.
         try (StrictModeContext ignored = StrictModeContext.allowDiskReads()) {
             super.onCreate(transformSavedInstanceStateForOnCreate(savedInstanceState));
@@ -491,15 +485,6 @@ public abstract class AsyncInitializationActivity
     public void onStart() {
         super.onStart();
         mNativeInitializationController.onStart();
-
-        // Since this activity is being started, the FRE should have been handled somehow already.
-        Intent intent = getIntent();
-        if (FirstRunFlowSequencer.checkIfFirstRunIsNecessary(
-                    shouldPreferLightweightFre(intent), intent)
-                && requiresFirstRunToBeCompleted(intent)) {
-            throw new IllegalStateException("The app has not completed the FRE yet "
-                    + getClass().getName() + " is trying to start.");
-        }
     }
 
     @CallSuper
@@ -713,7 +698,9 @@ public abstract class AsyncInitializationActivity
      * Returns whether the instant start is enabled.
      */
     protected boolean isInstantStartEnabled() {
-        return TabUiFeatureUtilities.supportInstantStart(isTablet(), this);
+        return !DeviceClassManager.enableAccessibilityLayout(this)
+                && CachedFeatureFlags.isEnabled(ChromeFeatureList.INSTANT_START) && !isTablet()
+                && !SysUtils.isLowEndDevice();
     }
 
     /**

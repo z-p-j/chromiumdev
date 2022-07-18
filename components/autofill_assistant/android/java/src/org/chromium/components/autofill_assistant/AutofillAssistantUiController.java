@@ -50,7 +50,6 @@ public class AutofillAssistantUiController {
     private WebContents mWebContents;
 
     private final AssistantSnackbarFactory mSnackbarFactory;
-    private final AssistantFeedbackUtil mFeedbackUtil;
     @Nullable
     private AssistantSnackbar mSnackbar;
 
@@ -74,7 +73,6 @@ public class AutofillAssistantUiController {
 
         mNativeUiController = nativeUiController;
         mSnackbarFactory = dependencies.getSnackbarFactory();
-        mFeedbackUtil = dependencies.createFeedbackUtil();
 
         // NOTE: Only create one instance of this unless you know what you are doing.
         @Nullable
@@ -89,7 +87,7 @@ public class AutofillAssistantUiController {
                 dependencies.createInfoPageUtil(),
                 dependencies.createProfileImageUtilOrNull(
                         mActivity, R.dimen.autofill_assistant_profile_size),
-                dependencies.createImageFetcher(), dependencies.createEditorFactory(),
+                dependencies.createImageFetcher(),
                 dependencies.getWindowAndroid(), dependencies.createSettingsUtil());
 
         mTabChangeObserverDestroyer =
@@ -267,7 +265,7 @@ public class AutofillAssistantUiController {
      */
     @CalledByNative
     private void showFeedback(String debugContext, /* @ScreenshotMode */ int screenshotMode) {
-        mFeedbackUtil.showFeedback(mActivity, mWebContents, screenshotMode, debugContext);
+
     }
 
     @CalledByNative

@@ -27,7 +27,6 @@
 #include "components/autofill/core/common/autofill_features.h"
 #include "components/autofill/core/common/autofill_payments_features.h"
 #include "components/browser_sync/browser_sync_switches.h"
-#include "components/browser_ui/photo_picker/android/features.h"
 #include "components/commerce/core/commerce_feature_list.h"
 #include "components/content_creation/notes/core/note_features.h"
 #include "components/content_creation/reactions/core/reactions_features.h"
@@ -50,7 +49,6 @@
 #include "components/permissions/features.h"
 #include "components/policy/core/common/features.h"
 #include "components/privacy_sandbox/privacy_sandbox_features.h"
-#include "components/query_tiles/switches.h"
 #include "components/reading_list/features/reading_list_switches.h"
 #include "components/safe_browsing/core/common/features.h"
 #include "components/send_tab_to_self/features.h"
@@ -359,9 +357,6 @@ const base::Feature* const kFeaturesExposedToJava[] = {
     &password_manager::features::kPasswordEditDialogWithDetails,
     &performance_hints::features::kContextMenuPerformanceInfo,
     &privacy_sandbox::kPrivacySandboxSettings3,
-    &query_tiles::features::kQueryTiles,
-    &query_tiles::features::kQueryTilesInNTP,
-    &query_tiles::features::kQueryTilesSegmentation,
     &reading_list::switches::kReadLater,
     &send_tab_to_self::kSendTabToSelfSigninPromo,
     &send_tab_to_self::kSendTabToSelfV2,

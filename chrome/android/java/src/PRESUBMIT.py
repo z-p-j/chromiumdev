@@ -36,8 +36,6 @@ SPLIT_COMPAT_UTILS_IMPL_NAME_RE = re.compile(
 COMMENT_RE = re.compile(r'^\s*(//|/\*|\*)')
 
 BROWSER_ROOT = 'chrome/android/java/src/org/chromium/chrome/browser/'
-SIGNIN_UI_BROWSER_ROOT = 'chrome/browser/ui/android/signin'
-'/java/src/org/chromium/chrome/browser/ui/signin'
 
 
 def CheckChangeOnUpload(input_api, output_api):
@@ -93,9 +91,6 @@ def _CheckAlertDialogBuilder(input_api, output_api):
       BROWSER_ROOT + 'password_manager/AccountChooserDialog.java',
       BROWSER_ROOT + 'password_manager/AutoSigninFirstRunDialog.java',
       BROWSER_ROOT + r'settings[\\\/].*',
-      SIGNIN_UI_BROWSER_ROOT + 'ConfirmManagedSyncDataDialog.java',
-      SIGNIN_UI_BROWSER_ROOT + 'ConfirmSyncDataStateMachineDelegate.java',
-      SIGNIN_UI_BROWSER_ROOT + 'SignOutDialogFragment.java',
       BROWSER_ROOT + 'site_settings/AddExceptionPreference.java',
       BROWSER_ROOT + 'site_settings/ChosenObjectSettings.java',
       BROWSER_ROOT + 'site_settings/ManageSpaceActivity.java',
@@ -159,7 +154,6 @@ def _CheckCompatibleAlertDialogBuilder(input_api, output_api):
       BROWSER_ROOT + 'externalnav/ExternalNavigationDelegateImpl.java',
       BROWSER_ROOT + 'payments/AndroidPaymentApp.java',
       BROWSER_ROOT + 'permissions/AndroidPermissionRequester.java',
-      BROWSER_ROOT + 'share/ShareDelegateImpl.java',
       BROWSER_ROOT + 'util/AccessibilityUtil.java',
       BROWSER_ROOT + 'webapps/AddToHomescreenDialog.java',
       BROWSER_ROOT + 'webapps/WebappOfflineDialog.java',

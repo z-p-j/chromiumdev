@@ -142,17 +142,13 @@
 
 #if BUILDFLAG(IS_ANDROID)
 #include "chrome/browser/android/customtabs/origin_verifier.h"
-#include "chrome/browser/android/explore_sites/explore_sites_service_factory.h"
 #include "chrome/browser/android/oom_intervention/oom_intervention_decider.h"
-#include "chrome/browser/android/webapps/webapp_registry.h"
-#include "chrome/browser/feed/feed_service_factory.h"
 #include "chrome/browser/offline_pages/offline_page_model_factory.h"
 #include "chrome/browser/profiles/profile_android.h"
 #include "components/cdm/browser/media_drm_storage_impl.h"  // nogncheck crbug.com/1125897
 #include "components/feed/buildflags.h"
 #include "components/feed/core/v2/public/feed_service.h"
 #include "components/feed/feed_feature_list.h"
-#include "components/installedapp/android/jni_headers/PackageHash_jni.h"
 #include "components/offline_pages/core/offline_page_feature.h"
 #include "components/offline_pages/core/offline_page_model.h"
 #endif  // BUILDFLAG(IS_ANDROID)
@@ -247,12 +243,7 @@ bool DoesOriginMatchEmbedderMask(uint64_t origin_type_mask,
 
 ChromeBrowsingDataRemoverDelegate::ChromeBrowsingDataRemoverDelegate(
     BrowserContext* browser_context)
-    : profile_(Profile::FromBrowserContext(browser_context))
-#if BUILDFLAG(IS_ANDROID)
-      ,
-      webapp_registry_(std::make_unique<WebappRegistry>())
-#endif
-      ,
+    : profile_(Profile::FromBrowserContext(browser_context)),
       credential_store_(MakeCredentialStore()) {
   domain_reliability_clearer_ = base::BindRepeating(
       [](BrowserContext* browser_context,
@@ -509,9 +500,6 @@ void ChromeBrowsingDataRemoverDelegate::RemoveEmbedderData(
         CreateTaskCompletionClosure(TracingDataType::kWebrtcLogs));
 
 #if BUILDFLAG(IS_ANDROID)
-    // Clear the history information (last launch time and origin URL) of any
-    // registered webapps.
-    webapp_registry_->ClearWebappHistoryForUrls(filter);
 
     // The OriginVerifier caches origins for Trusted Web Activities that have
     // been verified and stores them in Android Preferences.
@@ -570,17 +558,6 @@ void ChromeBrowsingDataRemoverDelegate::RemoveEmbedderData(
     }
 
     device_event_log::Clear(delete_begin_, delete_end_);
-
-#if BUILDFLAG(IS_ANDROID)
-    explore_sites::ExploreSitesService* explore_sites_service =
-        explore_sites::ExploreSitesServiceFactory::GetForBrowserContext(
-            profile_);
-    if (explore_sites_service) {
-      explore_sites_service->ClearActivities(
-          delete_begin_, delete_end_,
-          CreateTaskCompletionClosure(TracingDataType::kExploreSites));
-    }
-#endif
 
     CreateCrashUploadList()->Clear(delete_begin_, delete_end_);
 
@@ -645,11 +622,6 @@ void ChromeBrowsingDataRemoverDelegate::RemoveEmbedderData(
 
       MediaDeviceIDSalt::Reset(profile_->GetPrefs());
 
-#if BUILDFLAG(IS_ANDROID)
-      Java_PackageHash_onCookiesDeleted(
-          base::android::AttachCurrentThread(),
-          ProfileAndroid::FromProfile(profile_)->GetJavaObject());
-#endif
     }
 
     if (nullable_filter.is_null() ||
@@ -956,15 +928,6 @@ void ChromeBrowsingDataRemoverDelegate::RemoveEmbedderData(
             profile_));
 
 #if BUILDFLAG(IS_ANDROID)
-#if BUILDFLAG(ENABLE_FEED_V2)
-    // Don't bridge through if the service isn't present, which means we're
-    // probably running in a native unit test.
-    feed::FeedService* service =
-        feed::FeedServiceFactory::GetForBrowserContext(profile_);
-    if (service) {
-      service->ClearCachedData();
-    }
-#endif  // BUILDFLAG(ENABLE_FEED_V2)
 
 #endif  // BUILDFLAG(IS_ANDROID)
 
@@ -1165,14 +1128,6 @@ void ChromeBrowsingDataRemoverDelegate::RemoveEmbedderData(
         CreateTaskCompletionClosureForMojo(
             TracingDataType::kNetworkErrorLogging));
   }
-
-//////////////////////////////////////////////////////////////////////////////
-// DATA_TYPE_WEB_APP_DATA
-#if BUILDFLAG(IS_ANDROID)
-  // Clear all data associated with registered webapps.
-  if (remove_mask & constants::DATA_TYPE_WEB_APP_DATA)
-    webapp_registry_->UnregisterWebappsForUrls(filter);
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // Remove web app history.
@@ -1411,13 +1366,6 @@ void ChromeBrowsingDataRemoverDelegate::RecordUnfinishedSubTasks() {
         "History.ClearBrowsingData.Duration.SlowTasks180sChrome", task);
   }
 }
-
-#if BUILDFLAG(IS_ANDROID)
-void ChromeBrowsingDataRemoverDelegate::OverrideWebappRegistryForTesting(
-    std::unique_ptr<WebappRegistry> webapp_registry) {
-  webapp_registry_ = std::move(webapp_registry);
-}
-#endif
 
 void ChromeBrowsingDataRemoverDelegate::
     OverrideDomainReliabilityClearerForTesting(

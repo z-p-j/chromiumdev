@@ -14,9 +14,7 @@
 #include "content/public/browser/web_ui_data_source.h"
 
 #if BUILDFLAG(IS_ANDROID)
-#include "chrome/browser/ui/webui/internals/lens/lens_internals_ui_message_handler.h"
 #include "chrome/browser/ui/webui/internals/notifications/notifications_internals_ui_message_handler.h"
-#include "chrome/browser/ui/webui/internals/query_tiles/query_tiles_internals_ui_message_handler.h"
 #else
 #include "chrome/browser/ui/webui/internals/user_education/user_education_internals_page_handler_impl.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
@@ -66,8 +64,6 @@ InternalsUI::InternalsUI(content::WebUI* web_ui)
   // Add your sub-URL internals WebUI here.
   // Keep this set of sub-URLs in sync with |kChromeInternalsPathURLs|.
 #if BUILDFLAG(IS_ANDROID)
-  // chrome://internals/lens
-  AddLensInternals(web_ui);
   // chrome://internals/notifications
   source_->AddResourcePath(
       "notifications",
@@ -75,9 +71,6 @@ InternalsUI::InternalsUI(content::WebUI* web_ui)
   web_ui->AddMessageHandler(
       std::make_unique<NotificationsInternalsUIMessageHandler>(profile_));
 
-  // chrome://internals/query-tiles
-  if (!profile_->IsOffTheRecord())
-    AddQueryTilesInternals(web_ui);
 #else
   source_->AddResourcePath("user-education",
                            IDR_USER_EDUCATION_INTERNALS_INDEX_HTML);
@@ -100,22 +93,7 @@ InternalsUI::InternalsUI(content::WebUI* web_ui)
 InternalsUI::~InternalsUI() = default;
 
 #if BUILDFLAG(IS_ANDROID)
-void InternalsUI::AddLensInternals(content::WebUI* web_ui) {
-  source_->AddResourcePath("lens", IDR_LENS_INTERNALS_LENS_INTERNALS_HTML);
 
-  web_ui->AddMessageHandler(
-      std::make_unique<LensInternalsUIMessageHandler>(profile_));
-}
-
-void InternalsUI::AddQueryTilesInternals(content::WebUI* web_ui) {
-  source_->AddResourcePath("query_tiles_internals.js",
-                           IDR_QUERY_TILES_INTERNALS_JS);
-  source_->AddResourcePath("query_tiles_internals_browser_proxy.js",
-                           IDR_QUERY_TILES_INTERNALS_BROWSER_PROXY_JS);
-  source_->AddResourcePath("query-tiles", IDR_QUERY_TILES_INTERNALS_HTML);
-  web_ui->AddMessageHandler(
-      std::make_unique<QueryTilesInternalsUIMessageHandler>(profile_));
-}
 #else   // BUILDFLAG(IS_ANDROID)
 void InternalsUI::BindInterface(
     mojo::PendingReceiver<

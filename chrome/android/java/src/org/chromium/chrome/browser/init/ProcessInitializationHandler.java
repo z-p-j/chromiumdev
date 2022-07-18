@@ -6,7 +6,6 @@ package org.chromium.chrome.browser.init;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.os.SystemClock;
 import android.text.format.DateUtils;
@@ -28,22 +27,13 @@ import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.task.AsyncTask;
 import org.chromium.base.task.PostTask;
 import org.chromium.base.task.TaskTraits;
-import org.chromium.chrome.R;
 import org.chromium.chrome.browser.AppHooks;
 import org.chromium.chrome.browser.ChromeActivitySessionTracker;
-import org.chromium.chrome.browser.ChromeApplicationImpl;
-import org.chromium.chrome.browser.ChromeBackupAgentImpl;
 import org.chromium.chrome.browser.DefaultBrowserInfo;
 import org.chromium.chrome.browser.DeferredStartupHandler;
 import org.chromium.chrome.browser.DevToolsServer;
 import org.chromium.chrome.browser.app.bluetooth.BluetoothNotificationService;
-import org.chromium.chrome.browser.app.feature_guide.notifications.FeatureNotificationGuideDelegate;
-import org.chromium.chrome.browser.app.video_tutorials.VideoTutorialShareHelper;
-import org.chromium.chrome.browser.autofill_assistant.AutofillAssistantHistoryDeletionObserver;
 import org.chromium.chrome.browser.bluetooth.BluetoothNotificationManager;
-import org.chromium.chrome.browser.bookmarkswidget.BookmarkWidgetProvider;
-import org.chromium.chrome.browser.contacts_picker.ChromePickerAdapter;
-import org.chromium.chrome.browser.content_capture.ContentCaptureHistoryDeletionObserver;
 import org.chromium.chrome.browser.crash.CrashUploadCountStore;
 import org.chromium.chrome.browser.crash.LogcatExtractionRunnable;
 import org.chromium.chrome.browser.crash.MinidumpUploadServiceImpl;
@@ -51,53 +41,23 @@ import org.chromium.chrome.browser.download.DownloadController;
 import org.chromium.chrome.browser.download.DownloadManagerService;
 import org.chromium.chrome.browser.download.OfflineContentAvailabilityStatusProvider;
 import org.chromium.chrome.browser.enterprise.util.EnterpriseInfo;
-import org.chromium.chrome.browser.feature_guide.notifications.FeatureNotificationGuideService;
-import org.chromium.chrome.browser.feature_guide.notifications.FeatureNotificationGuideServiceFactory;
-import org.chromium.chrome.browser.firstrun.TosDialogBehaviorSharedPrefInvalidator;
 import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
-import org.chromium.chrome.browser.history.HistoryDeletionBridge;
-import org.chromium.chrome.browser.homepage.HomepageManager;
 import org.chromium.chrome.browser.incognito.IncognitoTabLauncher;
-import org.chromium.chrome.browser.language.GlobalAppLocaleController;
 import org.chromium.chrome.browser.locale.LocaleManager;
 import org.chromium.chrome.browser.media.MediaCaptureNotificationServiceImpl;
 import org.chromium.chrome.browser.media.MediaViewerUtils;
-import org.chromium.chrome.browser.metrics.LaunchMetrics;
-import org.chromium.chrome.browser.metrics.PackageMetrics;
-import org.chromium.chrome.browser.metrics.WebApkUninstallUmaTracker;
 import org.chromium.chrome.browser.notifications.channels.ChannelsUpdater;
 import org.chromium.chrome.browser.offlinepages.measurements.OfflineMeasurementsBackgroundTask;
-import org.chromium.chrome.browser.omnibox.voice.AssistantVoiceSearchService;
 import org.chromium.chrome.browser.optimization_guide.OptimizationGuideBridgeFactory;
-import org.chromium.chrome.browser.partnercustomizations.PartnerBrowserCustomizations;
-import org.chromium.chrome.browser.photo_picker.DecoderService;
 import org.chromium.chrome.browser.preferences.ChromePreferenceKeys;
 import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.chrome.browser.privacy.settings.PrivacyPreferencesManagerImpl;
-import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.profiles.ProfileManagerUtils;
-import org.chromium.chrome.browser.query_tiles.QueryTileUtils;
-import org.chromium.chrome.browser.quickactionsearchwidget.QuickActionSearchWidgetProvider;
 import org.chromium.chrome.browser.rlz.RevenueStats;
-import org.chromium.chrome.browser.searchwidget.SearchWidgetProvider;
-import org.chromium.chrome.browser.sharing.shared_clipboard.SharedClipboardShareActivity;
-import org.chromium.chrome.browser.signin.SigninCheckerProvider;
-import org.chromium.chrome.browser.tab.state.ShoppingPersistedTabData;
-import org.chromium.chrome.browser.tasks.tab_management.PriceTrackingUtilities;
-import org.chromium.chrome.browser.ui.searchactivityutils.SearchActivityPreferencesManager;
 import org.chromium.chrome.browser.util.AfterStartupTaskUtils;
-import org.chromium.chrome.browser.webapps.WebappRegistry;
 import org.chromium.components.background_task_scheduler.BackgroundTaskSchedulerFactory;
-import org.chromium.components.browser_ui.contacts_picker.ContactsPickerDialog;
-import org.chromium.components.browser_ui.photo_picker.DecoderServiceHost;
-import org.chromium.components.browser_ui.photo_picker.PhotoPickerDelegateBase;
-import org.chromium.components.browser_ui.photo_picker.PhotoPickerDialog;
-import org.chromium.components.browser_ui.share.ClipboardImageFileProvider;
-import org.chromium.components.browser_ui.share.ShareImageFileUtils;
 import org.chromium.components.browser_ui.util.ConversionUtils;
-import org.chromium.components.content_capture.PlatformContentCaptureController;
-import org.chromium.components.embedder_support.util.UrlUtilities;
 import org.chromium.components.minidump_uploader.CrashFileManager;
 import org.chromium.components.optimization_guide.proto.HintsProto;
 import org.chromium.components.signin.AccountManagerFacadeImpl;
@@ -110,15 +70,9 @@ import org.chromium.components.viz.common.display.DeJellyUtils;
 import org.chromium.components.webapps.AppBannerManager;
 import org.chromium.content_public.browser.BrowserTaskExecutor;
 import org.chromium.content_public.browser.ChildProcessLauncherHelper;
-import org.chromium.content_public.browser.ContactsPicker;
-import org.chromium.content_public.browser.ContactsPickerListener;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
 import org.chromium.content_public.common.ContentSwitches;
-import org.chromium.ui.base.Clipboard;
-import org.chromium.ui.base.PhotoPicker;
-import org.chromium.ui.base.PhotoPickerListener;
 import org.chromium.ui.base.SelectFileDialog;
-import org.chromium.ui.base.WindowAndroid;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -249,50 +203,6 @@ public class ProcessInitializationHandler {
         ProfileManagerUtils.removeSessionCookiesForAllProfiles();
         AppBannerManager.setAppDetailsDelegate(AppHooks.get().createAppDetailsDelegate());
         ChromeLifetimeController.initialize();
-        Clipboard.getInstance().setImageFileProvider(new ClipboardImageFileProvider());
-
-        DecoderServiceHost.setIntentSupplier(() -> {
-            return new Intent(ContextUtils.getApplicationContext(), DecoderService.class);
-        });
-
-        SelectFileDialog.setPhotoPickerDelegate(new PhotoPickerDelegateBase() {
-            @Override
-            public PhotoPicker showPhotoPicker(WindowAndroid windowAndroid,
-                    PhotoPickerListener listener, boolean allowMultiple, List<String> mimeTypes) {
-                PhotoPickerDialog dialog = new PhotoPickerDialog(windowAndroid,
-                        windowAndroid.getContext().get().getContentResolver(), listener,
-                        allowMultiple,
-                        mimeTypes);
-                dialog.getWindow().getAttributes().windowAnimations = R.style.PickerDialogAnimation;
-                dialog.show();
-                return dialog;
-            }
-        });
-
-        ContactsPicker.setContactsPickerDelegate(
-                (WindowAndroid windowAndroid, ContactsPickerListener listener,
-                        boolean allowMultiple, boolean includeNames, boolean includeEmails,
-                        boolean includeTel, boolean includeAddresses, boolean includeIcons,
-                        String formattedOrigin) -> {
-                    ContactsPickerDialog dialog = new ContactsPickerDialog(windowAndroid,
-                            new ChromePickerAdapter(windowAndroid.getContext().get()), listener,
-                            allowMultiple, includeNames, includeEmails, includeTel,
-                            includeAddresses, includeIcons, formattedOrigin);
-                    dialog.getWindow().getAttributes().windowAnimations =
-                            R.style.PickerDialogAnimation;
-                    dialog.show();
-                    return dialog;
-                });
-
-        SearchActivityPreferencesManager.onNativeLibraryReady();
-        SearchWidgetProvider.initialize();
-        QuickActionSearchWidgetProvider.initialize();
-
-        HistoryDeletionBridge.getInstance().addObserver(new ContentCaptureHistoryDeletionObserver(
-                () -> PlatformContentCaptureController.getInstance()));
-        HistoryDeletionBridge.getInstance().addObserver(
-                new AutofillAssistantHistoryDeletionObserver());
-        FeatureNotificationGuideService.setDelegate(new FeatureNotificationGuideDelegate());
 
         PrivacyPreferencesManagerImpl.getInstance().onNativeInitialized();
     }
@@ -330,19 +240,6 @@ public class ProcessInitializationHandler {
 
                 AfterStartupTaskUtils.setStartupComplete();
 
-                PartnerBrowserCustomizations.getInstance().setOnInitializeAsyncFinished(
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                String homepageUrl = HomepageManager.getHomepageUri();
-                                LaunchMetrics.recordHomePageLaunchMetrics(
-                                        HomepageManager.isHomepageEnabled(),
-                                        UrlUtilities.isNTPUrl(homepageUrl), homepageUrl);
-                            }
-                        });
-
-                ShareImageFileUtils.clearSharedImages();
-
                 SelectFileDialog.clearCapturedCameraFiles();
 
                 if (ChannelsUpdater.getInstance().shouldUpdateChannels()) {
@@ -376,13 +273,6 @@ public class ProcessInitializationHandler {
         deferredStartupHandler.addDeferredTask(new Runnable() {
             @Override
             public void run() {
-                HomepageManager.recordHomepageLocationTypeIfEnabled();
-            }
-        });
-
-        deferredStartupHandler.addDeferredTask(new Runnable() {
-            @Override
-            public void run() {
                 // Starts syncing with GSA.
                 AppHooks.get().createGsaHelper().startSync();
             }
@@ -391,15 +281,6 @@ public class ProcessInitializationHandler {
         deferredStartupHandler.addDeferredTask(new Runnable() {
             @Override
             public void run() {
-                // Record the saved restore state in a histogram
-                ChromeBackupAgentImpl.recordRestoreHistogram();
-            }
-        });
-
-        deferredStartupHandler.addDeferredTask(new Runnable() {
-            @Override
-            public void run() {
-                SigninCheckerProvider.get().onMainActivityStart();
                 RevenueStats.getInstance();
             }
         });
@@ -438,51 +319,21 @@ public class ProcessInitializationHandler {
                 () -> MediaViewerUtils.updateMediaLauncherActivityEnabled());
 
         deferredStartupHandler.addDeferredTask(
-                ChromeApplicationImpl.getComponent()
-                        .resolveTwaClearDataDialogRecorder()::makeDeferredRecordings);
-        deferredStartupHandler.addDeferredTask(WebApkUninstallUmaTracker::recordDeferredUma);
-
-        deferredStartupHandler.addDeferredTask(
                 () -> IncognitoTabLauncher.updateComponentEnabledState());
 
-        deferredStartupHandler.addDeferredTask(
-                () -> SharedClipboardShareActivity.updateComponentEnabledState());
         deferredStartupHandler.addDeferredTask(
                 () -> OfflineContentAvailabilityStatusProvider.getInstance());
         deferredStartupHandler.addDeferredTask(
                 () -> EnterpriseInfo.getInstance().logDeviceEnterpriseInfo());
         deferredStartupHandler.addDeferredTask(
-                () -> VideoTutorialShareHelper.saveUrlsToSharedPrefs());
-        deferredStartupHandler.addDeferredTask(
-                () -> TosDialogBehaviorSharedPrefInvalidator.refreshSharedPreferenceIfTosSkipped());
-        deferredStartupHandler.addDeferredTask(
                 () -> OfflineMeasurementsBackgroundTask.clearPersistedDataFromPrefs());
-        deferredStartupHandler.addDeferredTask(() -> QueryTileUtils.isQueryTilesEnabledOnNTP());
-        deferredStartupHandler.addDeferredTask(
-                ()
-                        -> AssistantVoiceSearchService.reportStartupUserEligibility(
-                                ContextUtils.getApplicationContext()));
-        deferredStartupHandler.addDeferredTask(
-                () -> GlobalAppLocaleController.getInstance().recordOverrideLanguageMetrics());
         deferredStartupHandler.addDeferredTask(() -> {
             // OptimizationTypes which we give a guarantee will be registered when we pass the
             // onDeferredStartup() signal to OptimizationGuide.
             List<HintsProto.OptimizationType> registeredTypesAllowList = new ArrayList<>();
-            registeredTypesAllowList.addAll(
-                    ShoppingPersistedTabData.getShoppingHintsToRegisterOnDeferredStartup());
             new OptimizationGuideBridgeFactory(registeredTypesAllowList)
                     .create()
                     .onDeferredStartup();
-            if (PriceTrackingUtilities.isPriceTrackingEligible()
-                    && ShoppingPersistedTabData.isPriceTrackingWithOptimizationGuideEnabled()) {
-                ShoppingPersistedTabData.onDeferredStartup();
-            }
-        });
-        deferredStartupHandler.addDeferredTask(() -> {
-            if (ChromeFeatureList.isEnabled(ChromeFeatureList.FEATURE_NOTIFICATION_GUIDE)) {
-                FeatureNotificationGuideServiceFactory.getForProfile(
-                        Profile.getLastUsedRegularProfile());
-            }
         });
     }
 
@@ -518,22 +369,8 @@ public class ProcessInitializationHandler {
 
                     initCrashReporting();
 
-                    // Initialize the WebappRegistry if it's not already initialized. Must be in
-                    // async task due to shared preferences disk access on N.
-                    WebappRegistry.getInstance();
-
-                    // Force a widget refresh in order to wake up any possible zombie widgets.
-                    // This is needed to ensure the right behavior when the process is suddenly
-                    // killed.
-                    BookmarkWidgetProvider.refreshAllWidgets();
-
                     removeSnapshotDatabase();
 
-                    // Warm up all web app shared prefs. This must be run after the WebappRegistry
-                    // instance is initialized.
-                    WebappRegistry.warmUpSharedPrefs();
-
-                    PackageMetrics.recordPackageStats();
                     return null;
                 } finally {
                     TraceEvent.end("ChromeBrowserInitializer.onDeferredStartup.doInBackground");
@@ -542,8 +379,6 @@ public class ProcessInitializationHandler {
 
             @Override
             protected void onPostExecute(Void params) {
-                // Must be run on the UI thread after the WebappRegistry has been completely warmed.
-                WebappRegistry.getInstance().unregisterOldWebapps(System.currentTimeMillis());
 
                 RecordHistogram.recordLongTimesHistogram(
                         "UMA.Debug.EnableCrashUpload.DeferredStartUpAsyncTaskDuration",

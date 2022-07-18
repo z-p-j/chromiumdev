@@ -48,8 +48,6 @@ public interface AssistantStaticDependencies {
     @CalledByNative
     AssistantInfoPageUtil createInfoPageUtil();
 
-    AssistantFeedbackUtil createFeedbackUtil();
-
     AssistantTabUtil createTabUtil();
 
     AssistantSettingsUtil createSettingsUtil();
@@ -68,7 +66,4 @@ public interface AssistantStaticDependencies {
     @Nullable
     AssistantProfileImageUtil createProfileImageUtilOrNull(
             Context context, @DimenRes int imageSizeRedId);
-
-    @Nullable
-    AssistantEditorFactory createEditorFactory();
 }

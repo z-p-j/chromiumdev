@@ -20,7 +20,6 @@ import("//components/nacl/features.gni")
 import("//components/offline_pages/buildflags/features.gni")
 import("//components/signin/features.gni")
 import("//crypto/features.gni")
-import("//device/vr/buildflags/buildflags.gni")
 import("//extensions/buildflags/buildflags.gni")
 import("//pdf/features.gni")
 import("//ppapi/buildflags/buildflags.gni")
@@ -397,7 +396,6 @@ static_library("ui") {
     "//chrome/browser:dev_ui_browser_resources",
     "//chrome/browser:resource_prefetch_predictor_proto",
     "//chrome/browser/breadcrumbs",
-    "//chrome/browser/commerce/shopping_list",
     "//chrome/browser/devtools",
     "//chrome/browser/image_decoder",
     "//chrome/browser/media:mojo_bindings",
@@ -670,10 +668,6 @@ static_library("ui") {
     "//chrome/browser/ui/webui:configs",
   ]
 
-  if (enable_vr && is_win) {
-    deps += [ "//chrome/browser/vr:vr_base" ]
-  }
-
   if (is_win || is_android || is_linux || is_chromeos) {
     sources += [
       "webui/sandbox/sandbox_internals_ui.cc",
@@ -789,8 +783,6 @@ static_library("ui") {
       "android/infobars/simple_confirm_infobar_builder.cc",
       "android/infobars/survey_infobar.cc",
       "android/infobars/survey_infobar.h",
-      "android/infobars/sync_error_infobar.cc",
-      "android/infobars/sync_error_infobar.h",
       "android/infobars/translate_compact_infobar.cc",
       "android/infobars/translate_compact_infobar.h",
       "android/infobars/update_password_infobar.cc",
@@ -798,8 +790,6 @@ static_library("ui") {
       "android/login_handler_android.cc",
       "android/logo/logo_bridge.cc",
       "android/logo/logo_bridge.h",
-      "android/omnibox/omnibox_view_util.cc",
-      "android/omnibox/omnibox_view_util.h",
       "android/overlay/overlay_window_android.cc",
       "android/overlay/overlay_window_android.h",
       "android/passwords/all_passwords_bottom_sheet_view.h",
@@ -837,8 +827,6 @@ static_library("ui") {
       "android/tab_model/tab_model_observer.h",
       "android/tab_model/tab_model_observer_jni_bridge.cc",
       "android/tab_model/tab_model_observer_jni_bridge.h",
-      "android/toolbar/location_bar_model_android.cc",
-      "android/toolbar/location_bar_model_android.h",
       "android/webid/account_selection_view_android.cc",
       "android/webid/account_selection_view_android.h",
       "autofill/autofill_bubble_base.h",
@@ -860,35 +848,15 @@ static_library("ui") {
       "page_info/chrome_page_info_client.cc",
       "page_info/chrome_page_info_client.h",
       "screen_capture_notification_ui_stub.cc",
-      "webui/explore_sites_internals/explore_sites_internals_page_handler.cc",
-      "webui/explore_sites_internals/explore_sites_internals_page_handler.h",
-      "webui/explore_sites_internals/explore_sites_internals_ui.cc",
-      "webui/explore_sites_internals/explore_sites_internals_ui.h",
-      "webui/internals/lens/lens_internals_ui_message_handler.cc",
-      "webui/internals/lens/lens_internals_ui_message_handler.h",
       "webui/internals/notifications/notifications_internals_ui_message_handler.cc",
       "webui/internals/notifications/notifications_internals_ui_message_handler.h",
-      "webui/internals/query_tiles/query_tiles_internals_ui_message_handler.cc",
-      "webui/internals/query_tiles/query_tiles_internals_ui_message_handler.h",
       "webui/offline/offline_internals_ui.cc",
       "webui/offline/offline_internals_ui.h",
       "webui/offline/offline_internals_ui_message_handler.cc",
       "webui/offline/offline_internals_ui_message_handler.h",
       "webui/video_tutorials/video_player_ui.cc",
       "webui/video_tutorials/video_player_ui.h",
-      "webui/webapks/webapks_handler.cc",
-      "webui/webapks/webapks_handler.h",
-      "webui/webapks/webapks_ui.cc",
-      "webui/webapks/webapks_ui.h",
     ]
-    if (enable_feed_v2) {
-      sources += [
-        "webui/feed_internals/feed_internals_ui.cc",
-        "webui/feed_internals/feed_internals_ui.h",
-        "webui/feed_internals/feedv2_internals_page_handler.cc",
-        "webui/feed_internals/feedv2_internals_page_handler.h",
-      ]
-    }
 
     deps += [
       "//chrome/android:jni_headers",
@@ -899,11 +867,8 @@ static_library("ui") {
       "//chrome/browser/notifications/scheduler/public",
       "//chrome/browser/resources/webapks:resources",
       "//chrome/browser/ui/android/autofill/internal:jni_headers",
-      "//chrome/browser/ui/webui/explore_sites_internals:mojo_bindings",
-      "//chrome/browser/ui/webui/feed_internals:mojo_bindings",
       "//components/browser_ui/accessibility/android",
       "//components/browser_ui/client_certificate/android",
-      "//components/browser_ui/share/android",
       "//components/browser_ui/util/android",
       "//components/embedder_support/android:context_menu",
       "//components/embedder_support/android:web_contents_delegate",
@@ -922,7 +887,6 @@ static_library("ui") {
       "//components/page_info/android:android",
       "//components/page_info/core",
       "//components/page_info/core:proto",
-      "//components/query_tiles",
       "//components/resources:android_resources",
       "//components/search_provider_logos",
       "//components/security_state/content/android",
@@ -931,7 +895,6 @@ static_library("ui") {
       "//components/translate/content/android",
       "//components/webauthn/android",
       "//content/public/browser",
-      "//device/vr/buildflags",
       "//services/device/public/cpp/usb",
       "//services/device/public/mojom:usb",
       "//ui/android",
@@ -5016,7 +4979,6 @@ static_library("ui") {
       "//components/user_notes:features",
       "//components/user_notes/browser",
       "//components/user_notes/interfaces",
-      "//device/vr/buildflags:buildflags",
       "//services/media_session/public/mojom",
       "//ui/base/dragdrop:types",
       "//ui/gfx/geometry",

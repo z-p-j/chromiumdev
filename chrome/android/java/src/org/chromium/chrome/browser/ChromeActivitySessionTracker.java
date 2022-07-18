@@ -10,7 +10,6 @@ import android.provider.Settings;
 import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.ApplicationState;
 import org.chromium.base.ApplicationStatus;
@@ -26,8 +25,6 @@ import org.chromium.chrome.browser.browsing_data.BrowsingDataBridge;
 import org.chromium.chrome.browser.browsing_data.BrowsingDataType;
 import org.chromium.chrome.browser.browsing_data.TimePeriod;
 import org.chromium.chrome.browser.feature_engagement.TrackerFactory;
-import org.chromium.chrome.browser.metrics.UmaUtils;
-import org.chromium.chrome.browser.metrics.VariationsSession;
 import org.chromium.chrome.browser.notifications.NotificationPlatformBridge;
 import org.chromium.chrome.browser.partnercustomizations.PartnerBrowserCustomizations;
 import org.chromium.chrome.browser.password_manager.PasswordManagerLifecycleHelper;
@@ -36,11 +33,9 @@ import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.profiles.ProfileManagerUtils;
-import org.chromium.chrome.browser.read_later.ReadingListBridge;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.translate.TranslateBridge;
 import org.chromium.components.browser_ui.accessibility.FontSizePrefs;
-import org.chromium.components.browser_ui.share.ShareImageFileUtils;
 import org.chromium.components.feature_engagement.EventConstants;
 import org.chromium.components.feature_engagement.Tracker;
 import org.chromium.components.user_prefs.UserPrefs;
@@ -56,12 +51,8 @@ public class ChromeActivitySessionTracker {
     @SuppressLint("StaticFieldLeak")
     private static ChromeActivitySessionTracker sInstance;
 
-    private final PowerBroadcastReceiver mPowerBroadcastReceiver = new PowerBroadcastReceiver();
     private final Map<Activity, Supplier<TabModelSelector>> mTabModelSelectorSuppliers =
             new HashMap<>();
-
-    // Used to trigger variation changes (such as seed fetches) upon application foregrounding.
-    private VariationsSession mVariationsSession;
 
     private boolean mIsInitialized;
     private boolean mIsStarted;
@@ -81,7 +72,7 @@ public class ChromeActivitySessionTracker {
      * @see #getInstance()
      */
     protected ChromeActivitySessionTracker() {
-        mVariationsSession = AppHooks.get().createVariationsSession();
+
     }
 
     /**
@@ -108,7 +99,7 @@ public class ChromeActivitySessionTracker {
      * @param callback Callback that will be called with the param value when available.
      */
     public void getVariationsRestrictModeValue(Callback<String> callback) {
-        mVariationsSession.getRestrictModeValue(callback);
+
     }
 
     /**
@@ -116,7 +107,7 @@ public class ChromeActivitySessionTracker {
      */
     @Nullable
     public String getVariationsLatestCountry() {
-        return mVariationsSession.getLatestCountry();
+        return null;
     }
 
     /**
@@ -129,7 +120,6 @@ public class ChromeActivitySessionTracker {
         mIsInitialized = true;
         assert !mIsStarted;
 
-        mVariationsSession.initializeWithNative();
         ApplicationStatus.registerApplicationStateListener(createApplicationStateListener());
     }
 
@@ -160,16 +150,11 @@ public class ChromeActivitySessionTracker {
     private void onForegroundSessionStart() {
         try (TraceEvent te = TraceEvent.scoped(
                      "ChromeActivitySessionTracker.onForegroundSessionStart")) {
-            UmaUtils.recordForegroundStartTime();
             updatePasswordEchoState();
             FontSizePrefs.getInstance(Profile.getLastUsedRegularProfile())
                     .onSystemFontScaleChanged();
-            ChromeLocalizationUtils.recordUiLanguageStatus();
             updateAcceptLanguages();
-            mVariationsSession.start();
-            mPowerBroadcastReceiver.onForegroundSessionStart();
             AppHooks.get().getChimeDelegate().startSession();
-            ReadingListBridge.onStartChromeForeground();
             PasswordManagerLifecycleHelper.getInstance().onStartForegroundSession();
 
             // Track the ratio of Chrome startups that are caused by notification clicks.
@@ -187,10 +172,8 @@ public class ChromeActivitySessionTracker {
      */
     private void onForegroundSessionEnd() {
         if (!mIsStarted) return;
-        UmaUtils.recordBackgroundTime();
         ProfileManagerUtils.flushPersistentDataForAllProfiles();
         mIsStarted = false;
-        mPowerBroadcastReceiver.onForegroundSessionEnd();
 
         IntentHandler.clearPendingReferrer();
         IntentHandler.clearPendingIncognitoUrl();
@@ -212,7 +195,6 @@ public class ChromeActivitySessionTracker {
         if (ApplicationStatus.isEveryActivityDestroyed()) {
             // These will all be re-initialized when a new Activity starts / upon next use.
             PartnerBrowserCustomizations.destroy();
-            ShareImageFileUtils.clearSharedImages();
         }
     }
 
@@ -235,7 +217,6 @@ public class ChromeActivitySessionTracker {
         String currentLocale = LocaleUtils.getDefaultLocaleListString();
         String previousLocale = SharedPreferencesManager.getInstance().readString(
                 ChromePreferenceKeys.APP_LOCALE, null);
-        ChromeLocalizationUtils.recordLocaleUpdateStatus(previousLocale, currentLocale);
         if (!TextUtils.equals(previousLocale, currentLocale)) {
             SharedPreferencesManager.getInstance().writeString(
                     ChromePreferenceKeys.APP_LOCALE, currentLocale);
@@ -271,11 +252,4 @@ public class ChromeActivitySessionTracker {
                 .setBoolean(Pref.WEB_KIT_PASSWORD_ECHO_ENABLED, systemEnabled);
     }
 
-    /**
-     * @return The PowerBroadcastReceiver for the browser process.
-     */
-    @VisibleForTesting
-    public PowerBroadcastReceiver getPowerBroadcastReceiverForTesting() {
-        return mPowerBroadcastReceiver;
-    }
 }

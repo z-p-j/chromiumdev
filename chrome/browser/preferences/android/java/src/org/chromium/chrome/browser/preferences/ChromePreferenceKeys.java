@@ -4,9 +4,6 @@
 
 package org.chromium.chrome.browser.preferences;
 
-import static org.chromium.components.browser_ui.share.ClipboardConstants.CLIPBOARD_SHARED_URI;
-import static org.chromium.components.browser_ui.share.ClipboardConstants.CLIPBOARD_SHARED_URI_TIMESTAMP;
-
 import org.chromium.base.annotations.CheckDiscard;
 import org.chromium.components.browser_ui.accessibility.AccessibilityConstants;
 
@@ -322,11 +319,6 @@ public final class ChromePreferenceKeys {
     public static final String EXPLORE_OFFLINE_CONTENT_AVAILABILITY_STATUS =
             "Chrome.NTPExploreOfflineCard.HasExploreOfflineContent";
 
-    /**
-     * Indicates whether First run field trial was enabled during FRE. This experiment is configured
-     * by client side code in {@link
-     * org.chromium.chrome.browser.signin.services.FREMobileIdentityConsistencyFieldTrial}.
-     */
     public static final String FIRST_RUN_FIELD_TRIAL_GROUP = "Chrome.FirstRun.FieldTrialEnabled";
 
     public static final String FIRST_RUN_VARIATIONS_FIELD_TRIAL_GROUP =
@@ -1036,8 +1028,6 @@ public final class ChromePreferenceKeys {
                 BLUETOOTH_NOTIFICATION_IDS,
                 CHROME_SURVEY_DOWNLOAD_ATTEMPTS.pattern(),
                 CHROME_SURVEY_PROMPT_DISPLAYED_TIMESTAMP.pattern(),
-                CLIPBOARD_SHARED_URI,
-                CLIPBOARD_SHARED_URI_TIMESTAMP,
                 CLOUD_MANAGEMENT_CLIENT_ID,
                 CLOUD_MANAGEMENT_DM_TOKEN,
                 COMMERCE_SUBSCRIPTIONS_CHROME_MANAGED_TIMESTAMP,

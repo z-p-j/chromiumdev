@@ -30,8 +30,6 @@ import android.webkit.WebViewFactory;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
-import dalvik.system.DexFile;
-
 import org.chromium.base.BuildInfo;
 import org.chromium.base.BundleUtils;
 import org.chromium.base.CommandLine;
@@ -54,13 +52,6 @@ import org.chromium.base.task.AsyncTask;
 import org.chromium.base.task.BackgroundOnlyAsyncTask;
 import org.chromium.base.task.PostTask;
 import org.chromium.base.task.TaskTraits;
-import org.chromium.components.browser_ui.contacts_picker.ContactsPickerDialog;
-import org.chromium.components.browser_ui.photo_picker.DecoderServiceHost;
-import org.chromium.components.browser_ui.photo_picker.ImageDecoder;
-import org.chromium.components.browser_ui.photo_picker.PhotoPickerDelegateBase;
-import org.chromium.components.browser_ui.photo_picker.PhotoPickerDialog;
-import org.chromium.components.browser_ui.share.ClipboardImageFileProvider;
-import org.chromium.components.browser_ui.share.ShareImageFileUtils;
 import org.chromium.components.component_updater.ComponentLoaderPolicyBridge;
 import org.chromium.components.component_updater.EmbeddedComponentLoader;
 import org.chromium.components.embedder_support.application.ClassLoaderContextWrapperFactory;
@@ -71,17 +62,10 @@ import org.chromium.components.webapk.lib.client.WebApkValidator;
 import org.chromium.content_public.browser.BrowserStartupController;
 import org.chromium.content_public.browser.ChildProcessCreationParams;
 import org.chromium.content_public.browser.ChildProcessLauncherHelper;
-import org.chromium.content_public.browser.ContactsPicker;
-import org.chromium.content_public.browser.ContactsPickerListener;
 import org.chromium.content_public.browser.DeviceUtils;
 import org.chromium.content_public.browser.SelectionPopupController;
 import org.chromium.net.NetworkChangeNotifier;
-import org.chromium.ui.base.Clipboard;
-import org.chromium.ui.base.PhotoPicker;
-import org.chromium.ui.base.PhotoPickerListener;
 import org.chromium.ui.base.ResourceBundle;
-import org.chromium.ui.base.SelectFileDialog;
-import org.chromium.ui.base.WindowAndroid;
 import org.chromium.weblayer_private.interfaces.APICallException;
 import org.chromium.weblayer_private.interfaces.IBrowserFragment;
 import org.chromium.weblayer_private.interfaces.ICrashReporterController;
@@ -101,7 +85,6 @@ import org.chromium.weblayer_private.media.MediaSessionManager;
 import org.chromium.weblayer_private.media.MediaStreamManager;
 import org.chromium.weblayer_private.metrics.MetricsServiceClient;
 import org.chromium.weblayer_private.metrics.UmaUtils;
-import org.chromium.weblayer_private.settings.SettingsFragmentImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,6 +94,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import dalvik.system.DexFile;
 
 /**
  * Root implementation class for WebLayer.
@@ -332,43 +317,6 @@ public final class WebLayerImpl extends IWebLayer.Stub {
         MediaStreamManager.onWebLayerInit();
         WebLayerNotificationChannels.updateChannelsIfNecessary();
 
-        ContactsPicker.setContactsPickerDelegate(
-                (WindowAndroid windowAndroid, ContactsPickerListener listener,
-                        boolean allowMultiple, boolean includeNames, boolean includeEmails,
-                        boolean includeTel, boolean includeAddresses, boolean includeIcons,
-                        String formattedOrigin) -> {
-                    ContactsPickerDialog dialog = new ContactsPickerDialog(windowAndroid,
-                            new ContactsPickerAdapter(windowAndroid), listener, allowMultiple,
-                            includeNames, includeEmails, includeTel, includeAddresses, includeIcons,
-                            formattedOrigin);
-                    dialog.show();
-                    return dialog;
-                });
-
-        DecoderServiceHost.setIntentSupplier(() -> { return createImageDecoderServiceIntent(); });
-        SelectFileDialog.setPhotoPickerDelegate(new PhotoPickerDelegateBase() {
-            @Override
-            public PhotoPicker showPhotoPicker(WindowAndroid windowAndroid,
-                    PhotoPickerListener listener, boolean allowMultiple, List<String> mimeTypes) {
-                PhotoPickerDialog dialog = new PhotoPickerDialog(windowAndroid,
-                        windowAndroid.getContext().get().getContentResolver(), listener,
-                        allowMultiple, mimeTypes);
-                dialog.show();
-                return dialog;
-            }
-        });
-
-        Clipboard.getInstance().setImageFileProvider(new ClipboardImageFileProvider());
-
-        // Clear previously shared images from disk in the background.
-        new BackgroundOnlyAsyncTask<Void>() {
-            @Override
-            protected Void doInBackground() {
-                ShareImageFileUtils.clearSharedImages();
-                return null;
-            }
-        }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
         performDexFixIfNecessary(packageInfo);
 
         TraceEvent.end("WebLayer init");
@@ -387,19 +335,13 @@ public final class WebLayerImpl extends IWebLayer.Stub {
     @Override
     public ISettingsFragment createSettingsFragmentImpl(
             IRemoteFragmentClient remoteFragmentClient, IObjectWrapper fragmentArgs) {
-        StrictModeWorkaround.apply();
-        Bundle unwrappedArgs = ObjectWrapper.unwrap(fragmentArgs, Bundle.class);
-        return new SettingsFragmentImpl(mProfileManager, remoteFragmentClient, unwrappedArgs)
-                .asISettingsFragment();
+        return null;
     }
 
     @Override
     public ISiteSettingsFragment createSiteSettingsFragmentImpl(
             IRemoteFragmentClient remoteFragmentClient, IObjectWrapper fragmentArgs) {
-        StrictModeWorkaround.apply();
-        Bundle unwrappedArgs = ObjectWrapper.unwrap(fragmentArgs, Bundle.class);
-        return new SettingsFragmentImpl(mProfileManager, remoteFragmentClient, unwrappedArgs)
-                .asISiteSettingsFragment();
+        return null;
     }
 
     @Override
@@ -486,19 +428,7 @@ public final class WebLayerImpl extends IWebLayer.Stub {
 
     @Override
     public IBinder initializeImageDecoder(IObjectWrapper appContext, IObjectWrapper remoteContext) {
-        StrictModeWorkaround.apply();
-
-        assert ContextUtils.getApplicationContext() == null;
-        CommandLine.init(null);
-        minimalInitForContext(ObjectWrapper.unwrap(appContext, Context.class),
-                ObjectWrapper.unwrap(remoteContext, Context.class));
-        LibraryLoader.getInstance().setLibraryProcessType(
-                LibraryProcessType.PROCESS_WEBLAYER_CHILD);
-        LibraryLoader.getInstance().ensureInitialized();
-
-        ImageDecoder imageDecoder = new ImageDecoder();
-        imageDecoder.initializeSandbox();
-        return imageDecoder;
+        return null;
     }
 
     @Override
@@ -592,18 +522,6 @@ public final class WebLayerImpl extends IWebLayer.Stub {
 
         try {
             return sClient.createMediaSessionServiceIntent();
-        } catch (RemoteException e) {
-            throw new APICallException(e);
-        }
-    }
-
-    public static Intent createImageDecoderServiceIntent() {
-        if (sClient == null) {
-            throw new IllegalStateException("WebLayer should have been initialized already.");
-        }
-
-        try {
-            return sClient.createImageDecoderServiceIntent();
         } catch (RemoteException e) {
             throw new APICallException(e);
         }

@@ -35,9 +35,6 @@ import org.chromium.chrome.browser.app.flags.ChromeCachedFlags;
 import org.chromium.chrome.browser.crash.LogcatExtractionRunnable;
 import org.chromium.chrome.browser.download.DownloadManagerService;
 import org.chromium.chrome.browser.flags.ChromeSwitches;
-import org.chromium.chrome.browser.language.GlobalAppLocaleController;
-import org.chromium.chrome.browser.signin.SigninCheckerProvider;
-import org.chromium.chrome.browser.webapps.ChromeWebApkHost;
 import org.chromium.components.background_task_scheduler.BackgroundTaskSchedulerFactory;
 import org.chromium.components.crash.browser.ChildProcessCrashObserver;
 import org.chromium.components.minidump_uploader.CrashFileManager;
@@ -216,7 +213,6 @@ public class ChromeBrowserInitializer {
         // behind long-running accesses in next phase.
         // Don't do any large file access here!
         ChromeStrictMode.configureStrictMode();
-        ChromeWebApkHost.init();
 
         // Time this call takes in background from test devices:
         // - Pixel 2: ~10 ms
@@ -294,12 +290,6 @@ public class ChromeBrowserInitializer {
             tasks.add(UiThreadTaskTraits.DEFAULT, this::onFinishFullBrowserInitialization);
         }
 
-        int startupMode =
-                getBrowserStartupController().getStartupMode(delegate.startMinimalBrowser());
-        tasks.add(UiThreadTaskTraits.DEFAULT, () -> {
-            BackgroundTaskSchedulerFactory.getUmaReporter().reportStartupMode(startupMode);
-        });
-
         if (isAsync) {
             // We want to start this queue once the C++ startup tasks have run; allow the
             // C++ startup to run asynchonously, and set it up to start the Java queue once
@@ -359,7 +349,6 @@ public class ChromeBrowserInitializer {
             LibraryPrefetcher.asyncPrefetchLibrariesToMemory();
             getBrowserStartupController().startBrowserProcessesSync(
                     LibraryProcessType.PROCESS_BROWSER, /*singleProcess=*/false);
-            SigninCheckerProvider.get();
         } finally {
             TraceEvent.end("ChromeBrowserInitializer.startChromeBrowserProcessesSync");
         }
@@ -446,10 +435,6 @@ public class ChromeBrowserInitializer {
             @Override
             public void onActivityStateChange(Activity activity, int newState) {
                 if (newState == ActivityState.CREATED || newState == ActivityState.DESTROYED) {
-                    // When the app locale is overridden a change in system locale will not effect
-                    // Chrome's UI language. There is race condition where the initial locale may
-                    // not equal the overridden default locale (https://crbug.com/1224756).
-                    if (GlobalAppLocaleController.getInstance().isOverridden()) return;
                     // Android destroys Activities at some point after a locale change, but doesn't
                     // kill the process.  This can lead to a bug where Chrome is halfway RTL, where
                     // stale natively-loaded resources are not reloaded (http://crbug.com/552618).

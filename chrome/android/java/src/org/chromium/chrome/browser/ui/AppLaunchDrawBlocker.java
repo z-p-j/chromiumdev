@@ -16,12 +16,10 @@ import androidx.annotation.VisibleForTesting;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.supplier.Supplier;
 import org.chromium.chrome.browser.IntentHandler;
-import org.chromium.chrome.browser.homepage.HomepageManager;
 import org.chromium.chrome.browser.incognito.IncognitoTabLauncher;
 import org.chromium.chrome.browser.lifecycle.ActivityLifecycleDispatcher;
 import org.chromium.chrome.browser.lifecycle.InflationObserver;
 import org.chromium.chrome.browser.lifecycle.StartStopWithNativeObserver;
-import org.chromium.chrome.browser.ntp.NewTabPage;
 import org.chromium.chrome.browser.preferences.ChromePreferenceKeys;
 import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.chrome.browser.search_engines.TemplateUrlServiceFactory;
@@ -179,15 +177,13 @@ public class AppLaunchDrawBlocker {
         int tabState = TabPersistentStore.readLastKnownActiveTabStatePref();
         boolean searchEngineHasLogo = SharedPreferencesManager.getInstance().readBoolean(
                 ChromePreferenceKeys.APP_LAUNCH_SEARCH_ENGINE_HAD_LOGO, true);
-        boolean singleUrlBarMode =
-                NewTabPage.isInSingleUrlBarMode(mIsTabletSupplier.get(), searchEngineHasLogo);
 
         String url = IntentHandler.getUrlFromIntent(mIntentSupplier.get());
         boolean hasValidIntentUrl = !mShouldIgnoreIntentSupplier.get() && !TextUtils.isEmpty(url);
         boolean isNtpUrl = UrlUtilities.isCanonicalizedNTPUrl(url);
 
         boolean shouldBlockWithoutIntent = shouldBlockDrawForNtpOnColdStartWithoutIntent(
-                tabState, HomepageManager.isHomepageNonNtpPreNative(), singleUrlBarMode);
+                tabState, true, true);
 
         if (shouldBlockDrawForNtpOnColdStartWithIntent(hasValidIntentUrl, isNtpUrl,
                     IntentHandler.shouldIntentShowNewTabOmniboxFocused(mIntentSupplier.get()),
@@ -255,14 +251,7 @@ public class AppLaunchDrawBlocker {
         long durationDrawBlocked =
                 SystemClock.elapsedRealtime() - mTimeStartedBlockingDrawForInitialTab;
 
-        boolean singleUrlBarNtp = false;
-        if (!isOverviewShownWithoutInstantStart) {
-            boolean searchEngineHasLogo =
-                    TemplateUrlServiceFactory.get().doesDefaultSearchEngineHaveLogo();
-            boolean singleUrlBarMode =
-                    NewTabPage.isInSingleUrlBarMode(mIsTabletSupplier.get(), searchEngineHasLogo);
-            singleUrlBarNtp = isTabRegularNtp && singleUrlBarMode;
-        }
+        boolean singleUrlBarNtp = true;
 
         @BlockDrawForInitialTabAccuracy
         int enumEntry;

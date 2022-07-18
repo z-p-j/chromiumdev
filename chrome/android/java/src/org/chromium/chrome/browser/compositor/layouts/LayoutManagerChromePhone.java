@@ -7,22 +7,16 @@ package org.chromium.chrome.browser.compositor.layouts;
 import android.content.Context;
 import android.view.ViewGroup;
 
-import org.chromium.base.jank_tracker.JankTracker;
 import org.chromium.base.supplier.ObservableSupplier;
 import org.chromium.base.supplier.OneshotSupplierImpl;
-import org.chromium.base.supplier.Supplier;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
 import org.chromium.chrome.browser.compositor.layouts.phone.SimpleAnimationLayout;
-import org.chromium.chrome.browser.device.DeviceClassManager;
 import org.chromium.chrome.browser.layouts.LayoutType;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabLaunchType;
 import org.chromium.chrome.browser.tabmodel.TabCreatorManager;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
-import org.chromium.chrome.browser.theme.TopUiThemeColorProvider;
-import org.chromium.chrome.browser.toolbar.ControlContainer;
-import org.chromium.chrome.features.start_surface.StartSurface;
 import org.chromium.ui.resources.dynamics.DynamicResourceLoader;
 
 /**
@@ -37,32 +31,26 @@ public class LayoutManagerChromePhone extends LayoutManagerChrome {
      * Creates an instance of a {@link LayoutManagerChromePhone}.
      * @param host         A {@link LayoutManagerHost} instance.
      * @param contentContainer A {@link ViewGroup} for Android views to be bound to.
-     * @param startSurface An interface to talk to the Grid Tab Switcher. If it's NULL, VTS
-     *                     should be used, otherwise GTS should be used.
      * @param tabContentManagerSupplier Supplier of the {@link TabContentManager} instance.
      * @param overviewModeBehaviorSupplier Supplier of the {@link OverviewModeBehavior}.
-     * @param topUiThemeColorProvider {@link ThemeColorProvider} for top UI.
      */
     public LayoutManagerChromePhone(LayoutManagerHost host, ViewGroup contentContainer,
-            StartSurface startSurface,
             ObservableSupplier<TabContentManager> tabContentManagerSupplier,
-            OneshotSupplierImpl<OverviewModeBehavior> overviewModeBehaviorSupplier,
-            Supplier<TopUiThemeColorProvider> topUiThemeColorProvider, JankTracker jankTracker) {
-        super(host, contentContainer, true, startSurface, tabContentManagerSupplier,
-                overviewModeBehaviorSupplier, topUiThemeColorProvider, jankTracker, null, null);
+            OneshotSupplierImpl<OverviewModeBehavior> overviewModeBehaviorSupplier) {
+        super(host, contentContainer, tabContentManagerSupplier,
+                overviewModeBehaviorSupplier);
     }
 
     @Override
     public void init(TabModelSelector selector, TabCreatorManager creator,
-            ControlContainer controlContainer, DynamicResourceLoader dynamicResourceLoader,
-            TopUiThemeColorProvider topUiColorProvider) {
+            DynamicResourceLoader dynamicResourceLoader) {
         Context context = mHost.getContext();
         LayoutRenderHost renderHost = mHost.getLayoutRenderHost();
 
         // Build Layouts
         mSimpleAnimationLayout = new SimpleAnimationLayout(context, this, renderHost);
 
-        super.init(selector, creator, controlContainer, dynamicResourceLoader, topUiColorProvider);
+        super.init(selector, creator, dynamicResourceLoader);
 
         // Initialize Layouts
         TabContentManager tabContentManager = mTabContentManagerSupplier.get();
@@ -80,12 +68,6 @@ public class LayoutManagerChromePhone extends LayoutManagerChrome {
 
     @Override
     public void onTabsAllClosing(boolean incognito) {
-        if (getActiveLayout() == mStaticLayout && !incognito) {
-            startShowing(DeviceClassManager.enableAccessibilityLayout(mHost.getContext())
-                            ? mOverviewListLayout
-                            : mOverviewLayout,
-                    /* animate= */ false);
-        }
         super.onTabsAllClosing(incognito);
     }
 

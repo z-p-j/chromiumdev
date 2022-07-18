@@ -15,33 +15,17 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import org.chromium.base.ContextUtils;
 import org.chromium.base.annotations.CalledByNative;
-import org.chromium.chrome.browser.customtabs.CustomTabsConnection;
-import org.chromium.chrome.browser.directactions.DirectActionCoordinator;
-import org.chromium.chrome.browser.feedback.FeedbackReporter;
-import org.chromium.chrome.browser.feedback.HelpAndFeedbackLauncher;
-import org.chromium.chrome.browser.feedback.HelpAndFeedbackLauncherImpl;
 import org.chromium.chrome.browser.gsa.GSAHelper;
-import org.chromium.chrome.browser.historyreport.AppIndexingReporter;
 import org.chromium.chrome.browser.init.ChromeStartupDelegate;
 import org.chromium.chrome.browser.init.ProcessInitializationHandler;
 import org.chromium.chrome.browser.instantapps.InstantAppsHandler;
-import org.chromium.chrome.browser.metrics.VariationsSession;
 import org.chromium.chrome.browser.notifications.chime.ChimeDelegate;
-import org.chromium.chrome.browser.omaha.RequestGenerator;
-import org.chromium.chrome.browser.partnerbookmarks.PartnerBookmark;
-import org.chromium.chrome.browser.partnerbookmarks.PartnerBookmarksDelegateImpl;
-import org.chromium.chrome.browser.password_manager.GooglePasswordManagerUIProvider;
 import org.chromium.chrome.browser.policy.PolicyAuditor;
 import org.chromium.chrome.browser.rlz.RevenueStats;
-import org.chromium.chrome.browser.survey.SurveyController;
-import org.chromium.chrome.browser.sync.TrustedVaultClient;
 import org.chromium.chrome.browser.tab.Tab;
-import org.chromium.chrome.browser.ui.signin.GoogleActivityController;
 import org.chromium.chrome.browser.usage_stats.DigitalWellbeingClient;
-import org.chromium.chrome.browser.webapps.GooglePlayWebApkInstallDelegate;
 import org.chromium.chrome.browser.xsurface.ProcessScope;
 import org.chromium.chrome.browser.xsurface.ProcessScopeDependencyProvider;
-import org.chromium.chrome.modules.image_editor.ImageEditorModuleProvider;
 import org.chromium.components.external_intents.AuthenticatorNavigationInterceptor;
 import org.chromium.components.policy.AppRestrictionsProvider;
 import org.chromium.components.policy.CombinedPolicyProvider;
@@ -94,57 +78,11 @@ public abstract class AppHooks {
     }
 
     /**
-     * Creates a new {@link AppIndexingReporter}.
-     * @return the created {@link AppIndexingReporter}.
-     */
-    public AppIndexingReporter createAppIndexingReporter() {
-        return new AppIndexingReporter();
-    }
-
-    /**
      * Return a {@link AuthenticatorNavigationInterceptor} for the given {@link Tab}.
      * This can be null if there are no applicable interceptor to be built.
      */
     public AuthenticatorNavigationInterceptor createAuthenticatorNavigationInterceptor(Tab tab) {
         return null;
-    }
-
-    /**
-     * @return An instance of {@link CustomTabsConnection}. Should not be called
-     * outside of {@link CustomTabsConnection#getInstance()}.
-     */
-    public CustomTabsConnection createCustomTabsConnection() {
-        return new CustomTabsConnection();
-    }
-
-    /**
-     * Returns a new {@link DirectActionCoordinator} instance, if available.
-     */
-    @Nullable
-    public DirectActionCoordinator createDirectActionCoordinator() {
-        return null;
-    }
-
-    /**
-     * Creates a new {@link SurveyController}.
-     * @return The created {@link SurveyController}.
-     */
-    public SurveyController createSurveyController() {
-        return new SurveyController();
-    }
-
-    /**
-     * @return An instance of {@link FeedbackReporter} to report feedback.
-     */
-    public FeedbackReporter createFeedbackReporter() {
-        return new FeedbackReporter() {};
-    }
-
-    /**
-     * @return An instance of GoogleActivityController.
-     */
-    public GoogleActivityController createGoogleActivityController() {
-        return new GoogleActivityController();
     }
 
     /**
@@ -155,31 +93,8 @@ public abstract class AppHooks {
         return new GSAHelper();
     }
 
-    /**
-     * Returns a new instance of HelpAndFeedbackLauncher.
-     */
-    public HelpAndFeedbackLauncher createHelpAndFeedbackLauncher() {
-        return new HelpAndFeedbackLauncherImpl();
-    }
-
     public InstantAppsHandler createInstantAppsHandler() {
         return new InstantAppsHandler();
-    }
-
-    /**
-     * @return An instance of {@link GooglePasswordManagerUIProvider}. Will be null if one is not
-     *         available.
-     */
-    public GooglePasswordManagerUIProvider createGooglePasswordManagerUIProvider() {
-        return null;
-    }
-
-    /**
-     * @return An instance of RequestGenerator to be used for Omaha XML creation.  Will be null if
-     *         a generator is unavailable.
-     */
-    public RequestGenerator createOmahaRequestGenerator() {
-        return null;
     }
 
     /**
@@ -194,18 +109,6 @@ public abstract class AppHooks {
      */
     public RevenueStats createRevenueStatsInstance() {
         return new RevenueStats();
-    }
-
-    /**
-     * Returns a new instance of VariationsSession.
-     */
-    public VariationsSession createVariationsSession() {
-        return new VariationsSession();
-    }
-
-    /** Returns the singleton instance of GooglePlayWebApkInstallDelegate. */
-    public GooglePlayWebApkInstallDelegate getGooglePlayWebApkInstallDelegate() {
-        return null;
     }
 
     /**
@@ -237,14 +140,6 @@ public abstract class AppHooks {
      */
     public List<String> getOfflinePagesSuppressNotificationPackages() {
         return Collections.emptyList();
-    }
-
-    /**
-     * @return An iterator of partner bookmarks.
-     */
-    @Nullable
-    public PartnerBookmark.BookmarkIterator getPartnerBookmarkIterator() {
-        return new PartnerBookmarksDelegateImpl().createIterator();
     }
 
     /**
@@ -280,13 +175,6 @@ public abstract class AppHooks {
     }
 
     /**
-     * Returns a new {@link TrustedVaultClient.Backend} instance.
-     */
-    public TrustedVaultClient.Backend createSyncTrustedVaultClientBackend() {
-        return new TrustedVaultClient.EmptyBackend();
-    }
-
-    /**
      * This is deprecated, and should not be called. Use FeedHooks instead.
      */
     public @Nullable ProcessScope getExternalSurfaceProcessScope(
@@ -308,20 +196,12 @@ public abstract class AppHooks {
         return new ChimeDelegate();
     }
 
-    public @Nullable ImageEditorModuleProvider getImageEditorModuleProvider() {
-        return null;
-    }
-
     public ChromeStartupDelegate createChromeStartupDelegate() {
         return new ChromeStartupDelegate();
     }
 
     public boolean canStartForegroundServiceWhileInvisible() {
         return true;
-    }
-
-    public String getDefaultQueryTilesServerUrl() {
-        return "";
     }
 
     // Stop! Do not add new methods to AppHooks anymore. Follow go/apphooks-migration instead.

@@ -33,10 +33,8 @@ import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.layouts.scene_layer.SceneOverlayLayer;
 import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.tab.Tab;
-import org.chromium.chrome.browser.toolbar.ToolbarManager;
 import org.chromium.components.browser_ui.widget.chips.ChipProperties;
 import org.chromium.components.browser_ui.widget.scrim.ScrimCoordinator;
-import org.chromium.components.browser_ui.widget.scrim.ScrimProperties;
 import org.chromium.ui.base.LocalizationUtils;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.ui.modelutil.PropertyModel;
@@ -97,9 +95,6 @@ public class ContextualSearchPanel extends OverlayPanel implements ContextualSea
     /** The {@link WindowAndroid} for the current activity.  */
     private final WindowAndroid mWindowAndroid;
 
-    /** Used to query toolbar state. */
-    private final ToolbarManager mToolbarManager;
-
     /** The {@link ActivityType} for the current activity. */
     private final @ActivityType int mActivityType;
 
@@ -151,7 +146,6 @@ public class ContextualSearchPanel extends OverlayPanel implements ContextualSea
      * @param windowAndroid The {@link WindowAndroid} for the current activity.
      * @param compositorViewHolder The {@link CompositorViewHolder} for the current activity.
      * @param toolbarHeightDp The height of the toolbar in dp.
-     * @param toolbarManager The {@link ToolbarManager}, used to query for colors.
      * @param activityType The {@link ActivityType} for the current activity.
      * @param currentTabSupplier Supplies the current activity tab.
      */
@@ -160,7 +154,7 @@ public class ContextualSearchPanel extends OverlayPanel implements ContextualSea
             @NonNull BrowserControlsStateProvider browserControlsStateProvider,
             @NonNull WindowAndroid windowAndroid,
             @NonNull CompositorViewHolder compositorViewHolder, float toolbarHeightDp,
-            @NonNull ToolbarManager toolbarManager, @ActivityType int activityType,
+            @ActivityType int activityType,
             @NonNull Supplier<Tab> currentTabSupplier) {
         super(context, layoutManager, panelManager, browserControlsStateProvider, windowAndroid,
                 compositorViewHolder, toolbarHeightDp, currentTabSupplier);
@@ -168,7 +162,6 @@ public class ContextualSearchPanel extends OverlayPanel implements ContextualSea
         mPanelMetrics = new ContextualSearchPanelMetrics();
         mCompositorViewHolder = compositorViewHolder;
         mWindowAndroid = windowAndroid;
-        mToolbarManager = toolbarManager;
         mActivityType = activityType;
         mCurrentTabSupplier = currentTabSupplier;
 
@@ -793,11 +786,6 @@ public class ContextualSearchPanel extends OverlayPanel implements ContextualSea
 
         getSearchBarControl().setSearchTerm(searchTerm, pronunciation);
         getSearchBarControl().animateSearchTermResolution();
-        // TODO(donnd): this can probably be removed or changed to an assert.
-        if (mActivity == null || mToolbarManager == null) return;
-
-        getSearchBarControl().setQuickAction(
-                quickActionUri, quickActionCategory, mToolbarManager.getPrimaryColor());
     }
 
     /**
@@ -923,38 +911,7 @@ public class ContextualSearchPanel extends OverlayPanel implements ContextualSea
 
     @Override
     protected void updateStatusBar() {
-        float maxBrightness = getMaxBasePageBrightness();
-        float minBrightness = getMinBasePageBrightness();
-        float basePageBrightness = getBasePageBrightness();
-        // Compute Status Bar alpha based on the base-page brightness range applied by the Overlay.
-        // TODO(donnd): Create a full-screen sized view and apply the black_alpha_65 color to get
-        // an exact match between the scrim and the status bar colors instead of adjusting the
-        // status bar alpha to approximate the native overlay brightness filter.
-        // Details in https://crbug.com/848922.
-        float statusBarAlpha =
-                (maxBrightness - basePageBrightness) / (maxBrightness - minBrightness);
-        if (statusBarAlpha == 0.0) {
-            if (mScrimCoordinator != null) mScrimCoordinator.hideScrim(false);
-            mScrimProperties = null;
-            mScrimCoordinator = null;
-            return;
 
-        } else {
-            mScrimCoordinator = mManagementDelegate.getScrimCoordinator();
-            if (mScrimProperties == null) {
-                mScrimProperties =
-                        new PropertyModel.Builder(ScrimProperties.REQUIRED_KEYS)
-                                .with(ScrimProperties.TOP_MARGIN, 0)
-                                .with(ScrimProperties.AFFECTS_STATUS_BAR, true)
-                                .with(ScrimProperties.ANCHOR_VIEW, mCompositorViewHolder)
-                                .with(ScrimProperties.SHOW_IN_FRONT_OF_ANCHOR_VIEW, false)
-                                .with(ScrimProperties.VISIBILITY_CALLBACK, null)
-                                .with(ScrimProperties.CLICK_DELEGATE, null)
-                                .build();
-                mScrimCoordinator.showScrim(mScrimProperties);
-            }
-            mScrimCoordinator.setAlpha(statusBarAlpha);
-        }
     }
 
     // ============================================================================================

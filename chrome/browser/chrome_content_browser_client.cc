@@ -147,13 +147,11 @@
 #include "chrome/browser/universal_web_contents_observers.h"
 #include "chrome/browser/url_param_filter/url_param_filter_throttle.h"
 #include "chrome/browser/usb/frame_usb_services.h"
-#include "chrome/browser/vr/vr_tab_helper.h"
 #include "chrome/browser/web_applications/policy/web_app_policy_manager.h"
 #include "chrome/browser/web_applications/system_web_apps/system_web_app_manager.h"
 #include "chrome/browser/web_applications/web_app_helpers.h"
 #include "chrome/browser/web_applications/web_app_provider.h"
 #include "chrome/browser/web_applications/web_app_registrar.h"
-#include "chrome/browser/webapps/web_app_offline.h"
 #include "chrome/browser/webauthn/webauthn_pref_names.h"
 #include "chrome/common/buildflags.h"
 #include "chrome/common/channel_info.h"
@@ -278,12 +276,12 @@
 #include "content/public/browser/web_contents_view_delegate.h"
 #include "content/public/browser/web_ui_url_loader_factory.h"
 #include "content/public/browser/webui_config_map.h"
+#include "content/public/common/alternative_error_page_override_info.mojom.h"
 #include "content/public/common/content_descriptors.h"
 #include "content/public/common/content_features.h"
 #include "content/public/common/content_switches.h"
 #include "content/public/common/url_constants.h"
 #include "content/public/common/window_container_type.mojom-shared.h"
-#include "device/vr/buildflags/buildflags.h"
 #include "extensions/buildflags/buildflags.h"
 #include "google_apis/gaia/gaia_urls.h"
 #include "google_apis/google_api_keys.h"
@@ -389,7 +387,6 @@
 #include "chrome/android/features/dev_ui/buildflags.h"
 #include "chrome/browser/android/customtabs/client_data_header_web_contents_observer.h"
 #include "chrome/browser/android/devtools_manager_delegate_android.h"
-#include "chrome/browser/android/ntp/new_tab_page_url_handler.h"
 #include "chrome/browser/android/service_tab_launcher.h"
 #include "chrome/browser/android/tab_android.h"
 #include "chrome/browser/android/tab_web_contents_delegate_android.h"
@@ -599,10 +596,6 @@
 
 #if BUILDFLAG(FULL_SAFE_BROWSING)
 #include "chrome/browser/enterprise/connectors/analysis/content_analysis_delegate.h"
-#endif
-
-#if BUILDFLAG(ENABLE_VR)
-#include "chrome/browser/vr/chrome_xr_integration_client.h"
 #endif
 
 #if BUILDFLAG(IS_CHROMEOS_LACROS)
@@ -3531,7 +3524,7 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
     }
 #endif
 
-    web_prefs->immersive_mode_enabled = vr::VrTabHelper::IsInVr(web_contents);
+    web_prefs->immersive_mode_enabled = false;
   }
 
   web_prefs->lazy_load_enabled =
@@ -3740,9 +3733,7 @@ void ChromeContentBrowserClient::BrowserURLHandlerCreated(
                           BrowserURLHandler::null_handler());
 
 #if BUILDFLAG(IS_ANDROID)
-  // Handler to rewrite chrome://newtab on Android.
-  handler->AddHandlerPair(&chrome::android::HandleAndroidNativePageURL,
-                          BrowserURLHandler::null_handler());
+
 #else   // BUILDFLAG(IS_ANDROID)
   // Handler to rewrite chrome://newtab for InstantExtended.
   handler->AddHandlerPair(&search::HandleNewTabURLRewrite,
@@ -6202,16 +6193,6 @@ bool ChromeContentBrowserClient::ShouldAllowPluginCreation(
 }
 #endif  // BUILDFLAG(ENABLE_PLUGINS)
 
-#if BUILDFLAG(ENABLE_VR)
-content::XrIntegrationClient*
-ChromeContentBrowserClient::GetXrIntegrationClient() {
-  if (!xr_integration_client_)
-    xr_integration_client_ = std::make_unique<vr::ChromeXrIntegrationClient>(
-        base::PassKey<ChromeContentBrowserClient>());
-  return xr_integration_client_.get();
-}
-#endif  // BUILDFLAG(ENABLE_VR)
-
 void ChromeContentBrowserClient::BindBrowserControlInterface(
     mojo::ScopedMessagePipeHandle pipe) {
 #if BUILDFLAG(IS_CHROMEOS_LACROS)
@@ -6502,18 +6483,7 @@ ChromeContentBrowserClient::GetAlternativeErrorPageOverrideInfo(
     const GURL& url,
     content::BrowserContext* browser_context,
     int32_t error_code) {
-  if (error_code != net::ERR_INTERNET_DISCONNECTED)
-    return nullptr;
-
-#if BUILDFLAG(IS_ANDROID)
-  if (!base::FeatureList::IsEnabled(features::kAndroidPWAsDefaultOfflinePage)) {
-#else
-  if (!base::FeatureList::IsEnabled(features::kDesktopPWAsDefaultOfflinePage)) {
-#endif  //  BUILDFLAG(IS_ANDROID)
-    return nullptr;
-  }
-
-  return web_app::GetOfflinePageInfo(url, browser_context);
+  return nullptr;
 }
 
 #if BUILDFLAG(IS_ANDROID)

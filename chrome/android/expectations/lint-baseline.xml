@@ -91,28 +91,6 @@
 
     <issue
         id="NewApi"
-        message="Call requires API level 26 (current min is 23): `getChannelIdForOrigin`"
-        errorLine1="                SiteChannelsManager.getInstance().getChannelIdForOrigin(mOrigin.toString());"
-        errorLine2="                                                  ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/android/webapps/launchpad/java/src/org/chromium/chrome/browser/webapps/launchpad/AppManagementMenuPermissionsMediator.java"
-            line="107"
-            column="51"/>
-    </issue>
-
-    <issue
-        id="NewApi"
-        message="Call requires API level 26 (current min is 23): `getInstance`"
-        errorLine1="                SiteChannelsManager.getInstance().getChannelIdForOrigin(mOrigin.toString());"
-        errorLine2="                                    ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/android/webapps/launchpad/java/src/org/chromium/chrome/browser/webapps/launchpad/AppManagementMenuPermissionsMediator.java"
-            line="107"
-            column="37"/>
-    </issue>
-
-    <issue
-        id="NewApi"
         message="Call requires API level 26 (current min is 23): `shouldQueryAutofillSuggestion`"
         errorLine1="        if (mAutofillMenuItemTitle != 0 &amp;&amp; mAutofillProvider.shouldQueryAutofillSuggestion()) {"
         errorLine2="                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
@@ -927,28 +905,6 @@
 
     <issue
         id="NewApi"
-        message="Call requires API level 26 (current min is 23): `getChannelIdForOrigin`"
-        errorLine1="        return SiteChannelsManager.getInstance().getChannelIdForOrigin(origin);"
-        errorLine2="                                                 ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/site_settings/ChromeSiteSettingsDelegate.java"
-            line="184"
-            column="50"/>
-    </issue>
-
-    <issue
-        id="NewApi"
-        message="Call requires API level 26 (current min is 23): `getInstance`"
-        errorLine1="        return SiteChannelsManager.getInstance().getChannelIdForOrigin(origin);"
-        errorLine2="                                   ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/site_settings/ChromeSiteSettingsDelegate.java"
-            line="184"
-            column="36"/>
-    </issue>
-
-    <issue
-        id="NewApi"
         message="Call requires API level 24 (current min is 23): `create`"
         errorLine1="        mMultiInstanceManager = MultiInstanceManager.create(this, getTabModelOrchestratorSupplier(),"
         errorLine2="                                                     ~~~~~~">
@@ -1055,28 +1011,6 @@
             file="../../chrome/android/java/src/org/chromium/chrome/browser/ChromeTabbedActivity.java"
             line="2619"
             column="39"/>
-    </issue>
-
-    <issue
-        id="NewApi"
-        message="Call requires API level 29 (current min is 23): `clearAllContentCaptureData`"
-        errorLine1="            contentCaptureController.clearAllContentCaptureData();"
-        errorLine2="                                     ~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/content_capture/ContentCaptureHistoryDeletionObserver.java"
-            line="30"
-            column="38"/>
-    </issue>
-
-    <issue
-        id="NewApi"
-        message="Call requires API level 29 (current min is 23): `clearContentCaptureDataForURLs`"
-        errorLine1="                    contentCaptureController.clearContentCaptureDataForURLs(deletedURLs);"
-        errorLine2="                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/content_capture/ContentCaptureHistoryDeletionObserver.java"
-            line="35"
-            column="46"/>
     </issue>
 
     <issue
@@ -1451,50 +1385,6 @@
             file="../../components/content_capture/android/java/src/org/chromium/components/content_capture/FaviconUpdateTask.java"
             line="27"
             column="66"/>
-    </issue>
-
-    <issue
-        id="NewApi"
-        message="Call requires API level 24 (current min is 23): `getLocale`"
-        errorLine1="        return getLocale(ContextUtils.getApplicationContext()).toLanguageTag();"
-        errorLine2="               ~~~~~~~~~">
-        <location
-            file="../../chrome/browser/feed/android/java/src/org/chromium/chrome/browser/feed/FeedServiceBridge.java"
-            line="95"
-            column="16"/>
-    </issue>
-
-    <issue
-        id="NewApi"
-        message="Call requires API level 29 (current min is 23): `addDirectAction`"
-        errorLine1="            reporter.addDirectAction(ACTION_ID).withParameter("
-        errorLine2="                     ~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/directactions/FindInPageDirectActionHandler.java"
-            line="35"
-            column="22"/>
-    </issue>
-
-    <issue
-        id="NewApi"
-        message="Call requires API level 29 (current min is 23): `withParameter`"
-        errorLine1="            reporter.addDirectAction(ACTION_ID).withParameter("
-        errorLine2="                                                ~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/directactions/FindInPageDirectActionHandler.java"
-            line="35"
-            column="49"/>
-    </issue>
-
-    <issue
-        id="NewApi"
-        message="Call requires API level 29 (current min is 23): `withParameter`"
-        errorLine1="                    ARGUMENT_NAME, Type.STRING, /* required = */ true);"
-        errorLine2="                                   ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/directactions/FindInPageDirectActionHandler.java"
-            line="36"
-            column="36"/>
     </issue>
 
     <issue
@@ -2775,17 +2665,6 @@
 
     <issue
         id="NewApi"
-        message="Call requires API level 27 (current min is 23): `setNavigationBarScrimFraction`"
-        errorLine1="                        controller.setNavigationBarScrimFraction(scrimFraction);"
-        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/tabbed_mode/TabbedRootUiCoordinator.java"
-            line="590"
-            column="36"/>
-    </issue>
-
-    <issue
-        id="NewApi"
         message="Call requires API level 27 (current min is 23): `destroy`"
         errorLine1="        if (mNavigationBarColorController != null) mNavigationBarColorController.destroy();"
         errorLine2="                                                                                 ~~~~~~~">
@@ -3002,17 +2881,6 @@
             file="../../ui/android/java/src/org/chromium/ui/resources/dynamics/ViewResourceAdapter.java"
             line="458"
             column="29"/>
-    </issue>
-
-    <issue
-        id="NewApi"
-        message="Call requires API level 24 (current min is 23): `setVrModeEnabled`"
-        errorLine1="            ApiHelperForN.setVrModeEnabled(activity, enabled,"
-        errorLine2="                          ~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/features/vr/java/src/org/chromium/chrome/browser/vr/VrDelegateFallback.java"
-            line="230"
-            column="27"/>
     </issue>
 
     <issue
@@ -3556,28 +3424,6 @@
 
     <issue
         id="WrongConstant"
-        message="Must be one of: AppMenuHighlightItem.UNKNOWN, AppMenuHighlightItem.DOWNLOADS, AppMenuHighlightItem.BOOKMARKS, AppMenuHighlightItem.TRANSLATE, AppMenuHighlightItem.ADD_TO_HOMESCREEN, AppMenuHighlightItem.DOWNLOAD_THIS_PAGE, AppMenuHighlightItem.BOOKMARK_THIS_PAGE, AppMenuHighlightItem.DATA_REDUCTION_FOOTER"
-        errorLine1="                getUmaEnumForMenuItem(menuItemId), AppMenuHighlightItem.NUM_ENTRIES);"
-        errorLine2="                                                                        ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/app/appmenu/AppMenuPropertiesDelegateImpl.java"
-            line="975"
-            column="73"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: AppMenuHighlightItem.UNKNOWN, AppMenuHighlightItem.DOWNLOADS, AppMenuHighlightItem.BOOKMARKS, AppMenuHighlightItem.TRANSLATE, AppMenuHighlightItem.ADD_TO_HOMESCREEN, AppMenuHighlightItem.DOWNLOAD_THIS_PAGE, AppMenuHighlightItem.BOOKMARK_THIS_PAGE, AppMenuHighlightItem.DATA_REDUCTION_FOOTER"
-        errorLine1="                getUmaEnumForMenuItem(menuItemId), AppMenuHighlightItem.NUM_ENTRIES);"
-        errorLine2="                                                                        ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/app/appmenu/AppMenuPropertiesDelegateImpl.java"
-            line="981"
-            column="73"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
         message="Must be one of: Icon.NONE, Icon.CLEAR, Icon.DONE, Icon.REFRESH"
         errorLine1="            case AssistantChip.Icon.OVERFLOW:"
         errorLine2="                                    ~~~~~~~~">
@@ -4007,17 +3853,6 @@
 
     <issue
         id="WrongConstant"
-        message="Must be one of: RestoreStatus.NO_RESTORE, RestoreStatus.RESTORE_COMPLETED, RestoreStatus.RESTORE_AFTER_FIRST_RUN, RestoreStatus.BROWSER_STARTUP_FAILED, RestoreStatus.NOT_SIGNED_IN, RestoreStatus.RESTORE_STATUS_RECORDED"
-        errorLine1="                    HISTOGRAM_ANDROID_RESTORE_RESULT, restoreStatus, RestoreStatus.NUM_ENTRIES);"
-        errorLine2="                                                                                   ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/ChromeBackupAgentImpl.java"
-            line="459"
-            column="84"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
         message="Must be one of: ChannelId.BROWSER, ChannelId.DOWNLOADS, ChannelId.INCOGNITO, ChannelId.MEDIA_PLAYBACK, ChannelId.SCREEN_CAPTURE, ChannelId.CONTENT_SUGGESTIONS, ChannelId.WEBAPP_ACTIONS, ChannelId.SITES, ChannelId.SHARING, ChannelId.UPDATES, ChannelId.COMPLETED_DOWNLOADS, ChannelId.PERMISSION_REQUESTS, ChannelId.PERMISSION_REQUESTS_HIGH, ChannelId.ANNOUNCEMENT, ChannelId.WEBAPPS, ChannelId.WEBAPPS_QUIET, ChannelId.PRICE_DROP, ChannelId.SECURITY_KEY, ChannelId.CHROME_TIPS"
         errorLine1="            map.put(ChannelId.WEBRTC_CAM_AND_MIC,"
         errorLine2="                              ~~~~~~~~~~~~~~~~~~">
@@ -4146,83 +3981,6 @@
             file="../../chrome/android/java/src/org/chromium/chrome/browser/contextmenu/ChromeContextMenuPopulator.java"
             line="620"
             column="65"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: UiAvailableTypes.TOP_AVAILABLE, UiAvailableTypes.ONLY_DEFAULT_AVAILABLE, UiAvailableTypes.NONE_AVAILABLE, UiAvailableTypes.OVERRIDDEN"
-        errorLine1="                availableStatus, UiAvailableTypes.NUM_ENTRIES);"
-        errorLine2="                                                  ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/ChromeLocalizationUtils.java"
-            line="133"
-            column="51"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: UiCorrectTypes.CORRECT, UiCorrectTypes.INCORRECT, UiCorrectTypes.NOT_AVAILABLE, UiCorrectTypes.ONLY_JAVA_CORRECT"
-        errorLine1="                &quot;LanguageUsage.UI.Android.Correctness&quot;, correctStatus, UiCorrectTypes.NUM_ENTRIES);"
-        errorLine2="                                                                                      ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/ChromeLocalizationUtils.java"
-            line="140"
-            column="87"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: UiCorrectTypes.CORRECT, UiCorrectTypes.INCORRECT, UiCorrectTypes.NOT_AVAILABLE, UiCorrectTypes.ONLY_JAVA_CORRECT"
-        errorLine1="                    UiCorrectTypes.NUM_ENTRIES);"
-        errorLine2="                                   ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/ChromeLocalizationUtils.java"
-            line="147"
-            column="36"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: UiCorrectTypes.CORRECT, UiCorrectTypes.INCORRECT, UiCorrectTypes.NOT_AVAILABLE, UiCorrectTypes.ONLY_JAVA_CORRECT"
-        errorLine1="                    UiCorrectTypes.NUM_ENTRIES);"
-        errorLine2="                                   ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/ChromeLocalizationUtils.java"
-            line="154"
-            column="36"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: LocaleUpdateStatus.NO_CHANGE, LocaleUpdateStatus.OVERRIDDEN_TOP_CHANGED, LocaleUpdateStatus.OVERRIDDEN_OTHERS_CHANGED, LocaleUpdateStatus.NO_OVERRIDE_TOP_CHANGED, LocaleUpdateStatus.NO_OVERRIDE_OTHERS_CHANGED, LocaleUpdateStatus.FIRST_RUN"
-        errorLine1="                &quot;LanguageUsage.UI.Android.IsLocaleUpdated&quot;, status, LocaleUpdateStatus.NUM_ENTRIES);"
-        errorLine2="                                                                                       ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/ChromeLocalizationUtils.java"
-            line="262"
-            column="88"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: FilteringResult.SURVEY_INFOBAR_ALREADY_DISPLAYED, FilteringResult.FORCE_SURVEY_ON_COMMAND_PRESENT, FilteringResult.USER_ALREADY_SAMPLED_TODAY, FilteringResult.MAX_NUMBER_MISSING, FilteringResult.ROLLED_NON_ZERO_NUMBER, FilteringResult.USER_SELECTED_FOR_SURVEY, FilteringResult.FIRST_TIME_USER"
-        errorLine1="                &quot;Android.Survey.SurveyFilteringResults&quot;, value, FilteringResult.NUM_ENTRIES);"
-        errorLine2="                                                                                ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/survey/ChromeSurveyController.java"
-            line="644"
-            column="81"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: InfoBarClosingState.ACCEPTED_SURVEY, InfoBarClosingState.CLOSE_BUTTON, InfoBarClosingState.VISIBLE_INDIRECT, InfoBarClosingState.HIDDEN_INDIRECT, InfoBarClosingState.UNKNOWN"
-        errorLine1="                &quot;Android.Survey.InfoBarClosingState&quot;, value, InfoBarClosingState.NUM_ENTRIES);"
-        errorLine2="                                                                                 ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/survey/ChromeSurveyController.java"
-            line="649"
-            column="82"/>
     </issue>
 
     <issue
@@ -5052,17 +4810,6 @@
 
     <issue
         id="WrongConstant"
-        message="Must be one of: ParallelRequestStatus.NO_REQUEST, ParallelRequestStatus.SUCCESS, ParallelRequestStatus.FAILURE_NOT_INITIALIZED, ParallelRequestStatus.FAILURE_NOT_AUTHORIZED, ParallelRequestStatus.FAILURE_INVALID_URL, ParallelRequestStatus.FAILURE_INVALID_REFERRER, ParallelRequestStatus.FAILURE_INVALID_REFERRER_FOR_SESSION"
-        errorLine1="                ParallelRequestStatus.NUM_ENTRIES);"
-        errorLine2="                                      ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/customtabs/CustomTabsConnection.java"
-            line="902"
-            column="39"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
         message="Must be one of: CloseCause.USER_ACTION_CHROME, CloseCause.USER_ACTION_ANDROID, CloseCause.AUTOCLOSE"
         errorLine1="                &quot;CustomTabs.CloseCause&quot;, mCloseCause, CloseCause.COUNT);"
         errorLine2="                                                                 ~~~~~">
@@ -5558,17 +5305,6 @@
 
     <issue
         id="WrongConstant"
-        message="Must be one of: StreamTabId.DEFAULT, StreamTabId.FOR_YOU, StreamTabId.FOLLOWING"
-        errorLine1="        mSectionHeaderModel.set(SectionHeaderListProperties.CURRENT_TAB_INDEX_KEY, tabId);"
-        errorLine2="                                                                                   ~~~~~">
-        <location
-            file="../../chrome/android/feed/core/java/src/org/chromium/chrome/browser/feed/FeedSurfaceMediator.java"
-            line="364"
-            column="84"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
         message="Must be one of: StorageRequestType.SAVE, StorageRequestType.RESTORE, StorageRequestType.DELETE"
         errorLine1="                    storageRequest.getStorageRequestType(), StorageRequestType.NUM_ENTRIES);"
         errorLine2="                                                                               ~~~~~~~~~~~">
@@ -5691,17 +5427,6 @@
     <issue
         id="WrongConstant"
         message="Must be one of: IdentityDiscState.NONE, IdentityDiscState.SMALL, IdentityDiscState.LARGE"
-        errorLine1="    private ProfileDataCache mProfileDataCache[] = new ProfileDataCache[IdentityDiscState.MAX];"
-        errorLine2="                                                                                          ~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/identity_disc/IdentityDiscController.java"
-            line="80"
-            column="91"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: IdentityDiscState.NONE, IdentityDiscState.SMALL, IdentityDiscState.LARGE"
         errorLine1="        for (int i = 0; i &lt; IdentityDiscState.MAX; i++) {"
         errorLine2="                                              ~~~">
         <location
@@ -5730,17 +5455,6 @@
             file="../../chrome/browser/image_descriptions/android/java/src/org/chromium/chrome/browser/image_descriptions/ImageDescriptionsDialog.java"
             line="274"
             column="55"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: IncognitoCCTCallerId.OTHER_APPS, IncognitoCCTCallerId.GOOGLE_APPS, IncognitoCCTCallerId.OTHER_CHROME_FEATURES, IncognitoCCTCallerId.READER_MODE, IncognitoCCTCallerId.READ_LATER"
-        errorLine1="                    &amp;&amp; incognitoCCTChromeClientId &lt; IntentHandler.IncognitoCCTCallerId.NUM_ENTRIES);"
-        errorLine2="                                                                                       ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/customtabs/IncognitoCustomTabIntentDataProvider.java"
-            line="179"
-            column="88"/>
     </issue>
 
     <issue
@@ -6416,39 +6130,6 @@
 
     <issue
         id="WrongConstant"
-        message="Must be one of: NightModeEnabledReason.USER_PREFERENCE, NightModeEnabledReason.POWER_SAVE_MODE, NightModeEnabledReason.OTHER"
-        errorLine1="                NightModeEnabledReason.NUM_ENTRIES);"
-        errorLine2="                                       ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/ui/android/night_mode/java/src/org/chromium/chrome/browser/night_mode/NightModeMetrics.java"
-            line="67"
-            column="40"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: ThemeType.SYSTEM_DEFAULT, ThemeType.LIGHT, ThemeType.DARK"
-        errorLine1="                &quot;Android.DarkTheme.Preference.State&quot;, theme, ThemeType.NUM_ENTRIES);"
-        errorLine2="                                                                       ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/ui/android/night_mode/java/src/org/chromium/chrome/browser/night_mode/NightModeMetrics.java"
-            line="86"
-            column="72"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: ThemeSettingsEntry.SETTINGS, ThemeSettingsEntry.AUTO_DARK_MODE_MESSAGE"
-        errorLine1="                &quot;Android.DarkTheme.ThemeSettingsEntry&quot;, entry, ThemeSettingsEntry.NUM_ENTRIES);"
-        errorLine2="                                                                                  ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/ui/android/night_mode/java/src/org/chromium/chrome/browser/night_mode/NightModeMetrics.java"
-            line="116"
-            column="83"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
         message="Must be one of: NoteShareDestination.FIRST_PARTY, NoteShareDestination.THIRD_PARTY"
         errorLine1="                NoteShareDestination.NUM_ENTRIES);"
         errorLine2="                                     ~~~~~~~~~~~">
@@ -6610,17 +6291,6 @@
             file="../../chrome/browser/optimization_guide/android/java/src/org/chromium/chrome/browser/optimization_guide/OptimizationGuidePushNotificationManager.java"
             line="148"
             column="71"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: VerificationResult.ONLINE_SUCCESS, VerificationResult.ONLINE_FAILURE, VerificationResult.OFFLINE_SUCCESS, VerificationResult.OFFLINE_FAILURE, VerificationResult.HTTPS_FAILURE, VerificationResult.REQUEST_FAILURE, VerificationResult.CACHED_SUCCESS"
-        errorLine1="                &quot;BrowserServices.VerificationResult&quot;, result, VerificationResult.NUM_ENTRIES);"
-        errorLine2="                                                                                 ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/android/browserservices/metrics/java/src/org/chromium/chrome/browser/browserservices/metrics/OriginVerifierMetricsRecorder.java"
-            line="38"
-            column="82"/>
     </issue>
 
     <issue
@@ -7021,105 +6691,6 @@
 
     <issue
         id="WrongConstant"
-        message="Must be one of: ThemeType.SYSTEM_DEFAULT, ThemeType.LIGHT, ThemeType.DARK"
-        errorLine1="        mButtons = new ArrayList&lt;>(Collections.nCopies(ThemeType.NUM_ENTRIES, null));"
-        errorLine2="                                                                 ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/ui/android/night_mode/java/src/org/chromium/chrome/browser/night_mode/settings/RadioButtonGroupThemePreference.java"
-            line="54"
-            column="66"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: ThemeType.SYSTEM_DEFAULT, ThemeType.LIGHT, ThemeType.DARK"
-        errorLine1="        assert ThemeType.NUM_ENTRIES == 3;"
-        errorLine2="                         ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/ui/android/night_mode/java/src/org/chromium/chrome/browser/night_mode/settings/RadioButtonGroupThemePreference.java"
-            line="81"
-            column="26"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: ThemeType.SYSTEM_DEFAULT, ThemeType.LIGHT, ThemeType.DARK"
-        errorLine1="        for (int i = 0; i &lt; ThemeType.NUM_ENTRIES; i++) {"
-        errorLine2="                                      ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/ui/android/night_mode/java/src/org/chromium/chrome/browser/night_mode/settings/RadioButtonGroupThemePreference.java"
-            line="114"
-            column="39"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: ThemeType.SYSTEM_DEFAULT, ThemeType.LIGHT, ThemeType.DARK"
-        errorLine1="        assert mSetting >= 0 &amp;&amp; mSetting &lt; ThemeType.NUM_ENTRIES : &quot;No matching setting found.&quot;;"
-        errorLine2="                                                     ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/ui/android/night_mode/java/src/org/chromium/chrome/browser/night_mode/settings/RadioButtonGroupThemePreference.java"
-            line="121"
-            column="54"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: VideoPreviewsType.NEVER, VideoPreviewsType.WIFI, VideoPreviewsType.WIFI_AND_MOBILE_DATA"
-        errorLine1="        mButtons = new ArrayList&lt;>(Collections.nCopies(VideoPreviewsType.NUM_ENTRIES, null));"
-        errorLine2="                                                                         ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/feed/android/java/src/org/chromium/chrome/browser/feed/settings/RadioButtonGroupVideoPreviewsPreference.java"
-            line="38"
-            column="74"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: VideoPreviewsType.NEVER, VideoPreviewsType.WIFI, VideoPreviewsType.WIFI_AND_MOBILE_DATA"
-        errorLine1="        assert VideoPreviewsType.NUM_ENTRIES == 3;"
-        errorLine2="                                 ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/feed/android/java/src/org/chromium/chrome/browser/feed/settings/RadioButtonGroupVideoPreviewsPreference.java"
-            line="49"
-            column="34"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: VideoPreviewsType.NEVER, VideoPreviewsType.WIFI, VideoPreviewsType.WIFI_AND_MOBILE_DATA"
-        errorLine1="        for (int i = 0; i &lt; VideoPreviewsType.NUM_ENTRIES; i++) {"
-        errorLine2="                                              ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/feed/android/java/src/org/chromium/chrome/browser/feed/settings/RadioButtonGroupVideoPreviewsPreference.java"
-            line="70"
-            column="47"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: VideoPreviewsType.NEVER, VideoPreviewsType.WIFI, VideoPreviewsType.WIFI_AND_MOBILE_DATA"
-        errorLine1="                &amp;&amp; mSetting &lt; VideoPreviewsType.NUM_ENTRIES : &quot;No matching setting found.&quot;;"
-        errorLine2="                                                ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/feed/android/java/src/org/chromium/chrome/browser/feed/settings/RadioButtonGroupVideoPreviewsPreference.java"
-            line="77"
-            column="49"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: VideoPreviewsType.NEVER, VideoPreviewsType.WIFI, VideoPreviewsType.WIFI_AND_MOBILE_DATA"
-        errorLine1="                &quot;FeedVideoPreviewsPreferenceUserActions&quot;, mSetting, VideoPreviewsType.NUM_ENTRIES);"
-        errorLine2="                                                                                      ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/feed/android/java/src/org/chromium/chrome/browser/feed/settings/RadioButtonGroupVideoPreviewsPreference.java"
-            line="80"
-            column="87"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
         message="Must be one of: FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_NEW_TAB_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_SHARE_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_VOICE_SEARCH_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_MESSAGE_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_TEXT_BUBBLE_FEATURE, FeatureConstants.AUTO_DARK_OPT_OUT_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_OPT_IN_FEATURE, FeatureConstants.DOWNLOAD_PAGE_FEATURE, FeatureConstants.DOWNLOAD_PAGE_SCREENSHOT_FEATURE, FeatureConstants.DOWNLOAD_HOME_FEATURE, FeatureConstants.DOWNLOAD_INDICATOR_FEATURE, FeatureConstants.CHROME_HOME_EXPAND_FEATURE, FeatureConstants.CHROME_HOME_PULL_TO_REFRESH_FEATURE, FeatureConstants.DATA_SAVER_PREVIEW_FEATURE, FeatureConstants.DATA_SAVER_DETAIL_FEATURE, FeatureConstants.EPHEMERAL_TAB_FEATURE, FeatureConstants.PREVIEWS_OMNIBOX_UI_FEATURE, FeatureConstants.TRANSLATE_MENU_BUTTON_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TRANSLATION_ENABLE_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_WEB_SEARCH_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_TAP_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_PANEL_OPEN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_OPT_IN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TAPPED_BUT_SHOULD_LONGPRESS_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_IN_PANEL_HELP_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_ADDRESS_FILL_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_BAR_SWIPING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PASSWORD_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_OFFER_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_VIRTUAL_CARD_FEATURE, FeatureConstants.DOWNLOAD_SETTINGS_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOAD_CONTINUING_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOADS_ARE_FASTER_FEATURE, FeatureConstants.NEW_TAB_PAGE_HOME_BUTTON_FEATURE, FeatureConstants.SHOPPING_LIST_MENU_ITEM_FEATURE, FeatureConstants.SHOPPING_LIST_SAVE_FLOW_FEATURE, FeatureConstants.TAB_GROUPS_QUICKLY_COMPARE_PAGES_FEATURE, FeatureConstants.TAB_GROUPS_TAP_TO_SEE_ANOTHER_TAB_FEATURE, FeatureConstants.TAB_GROUPS_YOUR_TABS_ARE_TOGETHER_FEATURE, FeatureConstants.TAB_SWITCHER_BUTTON_FEATURE, FeatureConstants.FEED_CARD_MENU_FEATURE, FeatureConstants.IDENTITY_DISC_FEATURE, FeatureConstants.TAB_GROUPS_DRAG_AND_DROP_FEATURE, FeatureConstants.QUIET_NOTIFICATION_PROMPTS_FEATURE, FeatureConstants.FEED_HEADER_MENU_FEATURE, FeatureConstants.FEED_SWIPE_REFRESH_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_1_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_2_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_3_FEATURE, FeatureConstants.PWA_INSTALL_AVAILABLE_FEATURE, FeatureConstants.PAGE_INFO_FEATURE, FeatureConstants.PAGE_INFO_STORE_INFO_FEATURE, FeatureConstants.IPH_SHARE_SCREENSHOT_FEATURE, FeatureConstants.IPH_SHARING_HUB_LINK_TOGGLE_FEATURE, FeatureConstants.IPH_WEB_FEED_FOLLOW_FEATURE, FeatureConstants.IPH_WEB_FEED_POST_FOLLOW_DIALOG_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_BUILDER_FEATURE, FeatureConstants.START_SURFACE_TAB_SWITCHER_HOME_BUTTON_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_RECEIVER_FEATURE, FeatureConstants.SHARING_HUB_WEBNOTES_STYLIZE_FEATURE"
         errorLine1="                        FeatureConstants.READ_LATER_APP_MENU_BOOKMARK_THIS_PAGE_FEATURE,"
         errorLine2="                                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
@@ -7138,61 +6709,6 @@
             file="../../chrome/android/java/src/org/chromium/chrome/browser/read_later/ReadLaterIPHController.java"
             line="74"
             column="42"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: FaviconLocality.LOCAL, FaviconLocality.FOREIGN"
-        errorLine1="            new ArrayMap&lt;>(FaviconLocality.NUM_ENTRIES);"
-        errorLine2="                                           ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/ntp/RecentTabsRowAdapter.java"
-            line="123"
-            column="44"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: OtherSessionsActions.MENU_INITIALIZED, OtherSessionsActions.LINK_CLICKED, OtherSessionsActions.COLLAPSE_SESSION, OtherSessionsActions.EXPAND_SESSION, OtherSessionsActions.OPEN_ALL, OtherSessionsActions.HAS_FOREIGN_DATA, OtherSessionsActions.HIDE_FOR_NOW"
-        errorLine1="                        OtherSessionsActions.COLLAPSE_SESSION, OtherSessionsActions.NUM_ENTRIES);"
-        errorLine2="                                                                                    ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/ntp/RecentTabsRowAdapter.java"
-            line="328"
-            column="85"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: OtherSessionsActions.MENU_INITIALIZED, OtherSessionsActions.LINK_CLICKED, OtherSessionsActions.COLLAPSE_SESSION, OtherSessionsActions.EXPAND_SESSION, OtherSessionsActions.OPEN_ALL, OtherSessionsActions.HAS_FOREIGN_DATA, OtherSessionsActions.HIDE_FOR_NOW"
-        errorLine1="                        OtherSessionsActions.EXPAND_SESSION, OtherSessionsActions.NUM_ENTRIES);"
-        errorLine2="                                                                                  ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/ntp/RecentTabsRowAdapter.java"
-            line="331"
-            column="83"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: OtherSessionsActions.MENU_INITIALIZED, OtherSessionsActions.LINK_CLICKED, OtherSessionsActions.COLLAPSE_SESSION, OtherSessionsActions.EXPAND_SESSION, OtherSessionsActions.OPEN_ALL, OtherSessionsActions.HAS_FOREIGN_DATA, OtherSessionsActions.HIDE_FOR_NOW"
-        errorLine1="                    OtherSessionsActions.LINK_CLICKED, OtherSessionsActions.NUM_ENTRIES);"
-        errorLine2="                                                                            ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/ntp/RecentTabsRowAdapter.java"
-            line="344"
-            column="77"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: OtherSessionsActions.MENU_INITIALIZED, OtherSessionsActions.LINK_CLICKED, OtherSessionsActions.COLLAPSE_SESSION, OtherSessionsActions.EXPAND_SESSION, OtherSessionsActions.OPEN_ALL, OtherSessionsActions.HAS_FOREIGN_DATA, OtherSessionsActions.HIDE_FOR_NOW"
-        errorLine1="                        OtherSessionsActions.OPEN_ALL, OtherSessionsActions.NUM_ENTRIES);"
-        errorLine2="                                                                            ~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/ntp/RecentTabsRowAdapter.java"
-            line="355"
-            column="77"/>
     </issue>
 
     <issue
@@ -7384,17 +6900,6 @@
 
     <issue
         id="WrongConstant"
-        message="Must be one of: FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_NEW_TAB_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_SHARE_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_VOICE_SEARCH_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_MESSAGE_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_TEXT_BUBBLE_FEATURE, FeatureConstants.AUTO_DARK_OPT_OUT_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_OPT_IN_FEATURE, FeatureConstants.DOWNLOAD_PAGE_FEATURE, FeatureConstants.DOWNLOAD_PAGE_SCREENSHOT_FEATURE, FeatureConstants.DOWNLOAD_HOME_FEATURE, FeatureConstants.DOWNLOAD_INDICATOR_FEATURE, FeatureConstants.CHROME_HOME_EXPAND_FEATURE, FeatureConstants.CHROME_HOME_PULL_TO_REFRESH_FEATURE, FeatureConstants.DATA_SAVER_PREVIEW_FEATURE, FeatureConstants.DATA_SAVER_DETAIL_FEATURE, FeatureConstants.EPHEMERAL_TAB_FEATURE, FeatureConstants.PREVIEWS_OMNIBOX_UI_FEATURE, FeatureConstants.TRANSLATE_MENU_BUTTON_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TRANSLATION_ENABLE_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_WEB_SEARCH_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_TAP_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_PANEL_OPEN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_OPT_IN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TAPPED_BUT_SHOULD_LONGPRESS_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_IN_PANEL_HELP_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_ADDRESS_FILL_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_BAR_SWIPING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PASSWORD_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_OFFER_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_VIRTUAL_CARD_FEATURE, FeatureConstants.DOWNLOAD_SETTINGS_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOAD_CONTINUING_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOADS_ARE_FASTER_FEATURE, FeatureConstants.NEW_TAB_PAGE_HOME_BUTTON_FEATURE, FeatureConstants.SHOPPING_LIST_MENU_ITEM_FEATURE, FeatureConstants.SHOPPING_LIST_SAVE_FLOW_FEATURE, FeatureConstants.TAB_GROUPS_QUICKLY_COMPARE_PAGES_FEATURE, FeatureConstants.TAB_GROUPS_TAP_TO_SEE_ANOTHER_TAB_FEATURE, FeatureConstants.TAB_GROUPS_YOUR_TABS_ARE_TOGETHER_FEATURE, FeatureConstants.TAB_SWITCHER_BUTTON_FEATURE, FeatureConstants.FEED_CARD_MENU_FEATURE, FeatureConstants.IDENTITY_DISC_FEATURE, FeatureConstants.TAB_GROUPS_DRAG_AND_DROP_FEATURE, FeatureConstants.QUIET_NOTIFICATION_PROMPTS_FEATURE, FeatureConstants.FEED_HEADER_MENU_FEATURE, FeatureConstants.FEED_SWIPE_REFRESH_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_1_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_2_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_3_FEATURE, FeatureConstants.PWA_INSTALL_AVAILABLE_FEATURE, FeatureConstants.PAGE_INFO_FEATURE, FeatureConstants.PAGE_INFO_STORE_INFO_FEATURE, FeatureConstants.IPH_SHARE_SCREENSHOT_FEATURE, FeatureConstants.IPH_SHARING_HUB_LINK_TOGGLE_FEATURE, FeatureConstants.IPH_WEB_FEED_FOLLOW_FEATURE, FeatureConstants.IPH_WEB_FEED_POST_FOLLOW_DIALOG_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_BUILDER_FEATURE, FeatureConstants.START_SURFACE_TAB_SWITCHER_HOME_BUTTON_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_RECEIVER_FEATURE, FeatureConstants.SHARING_HUB_WEBNOTES_STYLIZE_FEATURE"
-        errorLine1="                FeatureConstants.FEATURE_NOTIFICATION_GUIDE_NTP_SUGGESTION_CARD_HELP_BUBBLE_FEATURE,"
-        errorLine2="                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/feed/android/java/src/org/chromium/chrome/browser/feed/sections/SectionHeaderView.java"
-            line="452"
-            column="34"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
         message="Must be one of: FileSelectedAction.MEDIA_PICKER_IMAGE_BY_MIME_TYPE, FileSelectedAction.MEDIA_PICKER_VIDEO_BY_MIME_TYPE, FileSelectedAction.MEDIA_PICKER_OTHER_BY_MIME_TYPE, FileSelectedAction.MEDIA_PICKER_IMAGE_BY_EXTENSION, FileSelectedAction.MEDIA_PICKER_VIDEO_BY_EXTENSION, FileSelectedAction.MEDIA_PICKER_OTHER_BY_EXTENSION, FileSelectedAction.MEDIA_PICKER_UNKNOWN_TYPE, FileSelectedAction.EXTERNAL_PICKER_IMAGE_BY_MIME_TYPE, FileSelectedAction.EXTERNAL_PICKER_VIDEO_BY_MIME_TYPE, FileSelectedAction.EXTERNAL_PICKER_OTHER_BY_MIME_TYPE, FileSelectedAction.EXTERNAL_PICKER_IMAGE_BY_EXTENSION, FileSelectedAction.EXTERNAL_PICKER_VIDEO_BY_EXTENSION, FileSelectedAction.EXTERNAL_PICKER_OTHER_BY_EXTENSION, FileSelectedAction.EXTERNAL_PICKER_UNKNOWN_TYPE"
         errorLine1="                &quot;Android.SelectFileDialogContentSelected&quot;, action, FileSelectedAction.COUNT);"
         errorLine2="                                                                                      ~~~~~">
@@ -7461,17 +6966,6 @@
 
     <issue
         id="WrongConstant"
-        message="Must be one of: ShareSourceAndroid.ANDROID_SHARE_SHEET, ShareSourceAndroid.CHROME_SHARE_SHEET, ShareSourceAndroid.DIRECT_SHARE"
-        errorLine1="                ANY_SHARE_HISTOGRAM_NAME, source, ShareSourceAndroid.COUNT);"
-        errorLine2="                                                                     ~~~~~">
-        <location
-            file="../../components/browser_ui/share/android/java/src/org/chromium/components/browser_ui/share/ShareHelper.java"
-            line="447"
-            column="70"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
         message="Must be one of: ActionType.UNKNOWN, ActionType.DOWNLOAD_PAUSE, ActionType.DOWNLOAD_RESUME, ActionType.DOWNLOAD_CANCEL, ActionType.DOWNLOAD_PAGE_PAUSE, ActionType.DOWNLOAD_PAGE_RESUME, ActionType.DOWNLOAD_PAGE_CANCEL, ActionType.CONTENT_SUGGESTION_SETTINGS, ActionType.WEB_APP_ACTION_SHARE, ActionType.WEB_APP_ACTION_OPEN_IN_CHROME, ActionType.OFFLINE_CONTENT_SUGGESTION_SETTINGS, ActionType.SHARING_TRY_AGAIN, ActionType.SETTINGS, ActionType.ANNOUNCEMENT_ACK, ActionType.ANNOUNCEMENT_OPEN, ActionType.PRICE_DROP_VISIT_SITE, ActionType.PRICE_DROP_TURN_OFF_ALERT"
         errorLine1="                    confirmIntent, NotificationUmaTracker.ActionType.SHARING_CONFIRM);"
         errorLine2="                                                                     ~~~~~~~~~~~~~~~">
@@ -7490,28 +6984,6 @@
             file="../../chrome/android/java/src/org/chromium/chrome/browser/sharing/SharingNotificationUtil.java"
             line="91"
             column="69"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: FoundBuyableProductAnnotation.NOT_FOUND, FoundBuyableProductAnnotation.FOUND, FoundBuyableProductAnnotation.FOUND_WITH_PRICE_UPDATE"
-        errorLine1="                foundBuyableProductAnnotation, FoundBuyableProductAnnotation.NUM_ENTRIES);"
-        errorLine2="                                                                             ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/tab/java/src/org/chromium/chrome/browser/tab/state/ShoppingPersistedTabData.java"
-            line="671"
-            column="78"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: FoundBuyableProduct.NOT_FOUND, FoundBuyableProduct.FOUND, FoundBuyableProduct.FOUND_WITH_PRICE_UPDATE"
-        errorLine1="                FoundBuyableProduct.NUM_ENTRIES);"
-        errorLine2="                                    ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/tab/java/src/org/chromium/chrome/browser/tab/state/ShoppingPersistedTabData.java"
-            line="713"
-            column="37"/>
     </issue>
 
     <issue
@@ -7633,17 +7105,6 @@
             file="../../components/browser_ui/site_settings/android/java/src/org/chromium/components/browser_ui/site_settings/SiteSettingsCategory.java"
             line="141"
             column="53"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: UserChoice.USE_SOGOU, UserChoice.KEEP_GOOGLE, UserChoice.SETTINGS, UserChoice.BACK_KEY"
-        errorLine1="                &quot;SpecialLocale.PromotionDialog&quot;, mChoice, UserChoice.NUM_ENTRIES);"
-        errorLine2="                                                                     ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/search_engines/android/java/src/org/chromium/chrome/browser/search_engines/SogouPromoDialog.java"
-            line="139"
-            column="70"/>
     </issue>
 
     <issue
@@ -7901,17 +7362,6 @@
 
     <issue
         id="WrongConstant"
-        message="Must be one of: State.NONE, State.INVALID_GAIA_CREDENTIALS, State.USER_NOT_SIGNED_UP, State.CONNECTION_FAILED, State.SERVICE_UNAVAILABLE, State.REQUEST_CANCELED, State.UNEXPECTED_SERVICE_RESPONSE, State.SERVICE_ERROR"
-        errorLine1="        if (authErrorCode &lt; 0 || authErrorCode >= GoogleServiceAuthError.State.NUM_ENTRIES) {"
-        errorLine2="                                                                               ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/sync/android/java/src/org/chromium/chrome/browser/sync/SyncServiceImpl.java"
-            line="97"
-            column="80"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
         message="Must be one of: ThumbnailFetchingResult.GOT_JPEG, ThumbnailFetchingResult.GOT_ETC1, ThumbnailFetchingResult.GOT_NOTHING, ThumbnailFetchingResult.GOT_DIFFERENT_ASPECT_RATIO_JPEG"
         errorLine1="                UMA_THUMBNAIL_FETCHING_RESULT, result, ThumbnailFetchingResult.NUM_ENTRIES);"
         errorLine2="                                                                               ~~~~~~~~~~~">
@@ -8011,61 +7461,6 @@
 
     <issue
         id="WrongConstant"
-        message="Must be one of: SettingsNavigationSource.OTHER, SettingsNavigationSource.TWA_CLEAR_DATA_DIALOG, SettingsNavigationSource.TWA_MANAGE_SPACE_ACTIVITY"
-        errorLine1="        extras.putInt(SettingsNavigationSource.EXTRA_KEY,"
-        errorLine2="                                               ~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/browserservices/TrustedWebActivitySettingsLauncher.java"
-            line="108"
-            column="48"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: SettingsNavigationSource.OTHER, SettingsNavigationSource.TWA_CLEAR_DATA_DIALOG, SettingsNavigationSource.TWA_MANAGE_SPACE_ACTIVITY"
-        errorLine1="        args.putInt(SettingsNavigationSource.EXTRA_KEY, navigationSource);"
-        errorLine2="                                             ~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/browserservices/TrustedWebActivitySettingsLauncher.java"
-            line="121"
-            column="46"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: DelegatedNotificationSmallIconFallback.NO_FALLBACK, DelegatedNotificationSmallIconFallback.FALLBACK_ICON_NOT_PROVIDED, DelegatedNotificationSmallIconFallback.FALLBACK_FOR_STATUS_BAR, DelegatedNotificationSmallIconFallback.FALLBACK_FOR_STATUS_BAR_AND_CONTENT"
-        errorLine1="                DelegatedNotificationSmallIconFallback.NUM_ENTRIES);"
-        errorLine2="                                                       ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/android/browserservices/metrics/java/src/org/chromium/chrome/browser/browserservices/metrics/TrustedWebActivityUmaRecorder.java"
-            line="160"
-            column="56"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: ShareRequestMethod.GET, ShareRequestMethod.POST"
-        errorLine1="                &quot;TrustedWebActivity.ShareTargetRequest&quot;, method, ShareRequestMethod.NUM_ENTRIES);"
-        errorLine2="                                                                                    ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/android/browserservices/metrics/java/src/org/chromium/chrome/browser/browserservices/metrics/TrustedWebActivityUmaRecorder.java"
-            line="182"
-            column="85"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: PermissionChanged.NULL_TO_TRUE, PermissionChanged.NULL_TO_FALSE, PermissionChanged.TRUE_TO_FALSE, PermissionChanged.FALSE_TO_TRUE"
-        errorLine1="                        PermissionChanged.NUM_ENTRIES);"
-        errorLine2="                                          ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/android/browserservices/metrics/java/src/org/chromium/chrome/browser/browserservices/metrics/TrustedWebActivityUmaRecorder.java"
-            line="221"
-            column="43"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
         message="Must be one of: AudioPermissionState.GRANTED, AudioPermissionState.DENIED_CAN_ASK_AGAIN, AudioPermissionState.DENIED_CANNOT_ASK_AGAIN"
         errorLine1="                AudioPermissionState.NUM_ENTRIES);"
         errorLine2="                                     ~~~~~~~~~~~">
@@ -8139,50 +7534,6 @@
             file="../../media/capture/video/android/java/src/org/chromium/media/VideoCaptureCamera2.java"
             line="1074"
             column="49"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_NEW_TAB_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_SHARE_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_VOICE_SEARCH_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_MESSAGE_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_TEXT_BUBBLE_FEATURE, FeatureConstants.AUTO_DARK_OPT_OUT_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_OPT_IN_FEATURE, FeatureConstants.DOWNLOAD_PAGE_FEATURE, FeatureConstants.DOWNLOAD_PAGE_SCREENSHOT_FEATURE, FeatureConstants.DOWNLOAD_HOME_FEATURE, FeatureConstants.DOWNLOAD_INDICATOR_FEATURE, FeatureConstants.CHROME_HOME_EXPAND_FEATURE, FeatureConstants.CHROME_HOME_PULL_TO_REFRESH_FEATURE, FeatureConstants.DATA_SAVER_PREVIEW_FEATURE, FeatureConstants.DATA_SAVER_DETAIL_FEATURE, FeatureConstants.EPHEMERAL_TAB_FEATURE, FeatureConstants.PREVIEWS_OMNIBOX_UI_FEATURE, FeatureConstants.TRANSLATE_MENU_BUTTON_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TRANSLATION_ENABLE_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_WEB_SEARCH_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_TAP_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_PANEL_OPEN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_OPT_IN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TAPPED_BUT_SHOULD_LONGPRESS_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_IN_PANEL_HELP_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_ADDRESS_FILL_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_BAR_SWIPING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PASSWORD_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_OFFER_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_VIRTUAL_CARD_FEATURE, FeatureConstants.DOWNLOAD_SETTINGS_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOAD_CONTINUING_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOADS_ARE_FASTER_FEATURE, FeatureConstants.NEW_TAB_PAGE_HOME_BUTTON_FEATURE, FeatureConstants.SHOPPING_LIST_MENU_ITEM_FEATURE, FeatureConstants.SHOPPING_LIST_SAVE_FLOW_FEATURE, FeatureConstants.TAB_GROUPS_QUICKLY_COMPARE_PAGES_FEATURE, FeatureConstants.TAB_GROUPS_TAP_TO_SEE_ANOTHER_TAB_FEATURE, FeatureConstants.TAB_GROUPS_YOUR_TABS_ARE_TOGETHER_FEATURE, FeatureConstants.TAB_SWITCHER_BUTTON_FEATURE, FeatureConstants.FEED_CARD_MENU_FEATURE, FeatureConstants.IDENTITY_DISC_FEATURE, FeatureConstants.TAB_GROUPS_DRAG_AND_DROP_FEATURE, FeatureConstants.QUIET_NOTIFICATION_PROMPTS_FEATURE, FeatureConstants.FEED_HEADER_MENU_FEATURE, FeatureConstants.FEED_SWIPE_REFRESH_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_1_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_2_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_3_FEATURE, FeatureConstants.PWA_INSTALL_AVAILABLE_FEATURE, FeatureConstants.PAGE_INFO_FEATURE, FeatureConstants.PAGE_INFO_STORE_INFO_FEATURE, FeatureConstants.IPH_SHARE_SCREENSHOT_FEATURE, FeatureConstants.IPH_SHARING_HUB_LINK_TOGGLE_FEATURE, FeatureConstants.IPH_WEB_FEED_FOLLOW_FEATURE, FeatureConstants.IPH_WEB_FEED_POST_FOLLOW_DIALOG_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_BUILDER_FEATURE, FeatureConstants.START_SURFACE_TAB_SWITCHER_HOME_BUTTON_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_RECEIVER_FEATURE, FeatureConstants.SHARING_HUB_WEBNOTES_STYLIZE_FEATURE"
-        errorLine1="                return FeatureConstants.VIDEO_TUTORIAL_NTP_SUMMARY_FEATURE;"
-        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/video_tutorials/android/java/src/org/chromium/chrome/browser/video_tutorials/iph/VideoTutorialIPHUtils.java"
-            line="24"
-            column="41"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_NEW_TAB_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_SHARE_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_VOICE_SEARCH_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_MESSAGE_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_TEXT_BUBBLE_FEATURE, FeatureConstants.AUTO_DARK_OPT_OUT_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_OPT_IN_FEATURE, FeatureConstants.DOWNLOAD_PAGE_FEATURE, FeatureConstants.DOWNLOAD_PAGE_SCREENSHOT_FEATURE, FeatureConstants.DOWNLOAD_HOME_FEATURE, FeatureConstants.DOWNLOAD_INDICATOR_FEATURE, FeatureConstants.CHROME_HOME_EXPAND_FEATURE, FeatureConstants.CHROME_HOME_PULL_TO_REFRESH_FEATURE, FeatureConstants.DATA_SAVER_PREVIEW_FEATURE, FeatureConstants.DATA_SAVER_DETAIL_FEATURE, FeatureConstants.EPHEMERAL_TAB_FEATURE, FeatureConstants.PREVIEWS_OMNIBOX_UI_FEATURE, FeatureConstants.TRANSLATE_MENU_BUTTON_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TRANSLATION_ENABLE_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_WEB_SEARCH_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_TAP_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_PANEL_OPEN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_OPT_IN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TAPPED_BUT_SHOULD_LONGPRESS_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_IN_PANEL_HELP_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_ADDRESS_FILL_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_BAR_SWIPING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PASSWORD_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_OFFER_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_VIRTUAL_CARD_FEATURE, FeatureConstants.DOWNLOAD_SETTINGS_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOAD_CONTINUING_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOADS_ARE_FASTER_FEATURE, FeatureConstants.NEW_TAB_PAGE_HOME_BUTTON_FEATURE, FeatureConstants.SHOPPING_LIST_MENU_ITEM_FEATURE, FeatureConstants.SHOPPING_LIST_SAVE_FLOW_FEATURE, FeatureConstants.TAB_GROUPS_QUICKLY_COMPARE_PAGES_FEATURE, FeatureConstants.TAB_GROUPS_TAP_TO_SEE_ANOTHER_TAB_FEATURE, FeatureConstants.TAB_GROUPS_YOUR_TABS_ARE_TOGETHER_FEATURE, FeatureConstants.TAB_SWITCHER_BUTTON_FEATURE, FeatureConstants.FEED_CARD_MENU_FEATURE, FeatureConstants.IDENTITY_DISC_FEATURE, FeatureConstants.TAB_GROUPS_DRAG_AND_DROP_FEATURE, FeatureConstants.QUIET_NOTIFICATION_PROMPTS_FEATURE, FeatureConstants.FEED_HEADER_MENU_FEATURE, FeatureConstants.FEED_SWIPE_REFRESH_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_1_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_2_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_3_FEATURE, FeatureConstants.PWA_INSTALL_AVAILABLE_FEATURE, FeatureConstants.PAGE_INFO_FEATURE, FeatureConstants.PAGE_INFO_STORE_INFO_FEATURE, FeatureConstants.IPH_SHARE_SCREENSHOT_FEATURE, FeatureConstants.IPH_SHARING_HUB_LINK_TOGGLE_FEATURE, FeatureConstants.IPH_WEB_FEED_FOLLOW_FEATURE, FeatureConstants.IPH_WEB_FEED_POST_FOLLOW_DIALOG_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_BUILDER_FEATURE, FeatureConstants.START_SURFACE_TAB_SWITCHER_HOME_BUTTON_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_RECEIVER_FEATURE, FeatureConstants.SHARING_HUB_WEBNOTES_STYLIZE_FEATURE"
-        errorLine1="                return FeatureConstants.VIDEO_TUTORIAL_NTP_CHROME_INTRO_FEATURE;"
-        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/video_tutorials/android/java/src/org/chromium/chrome/browser/video_tutorials/iph/VideoTutorialIPHUtils.java"
-            line="26"
-            column="41"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_NEW_TAB_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_SHARE_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_VOICE_SEARCH_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_MESSAGE_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_TEXT_BUBBLE_FEATURE, FeatureConstants.AUTO_DARK_OPT_OUT_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_OPT_IN_FEATURE, FeatureConstants.DOWNLOAD_PAGE_FEATURE, FeatureConstants.DOWNLOAD_PAGE_SCREENSHOT_FEATURE, FeatureConstants.DOWNLOAD_HOME_FEATURE, FeatureConstants.DOWNLOAD_INDICATOR_FEATURE, FeatureConstants.CHROME_HOME_EXPAND_FEATURE, FeatureConstants.CHROME_HOME_PULL_TO_REFRESH_FEATURE, FeatureConstants.DATA_SAVER_PREVIEW_FEATURE, FeatureConstants.DATA_SAVER_DETAIL_FEATURE, FeatureConstants.EPHEMERAL_TAB_FEATURE, FeatureConstants.PREVIEWS_OMNIBOX_UI_FEATURE, FeatureConstants.TRANSLATE_MENU_BUTTON_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TRANSLATION_ENABLE_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_WEB_SEARCH_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_TAP_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_PANEL_OPEN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_OPT_IN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TAPPED_BUT_SHOULD_LONGPRESS_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_IN_PANEL_HELP_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_ADDRESS_FILL_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_BAR_SWIPING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PASSWORD_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_OFFER_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_VIRTUAL_CARD_FEATURE, FeatureConstants.DOWNLOAD_SETTINGS_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOAD_CONTINUING_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOADS_ARE_FASTER_FEATURE, FeatureConstants.NEW_TAB_PAGE_HOME_BUTTON_FEATURE, FeatureConstants.SHOPPING_LIST_MENU_ITEM_FEATURE, FeatureConstants.SHOPPING_LIST_SAVE_FLOW_FEATURE, FeatureConstants.TAB_GROUPS_QUICKLY_COMPARE_PAGES_FEATURE, FeatureConstants.TAB_GROUPS_TAP_TO_SEE_ANOTHER_TAB_FEATURE, FeatureConstants.TAB_GROUPS_YOUR_TABS_ARE_TOGETHER_FEATURE, FeatureConstants.TAB_SWITCHER_BUTTON_FEATURE, FeatureConstants.FEED_CARD_MENU_FEATURE, FeatureConstants.IDENTITY_DISC_FEATURE, FeatureConstants.TAB_GROUPS_DRAG_AND_DROP_FEATURE, FeatureConstants.QUIET_NOTIFICATION_PROMPTS_FEATURE, FeatureConstants.FEED_HEADER_MENU_FEATURE, FeatureConstants.FEED_SWIPE_REFRESH_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_1_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_2_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_3_FEATURE, FeatureConstants.PWA_INSTALL_AVAILABLE_FEATURE, FeatureConstants.PAGE_INFO_FEATURE, FeatureConstants.PAGE_INFO_STORE_INFO_FEATURE, FeatureConstants.IPH_SHARE_SCREENSHOT_FEATURE, FeatureConstants.IPH_SHARING_HUB_LINK_TOGGLE_FEATURE, FeatureConstants.IPH_WEB_FEED_FOLLOW_FEATURE, FeatureConstants.IPH_WEB_FEED_POST_FOLLOW_DIALOG_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_BUILDER_FEATURE, FeatureConstants.START_SURFACE_TAB_SWITCHER_HOME_BUTTON_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_RECEIVER_FEATURE, FeatureConstants.SHARING_HUB_WEBNOTES_STYLIZE_FEATURE"
-        errorLine1="                return FeatureConstants.VIDEO_TUTORIAL_NTP_DOWNLOAD_FEATURE;"
-        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/video_tutorials/android/java/src/org/chromium/chrome/browser/video_tutorials/iph/VideoTutorialIPHUtils.java"
-            line="28"
-            column="41"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_NEW_TAB_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_SHARE_FEATURE, FeatureConstants.ADAPTIVE_BUTTON_IN_TOP_TOOLBAR_CUSTOMIZATION_VOICE_SEARCH_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_MESSAGE_FEATURE, FeatureConstants.ADD_TO_HOMESCREEN_TEXT_BUBBLE_FEATURE, FeatureConstants.AUTO_DARK_OPT_OUT_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_FEATURE, FeatureConstants.AUTO_DARK_USER_EDUCATION_MESSAGE_OPT_IN_FEATURE, FeatureConstants.DOWNLOAD_PAGE_FEATURE, FeatureConstants.DOWNLOAD_PAGE_SCREENSHOT_FEATURE, FeatureConstants.DOWNLOAD_HOME_FEATURE, FeatureConstants.DOWNLOAD_INDICATOR_FEATURE, FeatureConstants.CHROME_HOME_EXPAND_FEATURE, FeatureConstants.CHROME_HOME_PULL_TO_REFRESH_FEATURE, FeatureConstants.DATA_SAVER_PREVIEW_FEATURE, FeatureConstants.DATA_SAVER_DETAIL_FEATURE, FeatureConstants.EPHEMERAL_TAB_FEATURE, FeatureConstants.PREVIEWS_OMNIBOX_UI_FEATURE, FeatureConstants.TRANSLATE_MENU_BUTTON_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TRANSLATION_ENABLE_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_WEB_SEARCH_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_TAP_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_PROMOTE_PANEL_OPEN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_OPT_IN_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_TAPPED_BUT_SHOULD_LONGPRESS_FEATURE, FeatureConstants.CONTEXTUAL_SEARCH_IN_PANEL_HELP_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_ADDRESS_FILL_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_BAR_SWIPING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PASSWORD_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_FILLING_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_OFFER_FEATURE, FeatureConstants.KEYBOARD_ACCESSORY_PAYMENT_VIRTUAL_CARD_FEATURE, FeatureConstants.DOWNLOAD_SETTINGS_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOAD_CONTINUING_FEATURE, FeatureConstants.DOWNLOAD_INFOBAR_DOWNLOADS_ARE_FASTER_FEATURE, FeatureConstants.NEW_TAB_PAGE_HOME_BUTTON_FEATURE, FeatureConstants.SHOPPING_LIST_MENU_ITEM_FEATURE, FeatureConstants.SHOPPING_LIST_SAVE_FLOW_FEATURE, FeatureConstants.TAB_GROUPS_QUICKLY_COMPARE_PAGES_FEATURE, FeatureConstants.TAB_GROUPS_TAP_TO_SEE_ANOTHER_TAB_FEATURE, FeatureConstants.TAB_GROUPS_YOUR_TABS_ARE_TOGETHER_FEATURE, FeatureConstants.TAB_SWITCHER_BUTTON_FEATURE, FeatureConstants.FEED_CARD_MENU_FEATURE, FeatureConstants.IDENTITY_DISC_FEATURE, FeatureConstants.TAB_GROUPS_DRAG_AND_DROP_FEATURE, FeatureConstants.QUIET_NOTIFICATION_PROMPTS_FEATURE, FeatureConstants.FEED_HEADER_MENU_FEATURE, FeatureConstants.FEED_SWIPE_REFRESH_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_1_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_2_FEATURE, FeatureConstants.CHROME_REENGAGEMENT_NOTIFICATION_3_FEATURE, FeatureConstants.PWA_INSTALL_AVAILABLE_FEATURE, FeatureConstants.PAGE_INFO_FEATURE, FeatureConstants.PAGE_INFO_STORE_INFO_FEATURE, FeatureConstants.IPH_SHARE_SCREENSHOT_FEATURE, FeatureConstants.IPH_SHARING_HUB_LINK_TOGGLE_FEATURE, FeatureConstants.IPH_WEB_FEED_FOLLOW_FEATURE, FeatureConstants.IPH_WEB_FEED_POST_FOLLOW_DIALOG_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_BUILDER_FEATURE, FeatureConstants.START_SURFACE_TAB_SWITCHER_HOME_BUTTON_FEATURE, FeatureConstants.SHARED_HIGHLIGHTING_RECEIVER_FEATURE, FeatureConstants.SHARING_HUB_WEBNOTES_STYLIZE_FEATURE"
-        errorLine1="                return FeatureConstants.VIDEO_TUTORIAL_NTP_SEARCH_FEATURE;"
-        errorLine2="                                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/video_tutorials/android/java/src/org/chromium/chrome/browser/video_tutorials/iph/VideoTutorialIPHUtils.java"
-            line="30"
-            column="41"/>
     </issue>
 
     <issue
@@ -8396,61 +7747,6 @@
 
     <issue
         id="WrongConstant"
-        message="Must be one of: UpdateRequestSent.WHILE_WEBAPK_CLOSED"
-        errorLine1="                HISTOGRAM_UPDATE_REQUEST_SENT, type, UpdateRequestSent.NUM_ENTRIES);"
-        errorLine2="                                                                       ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/android/browserservices/metrics/java/src/org/chromium/chrome/browser/browserservices/metrics/WebApkUmaRecorder.java"
-            line="115"
-            column="72"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: UpdateRequestQueued.ONCE, UpdateRequestQueued.TWICE, UpdateRequestQueued.THREE_TIMES"
-        errorLine1="                HISTOGRAM_UPDATE_REQUEST_QUEUED, times, UpdateRequestQueued.NUM_ENTRIES);"
-        errorLine2="                                                                            ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/android/browserservices/metrics/java/src/org/chromium/chrome/browser/browserservices/metrics/WebApkUmaRecorder.java"
-            line="125"
-            column="77"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: GooglePlayInstallResult.SUCCESS, GooglePlayInstallResult.FAILED_NO_DELEGATE, GooglePlayInstallResult.FAILED_TO_CONNECT_TO_SERVICE, GooglePlayInstallResult.FAILED_CALLER_VERIFICATION_FAILURE, GooglePlayInstallResult.FAILED_POLICY_VIOLATION, GooglePlayInstallResult.FAILED_API_DISABLED, GooglePlayInstallResult.FAILED_REQUEST_FAILED, GooglePlayInstallResult.FAILED_DOWNLOAD_CANCELLED, GooglePlayInstallResult.FAILED_DOWNLOAD_ERROR, GooglePlayInstallResult.FAILED_INSTALL_ERROR, GooglePlayInstallResult.FAILED_INSTALL_TIMEOUT, GooglePlayInstallResult.REQUEST_FAILED_POLICY_DISABLED, GooglePlayInstallResult.REQUEST_FAILED_UNKNOWN_ACCOUNT, GooglePlayInstallResult.REQUEST_FAILED_NETWORK_ERROR, GooglePlayInstallResult.REQUSET_FAILED_RESOLVE_ERROR, GooglePlayInstallResult.REQUEST_FAILED_NOT_GOOGLE_SIGNED"
-        errorLine1="                GooglePlayInstallResult.NUM_ENTRIES);"
-        errorLine2="                                        ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/android/browserservices/metrics/java/src/org/chromium/chrome/browser/browserservices/metrics/WebApkUmaRecorder.java"
-            line="167"
-            column="41"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: GooglePlayInstallResult.SUCCESS, GooglePlayInstallResult.FAILED_NO_DELEGATE, GooglePlayInstallResult.FAILED_TO_CONNECT_TO_SERVICE, GooglePlayInstallResult.FAILED_CALLER_VERIFICATION_FAILURE, GooglePlayInstallResult.FAILED_POLICY_VIOLATION, GooglePlayInstallResult.FAILED_API_DISABLED, GooglePlayInstallResult.FAILED_REQUEST_FAILED, GooglePlayInstallResult.FAILED_DOWNLOAD_CANCELLED, GooglePlayInstallResult.FAILED_DOWNLOAD_ERROR, GooglePlayInstallResult.FAILED_INSTALL_ERROR, GooglePlayInstallResult.FAILED_INSTALL_TIMEOUT, GooglePlayInstallResult.REQUEST_FAILED_POLICY_DISABLED, GooglePlayInstallResult.REQUEST_FAILED_UNKNOWN_ACCOUNT, GooglePlayInstallResult.REQUEST_FAILED_NETWORK_ERROR, GooglePlayInstallResult.REQUSET_FAILED_RESOLVE_ERROR, GooglePlayInstallResult.REQUEST_FAILED_NOT_GOOGLE_SIGNED"
-        errorLine1="                GooglePlayInstallResult.NUM_ENTRIES);"
-        errorLine2="                                        ~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/android/browserservices/metrics/java/src/org/chromium/chrome/browser/browserservices/metrics/WebApkUmaRecorder.java"
-            line="184"
-            column="41"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
-        message="Must be one of: ThemeSettingsEntry.SETTINGS, ThemeSettingsEntry.AUTO_DARK_MODE_MESSAGE"
-        errorLine1="                ThemeSettingsEntry.AUTO_DARK_MODE_DIALOG);"
-        errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/ui/android/night_mode/java/src/org/chromium/chrome/browser/night_mode/WebContentsDarkModeMessageController.java"
-            line="316"
-            column="36"/>
-    </issue>
-
-    <issue
-        id="WrongConstant"
         message="Must be one of: InfobarAction.SHOWN, InfobarAction.KEYBOARD_DISMISSED"
         errorLine1="                &quot;Blink.Sms.Receive.Infobar&quot;, action, InfobarAction.NUM_ENTRIES);"
         errorLine2="                                                                   ~~~~~~~~~~~">
@@ -8494,28 +7790,6 @@
     </issue>
 
     <issue
-        id="UseSwitchCompatOrMaterialCode"
-        message="Use `SwitchCompat` from AppCompat or `SwitchMaterial` from Material library"
-        errorLine1="        final Switch umaSwitch = mView.findViewById(R.id.fre_uma_dialog_switch);"
-        errorLine2="        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/ui/android/signin/java/src/org/chromium/chrome/browser/ui/signin/fre/FreUMADialogCoordinator.java"
-            line="56"
-            column="9"/>
-    </issue>
-
-    <issue
-        id="UseSwitchCompatOrMaterialXml"
-        message="Use `SwitchCompat` from AppCompat or `SwitchMaterial` from Material library"
-        errorLine1="            &lt;Switch"
-        errorLine2="            ^">
-        <location
-            file="../../chrome/browser/ui/android/signin/java/res/layout/fre_uma_dialog.xml"
-            line="33"
-            column="13"/>
-    </issue>
-
-    <issue
         id="VectorRaster"
         message="Limit vector icons sizes to 200×200 to keep icon drawing fast; see https://developer.android.com/studio/write/vector-asset-studio#when for more"
         errorLine1="    android:width=&quot;360dp&quot;"
@@ -8524,28 +7798,6 @@
             file="../../chrome/android/java/res/drawable/adaptive_toolbar_preference_header.xml"
             line="7"
             column="20"/>
-    </issue>
-
-    <issue
-        id="UnsafeOptInUsageError"
-        message="This declaration is opt-in and its usage should be marked with `@com.google.android.material.badge.ExperimentalBadgeUtils` or `@OptIn(markerClass = com.google.android.material.badge.ExperimentalBadgeUtils.class)`"
-        errorLine1="            BadgeUtils.detachBadgeDrawable(mBadge, mAnchor);"
-        errorLine2="                       ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/feed/android/java/src/org/chromium/chrome/browser/feed/sections/SectionHeaderView.java"
-            line="100"
-            column="24"/>
-    </issue>
-
-    <issue
-        id="UnsafeOptInUsageError"
-        message="This declaration is opt-in and its usage should be marked with `@com.google.android.material.badge.ExperimentalBadgeUtils` or `@OptIn(markerClass = com.google.android.material.badge.ExperimentalBadgeUtils.class)`"
-        errorLine1="                BadgeUtils.attachBadgeDrawable(mBadge, mAnchor);"
-        errorLine2="                           ~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/feed/android/java/src/org/chromium/chrome/browser/feed/sections/SectionHeaderView.java"
-            line="108"
-            column="28"/>
     </issue>
 
     <issue
@@ -8590,17 +7842,6 @@
             file="../../components/payments/content/android/java/src/org/chromium/components/payments/AndroidPaymentAppFinder.java"
             line="555"
             column="55"/>
-    </issue>
-
-    <issue
-        id="VisibleForTests"
-        message="This method should only be accessed from tests or within private scope"
-        errorLine1="        mHandler.onOptionsItemSelected(id, mHighlightedItemId != null &amp;&amp; mHighlightedItemId == id);"
-        errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/browser/ui/android/appmenu/internal/java/src/org/chromium/chrome/browser/ui/appmenu/AppMenu.java"
-            line="386"
-            column="18"/>
     </issue>
 
     <issue
@@ -8887,17 +8128,6 @@
             file="../../chrome/android/features/keyboard_accessory/internal/java/src/org/chromium/chrome/browser/keyboard_accessory/sheet_tabs/CreditCardAccessorySheetCoordinator.java"
             line="37"
             column="47"/>
-    </issue>
-
-    <issue
-        id="VisibleForTests"
-        message="This method should only be accessed from tests or within private scope"
-        errorLine1="        mConnection.cleanUpSession(sessionToken);"
-        errorLine2="                    ~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/customtabs/CustomTabsConnectionServiceImpl.java"
-            line="104"
-            column="21"/>
     </issue>
 
     <issue
@@ -9431,17 +8661,6 @@
     <issue
         id="VisibleForTests"
         message="This method should only be accessed from tests or within private scope"
-        errorLine1="            WebappExtras webappExtras = customTabActivity.getIntentDataProvider().getWebappExtras();"
-        errorLine2="                                                          ~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/webapps/WebappLocator.java"
-            line="45"
-            column="59"/>
-    </issue>
-
-    <issue
-        id="VisibleForTests"
-        message="This method should only be accessed from tests or within private scope"
         errorLine1="        list.add(new StorageInfo(host, type, size));"
         errorLine2="                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
@@ -9513,17 +8732,6 @@
         <location
             file="../../components/browser_ui/photo_picker/android/java/res/layout/photo_picker_bitmap_view.xml"
             line="109"
-            column="13"/>
-    </issue>
-
-    <issue
-        id="UseAppTint"
-        message="Must use `app:tint` instead of `android:tint`"
-        errorLine1="            android:tint=&quot;@color/default_icon_color_baseline&quot;"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/res/layout/search_widget_template.xml"
-            line="42"
             column="13"/>
     </issue>
 
@@ -9836,17 +9044,6 @@
     </issue>
 
     <issue
-        id="DataExtractionRules"
-        message="The attribute `android:allowBackup` is deprecated from Android 12 and higher and may be removed in future versions. Consider adding the attribute `android:dataExtractionRules` specifying an `@xml` resource which configures cloud backups and device transfers on Android 12 and higher."
-        errorLine1="  &lt;application android:name=&quot;org.chromium.chrome.browser.base.SplitMonochromeApplication&quot; android:icon=&quot;@drawable/ic_launcher&quot; android:roundIcon=&quot;@drawable/ic_launcher_round&quot; android:label=&quot;@string/app_name&quot; android:largeHeap=&quot;false&quot; android:manageSpaceActivity=&quot;@string/manage_space_activity&quot; android:supportsRtl=&quot;true&quot; android:zygotePreloadName=&quot;org.chromium.content_public.app.ZygotePreload&quot; android:allowBackup=&quot;false&quot; android:networkSecurityConfig=&quot;@xml/network_security_config&quot; android:allowAudioPlaybackCapture=&quot;false&quot; android:appComponentFactory=&quot;org.chromium.chrome.browser.base.SplitCompatAppComponentFactory&quot; android:multiArch=&quot;true&quot; android:extractNativeLibs=&quot;false&quot; android:use32bitAbi=&quot;true&quot;>"
-        errorLine2="                                                                                                                                                                                                                                                                                                                                                                                                                                ~~~~~">
-        <location
-            file="gen/chrome/android/monochrome_public_bundle__lint/gen/chrome/android/manifest/monochrome_public_bundle__base_bundle_module/AndroidManifest.xml"
-            line="219"
-            column="417"/>
-    </issue>
-
-    <issue
         id="NotifyDataSetChanged"
         message="It will always be more efficient to use more specific change events if you can. Rely on `notifyDataSetChanged` as a last resort."
         errorLine1="            notifyDataSetChanged();"
@@ -9899,17 +9096,6 @@
             file="../../chrome/android/java/src/org/chromium/chrome/browser/bookmarks/BookmarkItemsAdapter.java"
             line="438"
             column="32"/>
-    </issue>
-
-    <issue
-        id="NotifyDataSetChanged"
-        message="It will always be more efficient to use more specific change events if you can. Rely on `notifyDataSetChanged` as a last resort."
-        errorLine1="            mAdapter.notifyDataSetChanged();"
-        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
-        <location
-            file="../../chrome/android/java/src/org/chromium/chrome/browser/bookmarks/BookmarkManager.java"
-            line="104"
-            column="13"/>
     </issue>
 
     <issue

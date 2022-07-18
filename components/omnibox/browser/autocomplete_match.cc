@@ -36,7 +36,7 @@
 #include "ui/gfx/vector_icon_types.h"
 #include "url/third_party/mozilla/url_parse.h"
 
-#if (!BUILDFLAG(IS_ANDROID) || BUILDFLAG(ENABLE_VR)) && !BUILDFLAG(IS_IOS)
+#if !BUILDFLAG(IS_ANDROID) && !BUILDFLAG(IS_IOS)
 #include "components/omnibox/browser/suggestion_answer.h"
 #include "components/omnibox/browser/vector_icons.h"  // nogncheck
 #include "components/vector_icons/vector_icons.h"     // nogncheck
@@ -225,7 +225,6 @@ AutocompleteMatch::AutocompleteMatch(const AutocompleteMatch& match)
                        : nullptr),
       additional_info(match.additional_info),
       duplicate_matches(match.duplicate_matches),
-      query_tiles(match.query_tiles),
       navsuggest_tiles(match.navsuggest_tiles) {}
 
 AutocompleteMatch::AutocompleteMatch(AutocompleteMatch&& match) noexcept {
@@ -276,7 +275,6 @@ AutocompleteMatch& AutocompleteMatch::operator=(
   post_content = std::move(match.post_content);
   additional_info = std::move(match.additional_info);
   duplicate_matches = std::move(match.duplicate_matches);
-  query_tiles = std::move(match.query_tiles);
   navsuggest_tiles = std::move(match.navsuggest_tiles);
 #if BUILDFLAG(IS_ANDROID)
   DestroyJavaObject();
@@ -338,14 +336,13 @@ AutocompleteMatch& AutocompleteMatch::operator=(
   from_previous = match.from_previous;
   search_terms_args.reset(
       match.search_terms_args
-          ? new TemplateURLRef::SearchTermsArgs(*match.search_terms_args)
+         ? new TemplateURLRef::SearchTermsArgs(*match.search_terms_args)
           : nullptr);
   post_content.reset(match.post_content
                          ? new TemplateURLRef::PostContent(*match.post_content)
                          : nullptr);
   additional_info = match.additional_info;
   duplicate_matches = match.duplicate_matches;
-  query_tiles = match.query_tiles;
   navsuggest_tiles = match.navsuggest_tiles;
 
 #if BUILDFLAG(IS_ANDROID)
@@ -362,7 +359,7 @@ AutocompleteMatch& AutocompleteMatch::operator=(
   return *this;
 }
 
-#if (!BUILDFLAG(IS_ANDROID) || BUILDFLAG(ENABLE_VR)) && !BUILDFLAG(IS_IOS)
+#if !BUILDFLAG(IS_ANDROID) && !BUILDFLAG(IS_IOS)
 // static
 const gfx::VectorIcon& AutocompleteMatch::AnswerTypeToAnswerIcon(int type) {
   switch (static_cast<SuggestionAnswer::AnswerType>(type)) {

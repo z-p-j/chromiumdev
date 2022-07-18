@@ -124,7 +124,6 @@ if (is_android) {
       "//build/android:build_java",
       "//chrome/browser/flags:java",
       "//chrome/browser/preferences:java",
-      "//chrome/test/android:chrome_java_test_support",
       "//components/browser_ui/notifications/android:java",
       "//third_party/android_deps:espresso_java",
       "//third_party/android_deps:robolectric_all_java",
@@ -144,7 +143,6 @@ if (is_android) {
     testonly = true
 
     sources = [
-      "android/java/src/org/chromium/chrome/browser/notifications/CustomNotificationBuilderTest.java",
       "android/java/src/org/chromium/chrome/browser/notifications/NotificationBuilderBaseTest.java",
       "android/java/src/org/chromium/chrome/browser/notifications/NotificationTestUtil.java",
       "android/java/src/org/chromium/chrome/browser/notifications/NotificationWrapperBuilderFactoryTest.java",
@@ -160,7 +158,6 @@ if (is_android) {
       "//build/android:build_java",
       "//chrome/browser/flags:java",
       "//chrome/browser/preferences:java",
-      "//chrome/test/android:chrome_java_test_support",
       "//components/browser_ui/notifications/android:java",
       "//components/browser_ui/util/android:java",
       "//components/browser_ui/widget/android:java",

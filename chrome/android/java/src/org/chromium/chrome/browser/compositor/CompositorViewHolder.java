@@ -39,7 +39,6 @@ import org.chromium.base.TraceEvent;
 import org.chromium.base.compat.ApiHelperForN;
 import org.chromium.base.compat.ApiHelperForO;
 import org.chromium.base.supplier.ObservableSupplier;
-import org.chromium.chrome.R;
 import org.chromium.chrome.browser.browser_controls.BrowserControlsStateProvider;
 import org.chromium.chrome.browser.browser_controls.BrowserControlsUtils;
 import org.chromium.chrome.browser.compositor.layouts.LayoutManagerHost;
@@ -58,8 +57,6 @@ import org.chromium.chrome.browser.tabmodel.TabCreatorManager;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
-import org.chromium.chrome.browser.theme.TopUiThemeColorProvider;
-import org.chromium.chrome.browser.toolbar.ControlContainer;
 import org.chromium.chrome.browser.ui.TabObscuringHandler;
 import org.chromium.chrome.browser.util.ChromeAccessibilityUtil;
 import org.chromium.chrome.features.start_surface.StartSurfaceUserData;
@@ -108,14 +105,11 @@ public class CompositorViewHolder extends FrameLayout
          * @param layoutManager             A {@link LayoutManagerImpl} instance.  This class is
          *                                  responsible for driving all high level screen content
          * and determines which {@link Layout} is shown when.
-         * @param urlBar                    The {@link View} representing the URL bar (must be
-         *                                  focusable) or {@code null} if none exists.
          * @param contentContainer          A {@link ViewGroup} that can have content attached by
          *                                  {@link Layout}s.
-         * @param controlContainer          A {@link ControlContainer} instance to draw.
          */
-        void initializeCompositorContent(LayoutManagerImpl layoutManager, View urlBar,
-                ViewGroup contentContainer, ControlContainer controlContainer);
+        void initializeCompositorContent(LayoutManagerImpl layoutManager,
+                ViewGroup contentContainer);
     }
 
     private ObserverList<TouchEventObserver> mTouchEventObservers = new ObserverList<>();
@@ -144,9 +138,6 @@ public class CompositorViewHolder extends FrameLayout
     private @Nullable BrowserControlsManager mBrowserControlsManager;
     private View mAccessibilityView;
     private CompositorAccessibilityProvider mNodeProvider;
-
-    /** The toolbar control container. **/
-    private @Nullable ControlContainer mControlContainer;
 
     private InsetObserverView mInsetObserverView;
     private ObservableSupplier<Integer> mAutofillUiBottomInsetSupplier;
@@ -202,8 +193,6 @@ public class CompositorViewHolder extends FrameLayout
      */
     private @Nullable MotionEvent mLastActiveTouchEvent;
 
-    private TopUiThemeColorProvider mTopUiThemeColorProvider;
-
     /**
      * This view is created on demand to display debugging information.
      */
@@ -245,8 +234,6 @@ public class CompositorViewHolder extends FrameLayout
     }
 
     private DebugOverlay mDebugOverlay;
-
-    private View mUrlBar;
 
     /**
      * Creates a {@link CompositorView}.
@@ -469,30 +456,6 @@ public class CompositorViewHolder extends FrameLayout
     }
 
     /**
-     * @param controlContainer The ControlContainer.
-     */
-    public void setControlContainer(@Nullable ControlContainer controlContainer) {
-        DynamicResourceLoader loader = mCompositorView.getResourceManager() != null
-                ? mCompositorView.getResourceManager().getDynamicResourceLoader()
-                : null;
-        if (loader != null && mControlContainer != null) {
-            loader.unregisterResource(R.id.control_container);
-        }
-        mControlContainer = controlContainer;
-        if (loader != null && mControlContainer != null) {
-            loader.registerResource(
-                    R.id.control_container, mControlContainer.getToolbarResourceAdapter());
-        }
-    }
-
-    /**
-     * @param themeColorProvider {@link ThemeColorProvider} for top UI part.
-     */
-    public void setTopUiThemeColorProvider(TopUiThemeColorProvider themeColorProvider) {
-        mTopUiThemeColorProvider = themeColorProvider;
-    }
-
-    /**
      * Set the InsetObserverView that can be monitored for changes to the window insets from Android
      * system UI.
      */
@@ -569,11 +532,6 @@ public class CompositorViewHolder extends FrameLayout
             WindowAndroid windowAndroid, TabContentManager tabContentManager) {
         mCompositorView.initNativeCompositor(
                 SysUtils.isLowEndDevice(), windowAndroid, tabContentManager);
-
-        if (mControlContainer != null) {
-            mCompositorView.getResourceManager().getDynamicResourceLoader().registerResource(
-                    R.id.control_container, mControlContainer.getToolbarResourceAdapter());
-        }
 
         mApplicationBottomInsetSupplier = windowAndroid.getApplicationBottomInsetProvider();
         mApplicationBottomInsetSupplier.addObserver(mBottomInsetObserver);
@@ -1136,15 +1094,11 @@ public class CompositorViewHolder extends FrameLayout
 
         // Wait until the second frame to turn off the placeholder background for the CompositorView
         // and the tab strip, to ensure the compositor frame has been drawn.
-        final ViewGroup controlContainer = (ViewGroup) mControlContainer;
         if (mHasDrawnOnce) {
             post(new Runnable() {
                 @Override
                 public void run() {
                     mCompositorView.setBackgroundResource(0);
-                    if (controlContainer != null) {
-                        controlContainer.setBackgroundResource(0);
-                    }
                 }
             });
         }
@@ -1275,14 +1229,6 @@ public class CompositorViewHolder extends FrameLayout
         return mBrowserControlsManager.getTopVisibleContentOffset();
     }
 
-    /**
-     * Sets the URL bar. This is needed so that the ContentViewHolder can find out
-     * whether it can claim focus.
-     */
-    public void setUrlBar(View urlBar) {
-        mUrlBar = urlBar;
-    }
-
     @Override
     public void onAttachedToWindow() {
         mInvalidator.set(this);
@@ -1306,12 +1252,6 @@ public class CompositorViewHolder extends FrameLayout
 
     @Override
     public void hideKeyboard(Runnable postHideTask) {
-        // When this is called we actually want to hide the keyboard whatever owns it.
-        // This includes hiding the keyboard, and dropping focus from the URL bar.
-        // See http://crbug/236424
-        // TODO(aberent) Find a better place to put this, possibly as part of a wider
-        // redesign of focus control.
-        if (mUrlBar != null) mUrlBar.clearFocus();
         boolean wasVisible = false;
         if (hasFocus()) {
             wasVisible = KeyboardVisibilityDelegate.getInstance().hideKeyboard(this);
@@ -1332,9 +1272,8 @@ public class CompositorViewHolder extends FrameLayout
     public void onFinishNativeInitialization(
             TabModelSelector tabModelSelector, TabCreatorManager tabCreatorManager) {
         assert mLayoutManager != null;
-        mLayoutManager.init(tabModelSelector, tabCreatorManager, mControlContainer,
-                mCompositorView.getResourceManager().getDynamicResourceLoader(),
-                mTopUiThemeColorProvider);
+        mLayoutManager.init(tabModelSelector, tabCreatorManager,
+                mCompositorView.getResourceManager().getDynamicResourceLoader());
 
         mTabModelSelector = tabModelSelector;
         tabModelSelector.addObserver(new TabModelSelectorObserver() {
@@ -1376,7 +1315,7 @@ public class CompositorViewHolder extends FrameLayout
             setFocusableInTouchMode(false);
 
             // Claim focus for the new view unless the user is currently using the URL bar.
-            if (mUrlBar == null || !mUrlBar.hasFocus()) mView.requestFocus();
+            mView.requestFocus();
         } else {
             if (mView.getParent() == this) {
                 setFocusable(mCanBeFocusable);

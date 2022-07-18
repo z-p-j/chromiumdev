@@ -6,22 +6,13 @@ import("//build/config/android/config.gni")
 import(
     "//chrome/android/features/autofill_assistant/autofill_assistant_module.gni")
 import("//chrome/android/features/dev_ui/dev_ui_module.gni")
-import("//chrome/android/features/tab_ui/tab_ui_module.gni")
 import("//chrome/android/modules/buildflags.gni")
 import(
     "//chrome/android/modules/cablev2_authenticator/cablev2_authenticator_module.gni")
 import("//chrome/android/modules/stack_unwinder/stack_unwinder_module.gni")
 import("//chrome/android/modules/test_dummy/test_dummy_module.gni")
-import("//device/vr/buildflags/buildflags.gni")
 import("//weblayer/variables.gni")
 import("//weblayer/weblayer_module.gni")
-
-if (enable_vr) {
-  import("//chrome/android/features/vr/vr_module.gni")
-}
-if (enable_arcore) {
-  import("//chrome/android/features/ar/ar_module.gni")
-}
 
 # List of feature module descs for each Chrome flavor. These lists are used to
 # autogenerate the relevant module targets and bundles. A feature module desc
@@ -46,9 +37,6 @@ chrome_modern_module_descs = [
   test_dummy_module_desc,
   stack_unwinder_module_desc,
 ]
-if (enable_vr) {
-  chrome_modern_module_descs += [ vr_module_desc ]
-}
 if (dfmify_dev_ui) {
   chrome_modern_module_descs += [ dev_ui_module_desc ]
 }
@@ -60,9 +48,6 @@ if (false) {  # AR DFM is currently disabled
 }
 if (!disable_autofill_assistant_dfm) {
   monochrome_module_descs += [ autofill_assistant_module_desc ]
-}
-if (!disable_tab_ui_dfm) {
-  monochrome_module_descs += [ tab_ui_module_desc ]
 }
 monochrome_module_descs += [ cablev2_authenticator_module_desc ]
 

@@ -82,7 +82,6 @@
 #include "chrome/browser/ui/webui/flags/flags_ui.h"
 #include "chrome/browser/ui/webui/ntp/new_tab_ui.h"
 #include "chrome/browser/ui/webui/print_preview/policy_settings.h"
-#include "chrome/browser/updates/announcement_notification/announcement_notification_service.h"
 #include "chrome/browser/webauthn/chrome_authenticator_request_delegate.h"
 #include "chrome/browser/webauthn/webauthn_pref_names.h"
 #include "chrome/common/buildflags.h"
@@ -224,13 +223,9 @@
 
 #if BUILDFLAG(IS_ANDROID)
 #include "chrome/browser/android/bookmarks/partner_bookmarks_shim.h"
-#include "chrome/browser/android/explore_sites/history_statistics_reporter.h"
-#include "chrome/browser/android/ntp/recent_tabs_page_prefs.h"
 #include "chrome/browser/android/oom_intervention/oom_intervention_decider.h"
 #include "chrome/browser/android/preferences/browser_prefs_android.h"
 #include "chrome/browser/android/usage_stats/usage_stats_bridge.h"
-#include "chrome/browser/first_run/android/first_run_prefs.h"
-#include "chrome/browser/lens/android/lens_prefs.h"
 #include "chrome/browser/media/android/cdm/media_drm_origin_id_manager.h"
 #include "chrome/browser/notifications/notification_channels_provider_android.h"
 #include "chrome/browser/ssl/known_interception_disclosure_infobar_delegate.h"
@@ -239,7 +234,6 @@
 #include "components/content_creation/notes/core/note_prefs.h"
 #include "components/ntp_tiles/popular_sites_impl.h"
 #include "components/permissions/contexts/geolocation_permission_context_android.h"
-#include "components/query_tiles/tile_service_prefs.h"
 #else  // BUILDFLAG(IS_ANDROID)
 #include "chrome/browser/cart/cart_service.h"
 #include "chrome/browser/device_api/device_service_impl.h"
@@ -292,7 +286,6 @@
 #include "ash/services/device_sync/public/cpp/device_sync_prefs.h"
 #include "ash/services/multidevice_setup/multidevice_setup_service.h"
 #include "chrome/browser/apps/app_service/metrics/app_platform_metrics_service.h"
-#include "chrome/browser/apps/app_service/webapk/webapk_prefs.h"
 #include "chrome/browser/ash/account_manager/account_apps_availability.h"
 #include "chrome/browser/ash/account_manager/account_manager_edu_coexistence_controller.h"
 #include "chrome/browser/ash/app_mode/arc/arc_kiosk_app_manager.h"
@@ -1098,9 +1091,6 @@ void RegisterLocalState(PrefRegistrySimple* registry) {
 
 #if BUILDFLAG(IS_ANDROID)
   ::android::RegisterPrefs(registry);
-
-  registry->RegisterIntegerPref(first_run::kTosDialogBehavior, 0);
-  registry->RegisterBooleanPref(lens::kLensCameraAssistedSearchEnabled, true);
 #else   // BUILDFLAG(IS_ANDROID)
   gcm::RegisterPrefs(registry);
   IntranetRedirectDetector::RegisterPrefs(registry);
@@ -1262,7 +1252,6 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry,
   // User prefs. Please keep this list alphabetized.
   AccessibilityLabelsService::RegisterProfilePrefs(registry);
   AccessibilityUIMessageHandler::RegisterProfilePrefs(registry);
-  AnnouncementNotificationService::RegisterProfilePrefs(registry);
   autofill::prefs::RegisterProfilePrefs(registry);
   browsing_data::prefs::RegisterBrowserUserPrefs(registry);
   certificate_transparency::prefs::RegisterPrefs(registry);
@@ -1385,15 +1374,9 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry,
   SupervisedUserService::RegisterProfilePrefs(registry);
 #endif
 
-#if BUILDFLAG(ENABLE_FEED_V2)
-  feed::prefs::RegisterFeedSharedProfilePrefs(registry);
-  feed::RegisterProfilePrefs(registry);
-#endif
-
 #if BUILDFLAG(IS_ANDROID)
   cdm::MediaDrmStorageImpl::RegisterProfilePrefs(registry);
   content_creation::prefs::RegisterProfilePrefs(registry);
-  explore_sites::HistoryStatisticsReporter::RegisterPrefs(registry);
   permissions::GeolocationPermissionContextAndroid::RegisterProfilePrefs(
       registry);
   KnownInterceptionDisclosureInfoBarDelegate::RegisterProfilePrefs(registry);
@@ -1402,8 +1385,6 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry,
   ntp_tiles::PopularSitesImpl::RegisterProfilePrefs(registry);
   OomInterventionDecider::RegisterProfilePrefs(registry);
   PartnerBookmarksShim::RegisterProfilePrefs(registry);
-  query_tiles::RegisterPrefs(registry);
-  RecentTabsPagePrefs::RegisterProfilePrefs(registry);
   usage_stats::UsageStatsBridge::RegisterProfilePrefs(registry);
   variations::VariationsService::RegisterProfilePrefs(registry);
   video_tutorials::RegisterPrefs(registry);
@@ -1458,7 +1439,6 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry,
 #if BUILDFLAG(IS_CHROMEOS_ASH)
   app_list::AppListSyncableService::RegisterProfilePrefs(registry);
   apps::AppPlatformMetricsService::RegisterProfilePrefs(registry);
-  apps::webapk_prefs::RegisterProfilePrefs(registry);
   arc::prefs::RegisterProfilePrefs(registry);
   ArcAppListPrefs::RegisterProfilePrefs(registry);
   ash::AccountAppsAvailability::RegisterPrefs(registry);
@@ -1569,9 +1549,6 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry,
 #endif  // BUILDFLAG(ENABLE_SIDE_SEARCH)
 
 #if !BUILDFLAG(IS_ANDROID)
-  registry->RegisterBooleanPref(
-      prefs::kLensRegionSearchEnabled, true,
-      user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
   registry->RegisterBooleanPref(
       webauthn::pref_names::kRemoteProxiedRequestsAllowed, false);
 #endif

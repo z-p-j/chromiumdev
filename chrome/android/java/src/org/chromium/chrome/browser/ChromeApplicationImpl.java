@@ -6,7 +6,6 @@ package org.chromium.chrome.browser;
 
 import android.app.Application;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -17,18 +16,13 @@ import org.chromium.chrome.browser.app.notifications.ContextualNotificationPermi
 import org.chromium.chrome.browser.background_task_scheduler.ChromeBackgroundTaskFactory;
 import org.chromium.chrome.browser.base.SplitCompatApplication;
 import org.chromium.chrome.browser.crash.ChromePureJavaExceptionReporter;
-import org.chromium.chrome.browser.customtabs.CustomTabsConnection;
 import org.chromium.chrome.browser.dependency_injection.ChromeAppComponent;
 import org.chromium.chrome.browser.dependency_injection.ChromeAppModule;
 import org.chromium.chrome.browser.dependency_injection.DaggerChromeAppComponent;
 import org.chromium.chrome.browser.dependency_injection.ModuleFactoryOverrides;
 import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
-import org.chromium.chrome.browser.fonts.FontPreloader;
-import org.chromium.chrome.browser.night_mode.SystemNightModeMonitor;
 import org.chromium.chrome.browser.profiles.ProfileResolver;
-import org.chromium.chrome.browser.vr.OnExitVrRequestListener;
-import org.chromium.chrome.browser.vr.VrModuleProvider;
 import org.chromium.components.browser_ui.util.GlobalDiscardableReferencePool;
 import org.chromium.components.embedder_support.browser_context.PartitionResolverSupplier;
 import org.chromium.components.module_installer.util.ModuleUtil;
@@ -56,7 +50,6 @@ public class ChromeApplicationImpl extends SplitCompatApplication.Impl {
         super.onCreate();
 
         if (SplitCompatApplication.isBrowserProcess()) {
-            FontPreloader.getInstance().load(getApplication());
 
             // Only load the native library early for bundle builds since some tests use the
             // "--disable-native-initialization" switch, and the CommandLine is not initialized at
@@ -94,38 +87,11 @@ public class ChromeApplicationImpl extends SplitCompatApplication.Impl {
                 && GlobalDiscardableReferencePool.getReferencePool() != null) {
             GlobalDiscardableReferencePool.getReferencePool().drain();
         }
-        CustomTabsConnection.onTrimMemory(level);
     }
 
     @Override
     public void startActivity(Intent intent, Bundle options) {
-        if (VrModuleProvider.getDelegate().canLaunch2DIntents()
-                || VrModuleProvider.getIntentDelegate().isVrIntent(intent)) {
-            super.startActivity(intent, options);
-            return;
-        }
-
-        VrModuleProvider.getDelegate().requestToExitVr(new OnExitVrRequestListener() {
-            @Override
-            public void onSucceeded() {
-                if (!VrModuleProvider.getDelegate().canLaunch2DIntents()) {
-                    throw new IllegalStateException("Still in VR after having exited VR.");
-                }
-                startActivity(intent, options);
-            }
-
-            @Override
-            public void onDenied() {}
-        });
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        // TODO(huayinz): Add observer pattern for application configuration changes.
-        if (SplitCompatApplication.isBrowserProcess()) {
-            SystemNightModeMonitor.getInstance().onApplicationConfigurationChanged();
-        }
+        super.startActivity(intent, options);
     }
 
     /**

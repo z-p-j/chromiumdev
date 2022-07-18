@@ -4,59 +4,32 @@
 
 package org.chromium.chrome.browser.contextmenu;
 
-import static org.chromium.chrome.browser.contextmenu.ContextMenuItemProperties.MENU_ID;
-import static org.chromium.chrome.browser.contextmenu.ContextMenuItemProperties.TEXT;
-import static org.chromium.chrome.browser.contextmenu.ContextMenuItemWithIconButtonProperties.BUTTON_CONTENT_DESC;
-import static org.chromium.chrome.browser.contextmenu.ContextMenuItemWithIconButtonProperties.BUTTON_IMAGE;
-import static org.chromium.chrome.browser.contextmenu.ContextMenuItemWithIconButtonProperties.BUTTON_MENU_ID;
-
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.net.MailTo;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.webkit.URLUtil;
+import android.widget.Toast;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.Callback;
-import org.chromium.base.ContextUtils;
 import org.chromium.base.metrics.RecordHistogram;
-import org.chromium.base.supplier.Supplier;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.compositor.bottombar.ephemeraltab.EphemeralTabCoordinator;
 import org.chromium.chrome.browser.contextmenu.ChromeContextMenuItem.Item;
 import org.chromium.chrome.browser.contextmenu.ContextMenuCoordinator.ListItemType;
 import org.chromium.chrome.browser.feature_engagement.TrackerFactory;
-import org.chromium.chrome.browser.firstrun.FirstRunStatus;
-import org.chromium.chrome.browser.flags.ChromeFeatureList;
-import org.chromium.chrome.browser.gsa.GSAState;
-import org.chromium.chrome.browser.lens.LensController;
-import org.chromium.chrome.browser.lens.LensEntryPoint;
-import org.chromium.chrome.browser.lens.LensIntentParams;
-import org.chromium.chrome.browser.lens.LensMetrics;
 import org.chromium.chrome.browser.locale.LocaleManager;
 import org.chromium.chrome.browser.performance_hints.PerformanceHintsObserver;
 import org.chromium.chrome.browser.performance_hints.PerformanceHintsObserver.PerformanceClass;
 import org.chromium.chrome.browser.preferences.ChromePreferenceKeys;
 import org.chromium.chrome.browser.preferences.SharedPreferencesManager;
 import org.chromium.chrome.browser.profiles.Profile;
-import org.chromium.chrome.browser.read_later.ReadingListUtils;
 import org.chromium.chrome.browser.search_engines.TemplateUrlServiceFactory;
-import org.chromium.chrome.browser.share.ChromeShareExtras;
-import org.chromium.chrome.browser.share.LensUtils;
-import org.chromium.chrome.browser.share.ShareDelegate;
-import org.chromium.chrome.browser.share.ShareDelegate.ShareOrigin;
-import org.chromium.chrome.browser.share.ShareHelper;
-import org.chromium.chrome.browser.share.link_to_text.LinkToTextHelper;
-import org.chromium.chrome.browser.tasks.tab_management.TabUiFeatureUtilities;
-import org.chromium.components.browser_ui.share.ShareParams;
 import org.chromium.components.embedder_support.contextmenu.ContextMenuParams;
 import org.chromium.components.embedder_support.util.UrlUtilities;
 import org.chromium.components.externalauth.ExternalAuthUtils;
@@ -79,8 +52,10 @@ import org.chromium.url.Origin;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import static org.chromium.chrome.browser.contextmenu.ContextMenuItemProperties.MENU_ID;
+import static org.chromium.chrome.browser.contextmenu.ContextMenuItemProperties.TEXT;
 
 /**
  * A {@link ContextMenuPopulator} used for showing the default Chrome context menu.
@@ -89,7 +64,6 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
     private final Context mContext;
     private final ContextMenuItemDelegate mItemDelegate;
     private final @ContextMenuMode int mMode;
-    private final Supplier<ShareDelegate> mShareDelegateSupplier;
     private final ExternalAuthUtils mExternalAuthUtils;
     private final ContextMenuParams mParams;
     private final @Nullable Origin mInitiatingOrigin;
@@ -264,7 +238,6 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
                 } else {
                     assert histogramName.equals("ContextMenu.SelectedOptionAndroid.Link");
                 }
-                tryToRecordGroupRelatedHistogram(histogramName, action);
             }
 
             if (params.isAnchor()
@@ -274,34 +247,6 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
                 RecordHistogram.recordEnumeratedHistogram(
                         histogramName + ".PerformanceClassFast", action, Action.NUM_ENTRIES);
             }
-        }
-
-        private static void tryToRecordGroupRelatedHistogram(
-                String histogramName, @Action int action) {
-            if (TabUiFeatureUtilities.ENABLE_TAB_GROUP_AUTO_CREATION.getValue()) return;
-
-            boolean openInGroupShownFirst =
-                    TabUiFeatureUtilities.showContextMenuOpenNewTabInGroupItemFirst();
-
-            @SelectedNewTabCreationEnum
-            int selectedNewTabCreationEnum =
-                    SelectedNewTabCreationEnum.OPEN_IN_NEW_TAB_FIRST_SELECTED_OPEN_IN_NEW_TAB;
-
-            if (action == Action.OPEN_IN_NEW_TAB) {
-                if (openInGroupShownFirst) {
-                    selectedNewTabCreationEnum =
-                            SelectedNewTabCreationEnum
-                                    .OPEN_IN_NEW_TAB_IN_GROUP_FIRST_SELECTED_OPEN_IN_NEW_TAB;
-                }
-            } else if (action == Action.OPEN_IN_NEW_TAB_IN_GROUP) {
-                selectedNewTabCreationEnum = openInGroupShownFirst
-                        ? SelectedNewTabCreationEnum
-                                  .OPEN_IN_NEW_TAB_IN_GROUP_FIRST_SELECTED_OPEN_IN_NEW_TAB_IN_GROUP
-                        : SelectedNewTabCreationEnum
-                                  .OPEN_IN_NEW_TAB_FIRST_SELECTED_OPEN_IN_NEW_TAB_IN_GROUP;
-            }
-            RecordHistogram.recordEnumeratedHistogram(histogramName + ".NewTabOption",
-                    selectedNewTabCreationEnum, SelectedNewTabCreationEnum.NUM_ENTRIES);
         }
 
         /**
@@ -318,8 +263,6 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
      * Builds a {@link ChromeContextMenuPopulator}.
      * @param itemDelegate The {@link ContextMenuItemDelegate} that will be notified with actions
      *                 to perform when menu items are selected.
-     * @param shareDelegate The Supplier of {@link ShareDelegate} that will be notified when a share
-     *                      action is performed.
      * @param mode Defines the context menu mode
      * @param externalAuthUtils {@link ExternalAuthUtils} instance.
      * @param context The {@link Context} used to retrieve the strings.
@@ -327,11 +270,10 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
      * @param nativeDelegate The {@link ContextMenuNativeDelegate} used to interact with native.
      */
     public ChromeContextMenuPopulator(ContextMenuItemDelegate itemDelegate,
-            Supplier<ShareDelegate> shareDelegate, @ContextMenuMode int mode,
+            @ContextMenuMode int mode,
             ExternalAuthUtils externalAuthUtils, Context context, ContextMenuParams params,
             ContextMenuNativeDelegate nativeDelegate) {
         mItemDelegate = itemDelegate;
-        mShareDelegateSupplier = shareDelegate;
         mMode = mode;
         mExternalAuthUtils = externalAuthUtils;
         mContext = context;
@@ -378,20 +320,10 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
 
         if (mParams.isAnchor()) {
             ModelList linkGroup = new ModelList();
-            if (FirstRunStatus.getFirstRunFlowComplete() && !isEmptyUrl(mParams.getUrl())
+            if (!isEmptyUrl(mParams.getUrl())
                     && UrlUtilities.isAcceptedScheme(mParams.getUrl())) {
                 if (mMode == ContextMenuMode.NORMAL) {
-                    if (TabUiFeatureUtilities.ENABLE_TAB_GROUP_AUTO_CREATION.getValue()) {
-                        linkGroup.add(createListItem(Item.OPEN_IN_NEW_TAB));
-                    } else {
-                        if (TabUiFeatureUtilities.showContextMenuOpenNewTabInGroupItemFirst()) {
-                            linkGroup.add(createListItem(Item.OPEN_IN_NEW_TAB_IN_GROUP));
-                            linkGroup.add(createListItem(Item.OPEN_IN_NEW_TAB));
-                        } else {
-                            linkGroup.add(createListItem(Item.OPEN_IN_NEW_TAB));
-                            linkGroup.add(createListItem(Item.OPEN_IN_NEW_TAB_IN_GROUP));
-                        }
-                    }
+                    linkGroup.add(createListItem(Item.OPEN_IN_NEW_TAB));
                     if (!mItemDelegate.isIncognito() && mItemDelegate.isIncognitoSupported()) {
                         linkGroup.add(createListItem(Item.OPEN_IN_INCOGNITO_TAB));
                     }
@@ -415,35 +347,28 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
                     linkGroup.add(createListItem(Item.COPY_LINK_TEXT));
                 }
             }
-            if (FirstRunStatus.getFirstRunFlowComplete()) {
-                if (!mItemDelegate.isIncognito()
-                        && UrlUtilities.isDownloadableScheme(mParams.getLinkUrl())) {
-                    linkGroup.add(createListItem(Item.SAVE_LINK_AS));
+            if (!mItemDelegate.isIncognito()
+                    && UrlUtilities.isDownloadableScheme(mParams.getLinkUrl())) {
+                linkGroup.add(createListItem(Item.SAVE_LINK_AS));
+            }
+            if (UrlUtilities.isTelScheme(mParams.getLinkUrl())) {
+                if (mItemDelegate.supportsCall()) {
+                    linkGroup.add(createListItem(Item.CALL));
                 }
-                if (!mParams.isImage() && ChromeFeatureList.isEnabled(ChromeFeatureList.READ_LATER)
-                        && ReadingListUtils.isReadingListSupported(mParams.getLinkUrl())) {
-                    linkGroup.add(createListItem(Item.READ_LATER, shouldTriggerReadLaterHelpUi()));
+                if (mItemDelegate.supportsSendTextMessage()) {
+                    linkGroup.add(createListItem(Item.SEND_MESSAGE));
                 }
-                linkGroup.add(createShareListItem(Item.SHARE_LINK, Item.DIRECT_SHARE_LINK));
-                if (UrlUtilities.isTelScheme(mParams.getLinkUrl())) {
-                    if (mItemDelegate.supportsCall()) {
-                        linkGroup.add(createListItem(Item.CALL));
-                    }
-                    if (mItemDelegate.supportsSendTextMessage()) {
-                        linkGroup.add(createListItem(Item.SEND_MESSAGE));
-                    }
-                    if (mItemDelegate.supportsAddToContacts()) {
-                        linkGroup.add(createListItem(Item.ADD_TO_CONTACTS));
-                    }
+                if (mItemDelegate.supportsAddToContacts()) {
+                    linkGroup.add(createListItem(Item.ADD_TO_CONTACTS));
                 }
-                if (MailTo.isMailTo(mParams.getLinkUrl().getSpec())) {
-                    if (mItemDelegate.supportsSendEmailMessage()) {
-                        linkGroup.add(createListItem(Item.SEND_MESSAGE));
-                    }
-                    if (!TextUtils.isEmpty(MailTo.parse(mParams.getLinkUrl().getSpec()).getTo())
-                            && mItemDelegate.supportsAddToContacts()) {
-                        linkGroup.add(createListItem(Item.ADD_TO_CONTACTS));
-                    }
+            }
+            if (MailTo.isMailTo(mParams.getLinkUrl().getSpec())) {
+                if (mItemDelegate.supportsSendEmailMessage()) {
+                    linkGroup.add(createListItem(Item.SEND_MESSAGE));
+                }
+                if (!TextUtils.isEmpty(MailTo.parse(mParams.getLinkUrl().getSpec()).getTo())
+                        && mItemDelegate.supportsAddToContacts()) {
+                    linkGroup.add(createListItem(Item.ADD_TO_CONTACTS));
                 }
             }
             if (UrlUtilities.isTelScheme(mParams.getLinkUrl())
@@ -455,7 +380,7 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
             }
         }
 
-        if (mParams.isImage() && FirstRunStatus.getFirstRunFlowComplete()) {
+        if (mParams.isImage()) {
             ModelList imageGroup = new ModelList();
             boolean isSrcDownloadableScheme =
                     UrlUtilities.isDownloadableScheme(mParams.getSrcUrl());
@@ -481,46 +406,17 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
                 hasSaveImage = true;
             }
 
-            // If set, show 'Share Image' before 'Search with Google Lens'.
-            // IMPORTANT: Must stay consistent with logic after the below Lens block.
-            boolean addedShareImageAboveLens = false;
-            if (LensUtils.orderShareImageBeforeLens()) {
-                addedShareImageAboveLens = true;
-                imageGroup.add(createShareListItem(Item.SHARE_IMAGE, Item.DIRECT_SHARE_IMAGE));
-            }
-
             if (mMode == ContextMenuMode.CUSTOM_TAB || mMode == ContextMenuMode.NORMAL) {
                 if (checkSupportsGoogleSearchByImage(isSrcDownloadableScheme)) {
-                    // All behavior relating to Lens integration is gated by Feature Flag.
-                    // A map to indicate which image search menu item would be shown.
-                    boolean shouldShowSearchImageWithLens =
-                            shouldShowSearchWithLensAndRecordMetrics(
-                                    mParams.getPageUrl(), mItemDelegate.isIncognito());
-                    if (shouldShowSearchImageWithLens) {
-                        imageGroup.add(createListItem(Item.SEARCH_WITH_GOOGLE_LENS, true));
-                        maybeRecordUkmLensShown();
-                    } else {
-                        imageGroup.add(createListItem(Item.SEARCH_BY_IMAGE));
-                        maybeRecordUkmSearchByImageShown();
-                    }
-                } else if (ChromeFeatureList.isEnabled(
-                                   ChromeFeatureList.CONTEXT_MENU_SEARCH_WITH_GOOGLE_LENS)) {
-                    LensMetrics.recordLensSupportStatus(LENS_SUPPORT_STATUS_HISTOGRAM_NAME,
-                            LensMetrics.LensSupportStatus.SEARCH_BY_IMAGE_UNAVAILABLE);
+                    imageGroup.add(createListItem(Item.SEARCH_BY_IMAGE));
                 }
-            }
-
-            // By default show 'Share Image' after 'Search with Google Lens'.
-            // IMPORTANT: Must stay consistent with logic before the above Lens block.
-            if (!addedShareImageAboveLens) {
-                imageGroup.add(createShareListItem(Item.SHARE_IMAGE, Item.DIRECT_SHARE_IMAGE));
             }
 
             recordSaveImageContextMenuResult(isSrcDownloadableScheme);
             groupedItems.add(new Pair<>(R.string.contextmenu_image_title, imageGroup));
         }
 
-        if (mParams.isVideo() && FirstRunStatus.getFirstRunFlowComplete() && mParams.canSaveMedia()
+        if (mParams.isVideo() && mParams.canSaveMedia()
                 && UrlUtilities.isDownloadableScheme(mParams.getSrcUrl())) {
             ModelList videoGroup = new ModelList();
             videoGroup.add(createListItem(Item.SAVE_VIDEO));
@@ -539,7 +435,7 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
             groupedItems.add(new Pair<>(null, sharedHighlightingGroup));
         }
 
-        if (mMode != ContextMenuMode.NORMAL && FirstRunStatus.getFirstRunFlowComplete()) {
+        if (mMode != ContextMenuMode.NORMAL) {
             ModelList items = groupedItems.isEmpty()
                     ? new ModelList()
                     : groupedItems
@@ -695,16 +591,7 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
                 mNativeDelegate.startDownload(true);
             }
         } else if (itemId == R.id.contextmenu_share_link) {
-            recordContextMenuSelection(ContextMenuUma.Action.SHARE_LINK);
-            // TODO(https://crbug.com/783819): Migrate ShareParams to GURL.
-            ShareParams linkShareParams =
-                    new ShareParams
-                            .Builder(getWindow(), ContextMenuUtils.getTitle(mParams),
-                                    mParams.getUrl().getSpec())
-                            .build();
-            mShareDelegateSupplier.get().share(linkShareParams,
-                    new ChromeShareExtras.Builder().setSaveLastUsed(true).build(),
-                    ShareOrigin.CONTEXT_MENU);
+            Toast.makeText(mContext, "分享链接", Toast.LENGTH_SHORT).show();
         } else if (itemId == R.id.contextmenu_read_later) {
             recordContextMenuSelection(ContextMenuUma.Action.READ_LATER);
             // TODO(crbug.com/1147475): Download the page to offline page backend.
@@ -714,33 +601,14 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
             }
             mItemDelegate.onReadLater(mParams.getUrl(), title);
         } else if (itemId == R.id.contextmenu_direct_share_link) {
-            recordContextMenuSelection(ContextMenuUma.Action.DIRECT_SHARE_LINK);
-            final ShareParams shareParams =
-                    new ShareParams
-                            .Builder(getWindow(), ContextMenuUtils.getTitle(mParams),
-                                    mParams.getUrl().getSpec())
-                            .build();
-            mShareDelegateSupplier.get().share(shareParams,
-                    new ChromeShareExtras.Builder().setShareDirectly(true).build(),
-                    ShareOrigin.CONTEXT_MENU);
-        } else if (itemId == R.id.contextmenu_search_with_google_lens) {
-            recordContextMenuSelection(ContextMenuUma.Action.SEARCH_WITH_GOOGLE_LENS);
-            searchWithGoogleLens(LensEntryPoint.CONTEXT_MENU_SEARCH_MENU_ITEM);
-            SharedPreferencesManager prefManager = SharedPreferencesManager.getInstance();
-            prefManager.writeBoolean(
-                    ChromePreferenceKeys.CONTEXT_MENU_SEARCH_WITH_GOOGLE_LENS_CLICKED, true);
+            Toast.makeText(mContext, "直接分享链接", Toast.LENGTH_SHORT).show();
         } else if (itemId == R.id.contextmenu_search_by_image) {
             recordContextMenuSelection(ContextMenuUma.Action.SEARCH_BY_IMAGE);
             mNativeDelegate.searchForImage();
         } else if (itemId == R.id.contextmenu_share_image) {
-            recordContextMenuSelection(ContextMenuUma.Action.SHARE_IMAGE);
-            shareImage();
+            Toast.makeText(mContext, "图片分享", Toast.LENGTH_SHORT).show();
         } else if (itemId == R.id.contextmenu_direct_share_image) {
-            recordContextMenuSelection(ContextMenuUma.Action.DIRECT_SHARE_IMAGE);
-            mNativeDelegate.retrieveImageForShare(ContextMenuImageFormat.ORIGINAL, (Uri uri) -> {
-                ShareHelper.shareImage(
-                        getWindow(), getProfile(), ShareHelper.getLastShareComponentName(), uri);
-            });
+            Toast.makeText(mContext, "图片直接分享", Toast.LENGTH_SHORT).show();
         } else if (itemId == R.id.contextmenu_open_in_chrome) {
             recordContextMenuSelection(ContextMenuUma.Action.OPEN_IN_CHROME);
             mItemDelegate.onOpenInChrome(mParams.getUrl(), mParams.getPageUrl());
@@ -754,15 +622,11 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
             recordContextMenuSelection(ContextMenuUma.Action.OPEN_IN_BROWSER);
             mItemDelegate.onOpenInDefaultBrowser(mParams.getUrl());
         } else if (itemId == R.id.contextmenu_share_highlight) {
-            recordContextMenuSelection(ContextMenuUma.Action.SHARE_HIGHLIGHT);
-            shareHighlighting();
+            Toast.makeText(mContext, "分享highlight", Toast.LENGTH_SHORT).show();
         } else if (itemId == R.id.contextmenu_remove_highlight) {
-            recordContextMenuSelection(ContextMenuUma.Action.REMOVE_HIGHLIGHT);
-            LinkToTextHelper.removeHighlightsAllFrames(mItemDelegate.getWebContents());
+            Toast.makeText(mContext, "remove highlight", Toast.LENGTH_SHORT).show();
         } else if (itemId == R.id.contextmenu_learn_more) {
-            recordContextMenuSelection(ContextMenuUma.Action.LEARN_MORE);
-            mItemDelegate.onOpenInNewTab(new GURL(LinkToTextHelper.SHARED_HIGHLIGHTING_SUPPORT_URL),
-                    mParams.getReferrer(), /*navigateToTab=*/true);
+            Toast.makeText(mContext, "learn more", Toast.LENGTH_SHORT).show();
         } else {
             assert false;
         }
@@ -786,24 +650,6 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
         return getWindow().getActivity().get();
     }
 
-    private void shareHighlighting() {
-        ShareParams linkShareParams = new ShareParams
-                                              .Builder(getWindow(),
-                                                      /*title=*/"",
-                                                      /*url=*/mParams.getUrl().getSpec())
-                                              .build();
-
-        mShareDelegateSupplier.get().share(linkShareParams,
-                new ChromeShareExtras.Builder()
-                        .setSaveLastUsed(true)
-                        .setIsReshareHighlightedText(true)
-                        .setRenderFrameHost(mNativeDelegate.getRenderFrameHost())
-                        .setDetailedContentType(
-                                ChromeShareExtras.DetailedContentType.HIGHLIGHTED_TEXT)
-                        .build(),
-                ShareOrigin.MOBILE_ACTION_MODE);
-    }
-
     /**
      * Copy the image, that triggered the current context menu, to system clipboard.
      */
@@ -813,94 +659,20 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
     }
 
     /**
-     * Share the image that triggered the current context menu.
-     * Package-private, allowing access only from the context menu item to ensure that
-     * it will use the right activity set when the menu was displayed.
-     */
-    private void shareImage() {
-        mNativeDelegate.retrieveImageForShare(ContextMenuImageFormat.ORIGINAL, (Uri imageUri) -> {
-            if (!mShareDelegateSupplier.get().isSharingHubEnabled()) {
-                ShareHelper.shareImage(getWindow(),
-                        Profile.fromWebContents(mItemDelegate.getWebContents()), null, imageUri);
-                return;
-            }
-            ContentResolver contentResolver =
-                    ContextUtils.getApplicationContext().getContentResolver();
-            String mimeType = contentResolver.getType(imageUri);
-            ShareParams imageShareParams =
-                    new ShareParams
-                            .Builder(getWindow(), ContextMenuUtils.getTitle(mParams), /*url=*/"")
-                            .setFileUris(new ArrayList<>(Collections.singletonList(imageUri)))
-                            .setFileContentType(mimeType)
-                            .build();
-            int detailedContentType;
-            if (mimeType.equals("image/gif")) {
-                detailedContentType = ChromeShareExtras.DetailedContentType.GIF;
-            } else {
-                detailedContentType = ChromeShareExtras.DetailedContentType.IMAGE;
-            }
-            mShareDelegateSupplier.get().share(imageShareParams,
-                    new ChromeShareExtras.Builder()
-                            .setSaveLastUsed(true)
-                            .setImageSrcUrl(mParams.getSrcUrl())
-                            .setContentUrl(mParams.getPageUrl())
-                            .setDetailedContentType(detailedContentType)
-                            .build(),
-                    ShareOrigin.CONTEXT_MENU);
-        });
-    }
-
-    /**
      * @return The service that handles TemplateUrls.
      */
     protected TemplateUrlService getTemplateUrlService() {
         return TemplateUrlServiceFactory.get();
     }
 
-    /**
-     * Search for the image by intenting to the lens app with the image data attached.
-     * @param lensEntryPoint The entry point that launches the Lens app.
-     */
-    protected void searchWithGoogleLens(@LensEntryPoint int lensEntryPoint) {
-        mNativeDelegate.retrieveImageForShare(ContextMenuImageFormat.PNG, (Uri imageUri) -> {
-            LensIntentParams intentParams = getLensIntentParams(lensEntryPoint, imageUri);
-            LensController.getInstance().startLens(getWindow(), intentParams);
-        });
-    }
-
-    /**
-     * Build the intent params for Lens Context Menu features.
-     * @param lensEntryPoint The entry point that launches the Lens app.
-     * @param imageUri The image url that the context menu was triggered on.
-     * @return A LensIntentParams. Will be used to launch the Lens app.
-     */
-    @VisibleForTesting
-    protected LensIntentParams getLensIntentParams(
-            @LensEntryPoint int lensEntryPoint, Uri imageUri) {
-        return new LensIntentParams.Builder(lensEntryPoint, isIncognito())
-                .withImageUri(imageUri)
-                .withImageTitleOrAltText(mParams.getTitleText())
-                .withSrcUrl(mParams.getSrcUrl().getValidSpecOrEmpty())
-                .withPageUrl(mParams.getPageUrl().getValidSpecOrEmpty())
-                .build();
-    }
-
     @Override
     public @Nullable ChipDelegate getChipDelegate() {
-        if (LensChipDelegate.isEnabled(isIncognito(), isTabletScreen())) {
-            // TODO(crbug.com/783819): Migrate LensChipDelegate to GURL.
-            return new LensChipDelegate(mParams.getPageUrl().getSpec(), mParams.getTitleText(),
-                    mParams.getSrcUrl().getSpec(), getPageTitle(), isIncognito(), isTabletScreen(),
-                    mItemDelegate.getWebContents(), mNativeDelegate, getOnChipClickedCallback(),
-                    getOnChipShownCallback());
-        }
         return null;
     }
 
     private Callback<Integer> getOnChipShownCallback() {
         return (Integer result) -> {
             int chipType = result.intValue();
-            maybeRecordUkmLensChipShown(chipType);
         };
     }
 
@@ -953,67 +725,6 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
      */
     private void recordContextMenuSelection(int actionId) {
         ContextMenuUma.record(mItemDelegate.getWebContents(), mParams, actionId);
-        if (LensUtils.shouldLogUkmForLensContextMenuFeatures()) {
-            maybeRecordActionUkm("ContextMenuAndroid.Selected", actionId);
-        }
-    }
-
-    /**
-     * Whether the lens menu items should be shown based on a set of application
-     * compatibility checks.
-     *
-     * @param pageUrl The Url associated with the main frame of the page that triggered the context
-     *         menu.
-     * @param isIncognito Whether the user is incognito.
-     * @return A boolean. True if "Search image with Google Lens" should be enabled, otherwise
-     *         False.
-     */
-    private boolean shouldShowSearchWithLensAndRecordMetrics(GURL pageUrl, boolean isIncognito) {
-        // If Google Lens feature is not supported, show search by image menu item.
-        if (!LensUtils.isGoogleLensFeatureEnabled(isIncognito)) {
-            return false;
-        }
-
-        if (isTabletScreen() && !LensUtils.isGoogleLensFeatureEnabledOnTablet()) {
-            LensMetrics.recordLensSupportStatus(LENS_SUPPORT_STATUS_HISTOGRAM_NAME,
-                    LensMetrics.LensSupportStatus.DISABLED_ON_TABLET);
-            return false;
-        }
-
-        final TemplateUrlService templateUrlServiceInstance = getTemplateUrlService();
-        String versionName = LensUtils.getLensActivityVersionNameIfAvailable(mContext);
-        if (!templateUrlServiceInstance.isDefaultSearchEngineGoogle()) {
-            LensMetrics.recordLensSupportStatus(LENS_SUPPORT_STATUS_HISTOGRAM_NAME,
-                    LensMetrics.LensSupportStatus.NON_GOOGLE_SEARCH_ENGINE);
-            return false;
-        }
-        if (TextUtils.isEmpty(versionName)) {
-            LensMetrics.recordLensSupportStatus(LENS_SUPPORT_STATUS_HISTOGRAM_NAME,
-                    LensMetrics.LensSupportStatus.ACTIVITY_NOT_ACCESSIBLE);
-            return false;
-        }
-        if (GSAState.getInstance(mContext).isAgsaVersionBelowMinimum(
-                    versionName, LensUtils.getMinimumAgsaVersionForLensSupport())) {
-            LensMetrics.recordLensSupportStatus(
-                    LENS_SUPPORT_STATUS_HISTOGRAM_NAME, LensMetrics.LensSupportStatus.OUT_OF_DATE);
-            return false;
-        }
-
-        if (LensUtils.isDeviceOsBelowMinimum()) {
-            LensMetrics.recordLensSupportStatus(
-                    LENS_SUPPORT_STATUS_HISTOGRAM_NAME, LensMetrics.LensSupportStatus.LEGACY_OS);
-            return false;
-        }
-
-        if (!LensUtils.isValidAgsaPackage(mExternalAuthUtils)) {
-            LensMetrics.recordLensSupportStatus(LENS_SUPPORT_STATUS_HISTOGRAM_NAME,
-                    LensMetrics.LensSupportStatus.INVALID_PACKAGE);
-            return false;
-        }
-
-        LensMetrics.recordLensSupportStatus(LENS_SUPPORT_STATUS_HISTOGRAM_NAME,
-                LensMetrics.LensSupportStatus.LENS_SEARCH_SUPPORTED);
-        return true;
     }
 
     private ListItem createListItem(@Item int item) {
@@ -1028,73 +739,6 @@ public class ChromeContextMenuPopulator implements ContextMenuPopulator {
                                 ChromeContextMenuItem.getTitle(mContext, item, showInProductHelp))
                         .build();
         return new ListItem(ListItemType.CONTEXT_MENU_ITEM, model);
-    }
-
-    private ListItem createShareListItem(@Item int item, @Item int iconButtonItem) {
-        final boolean isLink = item == Item.SHARE_LINK;
-        final Pair<Drawable, CharSequence> shareInfo = createRecentShareAppInfo(isLink);
-        final PropertyModel model =
-                new PropertyModel.Builder(ContextMenuItemWithIconButtonProperties.ALL_KEYS)
-                        .with(MENU_ID, ChromeContextMenuItem.getMenuId(item))
-                        .with(TEXT, ChromeContextMenuItem.getTitle(mContext, item, false))
-                        .with(BUTTON_IMAGE, shareInfo.first)
-                        .with(BUTTON_CONTENT_DESC, shareInfo.second)
-                        .with(BUTTON_MENU_ID, ChromeContextMenuItem.getMenuId(iconButtonItem))
-                        .build();
-        return new ListItem(ListItemType.CONTEXT_MENU_ITEM_WITH_ICON_BUTTON, model);
-    }
-
-    /**
-     * Return the icon and name of the most recently shared app by certain app.
-     * @param isLink Whether the item is SHARE_LINK.
-     */
-    private static Pair<Drawable, CharSequence> createRecentShareAppInfo(boolean isLink) {
-        Intent shareIntent = isLink ? ShareHelper.getShareLinkAppCompatibilityIntent()
-                                    : ShareHelper.getShareImageIntent(null);
-        return ShareHelper.getShareableIconAndName(shareIntent);
-    }
-
-    /**
-     * If not disabled record a UKM for opening the context menu with the search by image option.
-     */
-    private void maybeRecordUkmSearchByImageShown() {
-        if (LensUtils.shouldLogUkmForLensContextMenuFeatures()) {
-            maybeRecordBooleanUkm("ContextMenuAndroid.Shown", "SearchByImage");
-        }
-    }
-
-    /**
-     * If not disabled record a UKM for opening the context menu with the lens item.
-     */
-    private void maybeRecordUkmLensShown() {
-        if (LensUtils.shouldLogUkmByFeature(
-                    ChromeFeatureList.CONTEXT_MENU_SEARCH_WITH_GOOGLE_LENS)) {
-            maybeRecordBooleanUkm("ContextMenuAndroid.Shown", "SearchWithGoogleLens");
-        }
-    }
-
-    private void maybeRecordUkmLensChipShown(int chipType) {
-        String actionName = null;
-        switch (chipType) {
-            case ChipRenderParams.ChipType.LENS_SHOPPING_CHIP:
-                if (!LensUtils.shouldLogUkmByFeature(
-                            ChromeFeatureList.CONTEXT_MENU_GOOGLE_LENS_CHIP)) {
-                    return;
-                }
-                actionName = "ShopWithGoogleLensChip";
-                break;
-            case ChipRenderParams.ChipType.LENS_TRANSLATE_CHIP:
-                if (!LensUtils.shouldLogUkmByFeature(
-                            ChromeFeatureList.CONTEXT_MENU_TRANSLATE_WITH_GOOGLE_LENS)) {
-                    return;
-                }
-                actionName = "TranslateWithGoogleLensChip";
-                break;
-            default:
-                // Unreachable value.
-                assert false : "Invalid chip type provided to callback.";
-        }
-        maybeRecordBooleanUkm("ContextMenuAndroid.Shown", actionName);
     }
 
     /**

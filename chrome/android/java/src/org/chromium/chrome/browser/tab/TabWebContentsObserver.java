@@ -4,8 +4,8 @@
 
 package org.chromium.chrome.browser.tab;
 
-import android.app.Activity;
 import android.os.Handler;
+import android.widget.Toast;
 
 import androidx.annotation.VisibleForTesting;
 
@@ -17,17 +17,14 @@ import org.chromium.base.Log;
 import org.chromium.base.ObserverList;
 import org.chromium.base.ObserverList.RewindableIterator;
 import org.chromium.base.metrics.RecordHistogram;
-import org.chromium.chrome.R;
 import org.chromium.chrome.browser.AppHooks;
 import org.chromium.chrome.browser.SwipeRefreshHandler;
 import org.chromium.chrome.browser.app.bluetooth.BluetoothNotificationService;
 import org.chromium.chrome.browser.bluetooth.BluetoothNotificationManager;
 import org.chromium.chrome.browser.display_cutout.DisplayCutoutTabHelper;
-import org.chromium.chrome.browser.feedback.HelpAndFeedbackLauncherImpl;
 import org.chromium.chrome.browser.media.MediaCaptureNotificationServiceImpl;
 import org.chromium.chrome.browser.policy.PolicyAuditor;
 import org.chromium.chrome.browser.policy.PolicyAuditor.AuditEvent;
-import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.content_public.browser.GlobalRenderFrameHostId;
 import org.chromium.content_public.browser.LifecycleState;
 import org.chromium.content_public.browser.NavigationHandle;
@@ -165,18 +162,12 @@ public class TabWebContentsObserver extends TabWebContentsUserData {
                 (new Handler()).post(() -> {
                     sadTab.show(mTab.getThemedApplicationContext(),
                             /* suggestionAction= */ () -> {
-                                Activity activity = mTab.getWindowAndroid().getActivity().get();
-                                assert activity != null;
-                                HelpAndFeedbackLauncherImpl.getInstance().show(activity,
-                                        activity.getString(R.string.help_context_sad_tab),
-                                        Profile.fromWebContents(mTab.getWebContents()), null);
+                                Toast.makeText(mTab.getContext(), "TODO suggestionAction", Toast.LENGTH_SHORT).show();
                             },
 
                             /* buttonAction= */ () -> {
                                 if (sadTab.showSendFeedbackView()) {
-                                    mTab.getActivity().startHelpAndFeedback(mTab.getUrl().getSpec(),
-                                            "MobileSadTabFeedback",
-                                            Profile.fromWebContents(mTab.getWebContents()));
+                                    Toast.makeText(mTab.getContext(), "TODO startHelpAndFeedback", Toast.LENGTH_SHORT).show();
                                 } else {
                                     mTab.reload();
                                 }

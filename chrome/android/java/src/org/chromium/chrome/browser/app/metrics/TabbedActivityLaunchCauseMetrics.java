@@ -11,11 +11,7 @@ import android.speech.RecognizerResultsIntent;
 import org.chromium.base.IntentUtils;
 import org.chromium.chrome.browser.IntentHandler;
 import org.chromium.chrome.browser.ServiceTabLauncher;
-import org.chromium.chrome.browser.browserservices.intents.WebappConstants;
-import org.chromium.chrome.browser.searchwidget.SearchActivity;
-import org.chromium.chrome.browser.searchwidget.SearchWidgetProvider;
 import org.chromium.chrome.browser.tab.Tab;
-import org.chromium.components.webapps.ShortcutSource;
 
 /**
  * LaunchCauseMetrics for ChromeTabbedActivity.
@@ -41,30 +37,6 @@ public class TabbedActivityLaunchCauseMetrics extends LaunchCauseMetrics {
                     launchIntent, IntentHandler.EXTRA_INVOKED_FROM_SHORTCUT, false)
                 && IntentHandler.wasIntentSenderChrome(launchIntent)) {
             return LaunchCause.MAIN_LAUNCHER_ICON_SHORTCUT;
-        }
-
-        if (ShortcutSource.BOOKMARK_NAVIGATOR_WIDGET
-                == IntentUtils.safeGetIntExtra(
-                        launchIntent, WebappConstants.EXTRA_SOURCE, ShortcutSource.UNKNOWN)) {
-            return LaunchCause.HOME_SCREEN_WIDGET;
-        }
-
-        if (ShortcutSource.ADD_TO_HOMESCREEN_SHORTCUT
-                == IntentUtils.safeGetIntExtra(
-                        launchIntent, WebappConstants.EXTRA_SOURCE, ShortcutSource.UNKNOWN)) {
-            return LaunchCause.HOME_SCREEN_SHORTCUT;
-        }
-
-        if (IntentUtils.safeGetBooleanExtra(
-                    launchIntent, SearchActivity.EXTRA_FROM_SEARCH_ACTIVITY, false)) {
-            if (IntentUtils.safeGetBooleanExtra(
-                        launchIntent, SearchWidgetProvider.EXTRA_FROM_SEARCH_WIDGET, false)) {
-                return LaunchCause.HOME_SCREEN_WIDGET;
-            }
-            // Intent came through the Search Activity but wasn't from the Search Widget, so
-            // probably came from LaunchIntentDispatcher#processWebSearchIntent, and no other
-            // installed apps could handle web search.
-            return LaunchCause.EXTERNAL_SEARCH_ACTION_INTENT;
         }
 
         if (RecognizerResultsIntent.ACTION_VOICE_SEARCH_RESULTS.equals(launchIntent.getAction())) {

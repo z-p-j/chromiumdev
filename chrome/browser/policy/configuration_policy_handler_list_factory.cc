@@ -113,8 +113,6 @@
 #include "printing/buildflags/buildflags.h"
 
 #if BUILDFLAG(IS_ANDROID)
-#include "chrome/browser/first_run/android/first_run_prefs.h"
-#include "chrome/browser/lens/android/lens_prefs.h"
 #include "chrome/browser/search/contextual_search_policy_handler_android.h"
 #else  // BUILDFLAG(IS_ANDROID)
 #include "chrome/browser/download/default_download_dir_policy_handler.h"
@@ -140,7 +138,6 @@
 #include "ash/components/arc/arc_prefs.h"
 #include "ash/constants/ash_pref_names.h"
 #include "ash/services/multidevice_setup/public/cpp/prefs.h"
-#include "chrome/browser/apps/app_service/webapk/webapk_prefs.h"
 #include "chrome/browser/ash/accessibility/magnifier_type.h"
 #include "chrome/browser/ash/app_restore/full_restore_prefs.h"
 #include "chrome/browser/ash/arc/policy/arc_policy_handler.h"
@@ -255,18 +252,9 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
   { key::kIsolateOriginsAndroid,
     prefs::kIsolateOrigins,
     base::Value::Type::STRING },
-  { key::kLensCameraAssistedSearchEnabled,
-    lens::kLensCameraAssistedSearchEnabled,
-    base::Value::Type::BOOLEAN },
-  { key::kNTPContentSuggestionsEnabled,
-    feed::prefs::kEnableSnippets,
-    base::Value::Type::BOOLEAN },
   { key::kSitePerProcessAndroid,
     prefs::kSitePerProcess,
     base::Value::Type::BOOLEAN },
-  { key::kTosDialogBehavior,
-    first_run::kTosDialogBehavior,
-    base::Value::Type::INTEGER },
   { key::kWebXRImmersiveArEnabled,
     prefs::kWebXRImmersiveArEnabled,
     base::Value::Type::BOOLEAN },
@@ -443,9 +431,6 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
     base::Value::Type::STRING },
   { key::kIsolatedAppsDeveloperModeAllowed,
     policy_prefs::kIsolatedAppsDeveloperModeAllowed,
-    base::Value::Type::BOOLEAN },
-  { key::kLensRegionSearchEnabled,
-    prefs::kLensRegionSearchEnabled,
     base::Value::Type::BOOLEAN },
   { key::kLocalFontsAllowedForUrls,
     prefs::kManagedLocalFontsAllowedForUrls,
@@ -1372,9 +1357,6 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
   { key::kRestrictedManagedGuestSessionExtensionCleanupExemptList,
     prefs::kRestrictedManagedGuestSessionExtensionCleanupExemptList,
     base::Value::Type::LIST },
-  { key::kArcAppToWebAppSharingEnabled,
-    apps::webapk_prefs::kGeneratedWebApksEnabled,
-    base::Value::Type::BOOLEAN},
   { key::kEnhancedNetworkVoicesInSelectToSpeakAllowed,
     ash::prefs::kAccessibilityEnhancedNetworkVoicesInSelectToSpeakAllowed,
     base::Value::Type::BOOLEAN },

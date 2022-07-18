@@ -72,7 +72,6 @@ include_rules = [
   "+components/browser_ui/bottomsheet",
   "+components/browser_ui/modaldialog",
   "+components/browser_ui/notifications",
-  "+components/browser_ui/photo_picker",
   "+components/browser_ui/settings",
   "+components/browser_ui/util",
   "+components/browser_ui/widget",
@@ -263,7 +262,6 @@ include_rules = [
   "+components/profile_metrics",
   "+components/proxy_config",
   "+components/query_parser",
-  "+components/query_tiles",
   "+components/quirks",
   "+components/reading_list/core",
   "+components/reading_list/features",
@@ -379,8 +377,6 @@ include_rules = [
   "+device/bluetooth",
   "+device/fido",
   "+device/gamepad/public/cpp",
-  "+device/vr/buildflags/buildflags.h",
-  "+device/vr/public",
   "+extensions/browser",
   "+extensions/common",
   "+extensions/components/javascript_dialog_extensions_client",
@@ -532,7 +528,6 @@ specific_include_rules = {
     "+chrome/android/java/src/org/chromium/chrome/browser/ChromeTabbedActivity.java",
   ],
   '.*TestUtils\.java': [
-      "+chrome/android/java/src/org/chromium/chrome/browser/searchwidget/SearchActivity.java",
       "+chrome/android/java/src/org/chromium/chrome/browser/ChromeTabbedActivity.java",
     ],
   "platform_util_linux.cc": [

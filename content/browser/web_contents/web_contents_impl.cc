@@ -106,7 +106,6 @@
 #include "content/browser/web_package/save_as_web_bundle_job.h"
 #include "content/browser/webui/web_ui_controller_factory_registry.h"
 #include "content/browser/webui/web_ui_impl.h"
-#include "content/browser/xr/service/xr_runtime_manager_impl.h"
 #include "content/common/content_switches_internal.h"
 #include "content/common/partition_alloc_support.h"
 #include "content/public/browser/ax_inspect_factory.h"
@@ -3564,10 +3563,6 @@ PageVisibilityState WebContentsImpl::CalculatePageVisibilityState(
   // or video (e.g. mirroring or WebXR). If there are, apply the correct state
   // of kHidden or kHiddenButPainting.
   bool web_contents_visible_in_vr = false;
-#if BUILDFLAG(ENABLE_VR)
-  web_contents_visible_in_vr =
-      XRRuntimeManagerImpl::GetImmersiveSessionWebContents() == this;
-#endif
 
   // If there are entities in Picture-in-Picture mode, don't activate the
   // "disable rendering" optimization, since it still needs to drive the video,
@@ -4454,12 +4449,7 @@ void WebContentsImpl::RecordAccessibilityEvents(
 
 device::mojom::GeolocationContext* WebContentsImpl::GetGeolocationContext() {
   OPTIONAL_TRACE_EVENT0("content", "WebContentsImpl::GetGeolocationContext");
-  if (delegate_) {
-    auto* installed_webapp_context =
-        delegate_->GetInstalledWebappGeolocationContext();
-    if (installed_webapp_context)
-      return installed_webapp_context;
-  }
+
 
   if (!geolocation_context_) {
     GetDeviceService().BindGeolocationContext(

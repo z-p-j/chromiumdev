@@ -5,15 +5,11 @@
 package org.chromium.chrome.browser.ui.tablet.emptybackground;
 
 import android.app.Activity;
-import android.view.View;
-import android.view.View.OnAttachStateChangeListener;
-import android.view.ViewStub;
 
 import androidx.annotation.Nullable;
 
 import org.chromium.base.CallbackController;
 import org.chromium.base.supplier.ObservableSupplier;
-import org.chromium.chrome.R;
 import org.chromium.chrome.browser.layouts.LayoutManager;
 import org.chromium.chrome.browser.layouts.LayoutStateProvider;
 import org.chromium.chrome.browser.layouts.LayoutType;
@@ -25,7 +21,6 @@ import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
-import org.chromium.chrome.browser.ui.appmenu.AppMenuHandler;
 import org.chromium.chrome.browser.ui.messages.snackbar.SnackbarManager;
 
 import java.util.List;
@@ -44,27 +39,21 @@ public class EmptyBackgroundViewWrapper {
     CallbackController mCallbackController = new CallbackController();
     private @Nullable LayoutStateProvider mLayoutStateProvider;
 
-    private EmptyBackgroundViewTablet mBackgroundView;
-    private final @Nullable AppMenuHandler mMenuHandler;
-
     /**
      * Creates a {@link EmptyBackgroundViewWrapper} instance that will lazily inflate.
      * @param selector A {@link TabModelSelector} that will be used to query system state.
      * @param tabCreator A {@link TabCreator} that will be used to open the New Tab Page.
      * @param activity An {@link Activity} that represents a parent of th
      *         {@link android.view.ViewStub}.
-     * @param menuHandler A {@link AppMenuHandler} to handle menu touch events.
      * @param snackbarManager The {@link SnackbarManager} to show the undo snackbar when the empty
      *         background is visible.
      * @param layoutStateProviderSupplier An {@link ObservableSupplier} for the
      *         {@link LayoutManager} associated with the containing activity.
      */
     public EmptyBackgroundViewWrapper(TabModelSelector selector, TabCreator tabCreator,
-            Activity activity, @Nullable AppMenuHandler menuHandler,
-            SnackbarManager snackbarManager,
+            Activity activity, SnackbarManager snackbarManager,
             ObservableSupplier<LayoutManager> layoutStateProviderSupplier) {
         mActivity = activity;
-        mMenuHandler = menuHandler;
         mTabModelSelector = selector;
         mTabCreator = tabCreator;
         mSnackbarManager = snackbarManager;
@@ -141,33 +130,12 @@ public class EmptyBackgroundViewWrapper {
     }
 
     private void inflateViewIfNecessary() {
-        if (mBackgroundView != null) return;
-
-        mBackgroundView = (EmptyBackgroundViewTablet) ((ViewStub) mActivity.findViewById(
-                                                               R.id.empty_container_stub))
-                                  .inflate();
-        mBackgroundView.setTabModelSelector(mTabModelSelector);
-        mBackgroundView.setTabCreator(mTabCreator);
-        if (mMenuHandler != null) mBackgroundView.setMenuOnTouchListener(mMenuHandler);
-        mBackgroundView.addOnAttachStateChangeListener(new OnAttachStateChangeListener() {
-            @Override
-            public void onViewDetachedFromWindow(View v) {
-                uninitialize();
-            }
-
-            @Override
-            public void onViewAttachedToWindow(View v) {}
-        });
     }
 
     private void updateEmptyContainerState() {
         boolean showEmptyBackground = shouldShowEmptyContainer();
         if (showEmptyBackground) inflateViewIfNecessary();
 
-        if (mBackgroundView != null) {
-            mBackgroundView.setEmptyContainerState(showEmptyBackground);
-            mSnackbarManager.overrideParent(showEmptyBackground ? mBackgroundView : null);
-        }
     }
 
     private boolean shouldShowEmptyContainer() {

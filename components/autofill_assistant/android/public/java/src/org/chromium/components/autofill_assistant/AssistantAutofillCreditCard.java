@@ -34,7 +34,6 @@ public class AssistantAutofillCreditCard {
             put("troyCC", R.drawable.troy_card);
             put("unionPayCC", R.drawable.unionpay_card);
             put("visaCC", R.drawable.visa_card);
-            put("googlePay", R.drawable.google_pay);
         }
     };
 
@@ -139,7 +138,7 @@ public class AssistantAutofillCreditCard {
 
     public String getFormattedExpirationDate(Context context) {
         return getMonth()
-                + context.getResources().getString(R.string.autofill_expiration_date_separator)
+                + "/"
                 + getYear();
     }
 

@@ -122,7 +122,6 @@
 #include "components/payments/core/features.h"
 #include "components/permissions/features.h"
 #include "components/policy/core/common/features.h"
-#include "components/query_tiles/switches.h"
 #include "components/reading_list/features/reading_list_switches.h"
 #include "components/safe_browsing/core/common/features.h"
 #include "components/search/ntp_features.h"
@@ -155,7 +154,6 @@
 #include "device/bluetooth/floss/floss_features.h"
 #include "device/fido/features.h"
 #include "device/gamepad/public/cpp/gamepad_features.h"
-#include "device/vr/buildflags/buildflags.h"
 #include "extensions/buildflags/buildflags.h"
 #include "gpu/config/gpu_finch_features.h"
 #include "gpu/config/gpu_switches.h"
@@ -211,10 +209,8 @@
 #endif
 
 #if BUILDFLAG(IS_ANDROID)
-#include "chrome/browser/android/explore_sites/explore_sites_feature.h"
 #include "chrome/browser/flags/android/chrome_feature_list.h"
 #include "chrome/browser/notifications/chime/android/features.h"
-#include "components/browser_ui/photo_picker/android/features.h"
 #include "components/content_creation/notes/core/note_features.h"
 #include "components/content_creation/reactions/core/reactions_features.h"
 #include "components/translate/content/android/translate_message.h"
@@ -376,19 +372,6 @@ const FeatureEntry::Choice kOzonePlatformHintRuntimeChoices[] = {
 #endif
 };
 #endif
-
-#if BUILDFLAG(ENABLE_VR)
-const FeatureEntry::Choice kWebXrForceRuntimeChoices[] = {
-    {flags_ui::kGenericExperimentChoiceDefault, "", ""},
-    {flag_descriptions::kWebXrRuntimeChoiceNone, switches::kWebXrForceRuntime,
-     switches::kWebXrRuntimeNone},
-
-#if BUILDFLAG(ENABLE_OPENXR)
-    {flag_descriptions::kWebXrRuntimeChoiceOpenXR, switches::kWebXrForceRuntime,
-     switches::kWebXrRuntimeOpenXr},
-#endif  // ENABLE_OPENXR
-};
-#endif  // ENABLE_VR
 
 #if BUILDFLAG(IS_ANDROID)
 const FeatureEntry::FeatureParam kElasticOverscrollFilterType[] = {
@@ -1687,25 +1670,6 @@ const FeatureEntry::FeatureVariation
          nullptr}};
 
 #if BUILDFLAG(IS_ANDROID)
-const FeatureEntry::FeatureParam kExploreSitesExperimental = {
-    chrome::android::explore_sites::kExploreSitesVariationParameterName,
-    chrome::android::explore_sites::kExploreSitesVariationExperimental};
-const FeatureEntry::FeatureParam kExploreSitesDenseTitleBottom[] = {
-    {chrome::android::explore_sites::kExploreSitesDenseVariationParameterName,
-     chrome::android::explore_sites::
-         kExploreSitesDenseVariationDenseTitleBottom},
-};
-const FeatureEntry::FeatureParam kExploreSitesDenseTitleRight[] = {
-    {chrome::android::explore_sites::kExploreSitesDenseVariationParameterName,
-     chrome::android::explore_sites::
-         kExploreSitesDenseVariationDenseTitleRight},
-};
-const FeatureEntry::FeatureVariation kExploreSitesVariations[] = {
-    {"Experimental", &kExploreSitesExperimental, 1, nullptr},
-    {"Dense Title Bottom", kExploreSitesDenseTitleBottom,
-     std::size(kExploreSitesDenseTitleBottom), nullptr},
-    {"Dense Title Right", kExploreSitesDenseTitleRight,
-     std::size(kExploreSitesDenseTitleRight), nullptr}};
 const FeatureEntry::FeatureParam kLongpressResolvePreserveTap = {
     contextual_search::kLongpressResolveParamName,
     contextual_search::kLongpressResolvePreserveTap};
@@ -2349,20 +2313,6 @@ const FeatureEntry::Choice kWebOtpBackendChoices[] = {
      switches::kWebOtpBackendUserConsent},
     {flag_descriptions::kWebOtpBackendAuto, switches::kWebOtpBackend,
      switches::kWebOtpBackendAuto},
-};
-
-const FeatureEntry::Choice kQueryTilesCountryChoices[] = {
-    {flags_ui::kGenericExperimentChoiceDefault, "", ""},
-    {flag_descriptions::kQueryTilesCountryCodeUS,
-     query_tiles::switches::kQueryTilesCountryCode, "US"},
-    {flag_descriptions::kQueryTilesCountryCodeIndia,
-     query_tiles::switches::kQueryTilesCountryCode, "IN"},
-    {flag_descriptions::kQueryTilesCountryCodeBrazil,
-     query_tiles::switches::kQueryTilesCountryCode, "BR"},
-    {flag_descriptions::kQueryTilesCountryCodeNigeria,
-     query_tiles::switches::kQueryTilesCountryCode, "NG"},
-    {flag_descriptions::kQueryTilesCountryCodeIndonesia,
-     query_tiles::switches::kQueryTilesCountryCode, "ID"},
 };
 
 #endif  // BUILDFLAG(IS_ANDROID)
@@ -3242,11 +3192,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kContextualTriggersSelectionSizeName,
      flag_descriptions::kContextualTriggersSelectionSizeDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(chrome::android::kContextualTriggersSelectionSize)},
-    {"explore-sites", flag_descriptions::kExploreSitesName,
-     flag_descriptions::kExploreSitesDescription, kOsAndroid,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(chrome::android::kExploreSites,
-                                    kExploreSitesVariations,
-                                    "ExploreSites InitialCountries")},
     {"related-searches", flag_descriptions::kRelatedSearchesName,
      flag_descriptions::kRelatedSearchesDescription, kOsAndroid,
      FEATURE_WITH_PARAMS_VALUE_TYPE(chrome::android::kRelatedSearches,
@@ -4282,14 +4227,6 @@ const FeatureEntry kFeatureEntries[] = {
 
 #endif  // BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_MAC)
 
-#if BUILDFLAG(ENABLE_VR)
-    {"webxr-incubations", flag_descriptions::kWebXrIncubationsName,
-     flag_descriptions::kWebXrIncubationsDescription, kOsAll,
-     FEATURE_VALUE_TYPE(device::features::kWebXrIncubations)},
-    {"webxr-runtime", flag_descriptions::kWebXrForceRuntimeName,
-     flag_descriptions::kWebXrForceRuntimeDescription, kOsDesktop,
-     MULTI_VALUE_TYPE(kWebXrForceRuntimeChoices)},
-#endif  // ENABLE_VR
 #if BUILDFLAG(IS_CHROMEOS_ASH)
     {"disable-accelerated-mjpeg-decode",
      flag_descriptions::kAcceleratedMjpegDecodeName,
@@ -4330,44 +4267,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kOfflinePagesLivePageSharingName,
      flag_descriptions::kOfflinePagesLivePageSharingDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(offline_pages::kOfflinePagesLivePageSharingFeature)},
-    {"query-tiles", flag_descriptions::kQueryTilesName,
-     flag_descriptions::kQueryTilesDescription, kOsAndroid,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(query_tiles::features::kQueryTiles,
-                                    kQueryTilesVariations,
-                                    "QueryTilesVariations")},
-    {"query-tiles-ntp", flag_descriptions::kQueryTilesNTPName,
-     flag_descriptions::kQueryTilesNTPDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(query_tiles::features::kQueryTilesInNTP)},
-    {"query-tiles-single-tier", flag_descriptions::kQueryTilesSingleTierName,
-     flag_descriptions::kQueryTilesSingleTierDescription, kOsAndroid,
-     SINGLE_VALUE_TYPE(query_tiles::switches::kQueryTilesSingleTier)},
-    {"query-tiles-enable-query-editing",
-     flag_descriptions::kQueryTilesEnableQueryEditingName,
-     flag_descriptions::kQueryTilesEnableQueryEditingDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(query_tiles::features::kQueryTilesEnableQueryEditing)},
-    {"query-tiles-enable-trending",
-     flag_descriptions::kQueryTilesEnableTrendingName,
-     flag_descriptions::kQueryTilesEnableTrendingDescription, kOsAndroid,
-     SINGLE_VALUE_TYPE(query_tiles::switches::kQueryTilesEnableTrending)},
-    {"query-tiles-country-code", flag_descriptions::kQueryTilesCountryCode,
-     flag_descriptions::kQueryTilesCountryCodeDescription, kOsAndroid,
-     MULTI_VALUE_TYPE(kQueryTilesCountryChoices)},
-    {"query-tiles-instant-fetch",
-     flag_descriptions::kQueryTilesInstantFetchName,
-     flag_descriptions::kQueryTilesInstantFetchDescription, kOsAndroid,
-     SINGLE_VALUE_TYPE(
-         query_tiles::switches::kQueryTilesInstantBackgroundTask)},
-    {"query-tiles-rank-tiles", flag_descriptions::kQueryTilesRankTilesName,
-     flag_descriptions::kQueryTilesRankTilesDescription, kOsAndroid,
-     SINGLE_VALUE_TYPE(query_tiles::switches::kQueryTilesRankTiles)},
-    {"query-tiles-segmentation", flag_descriptions::kQueryTilesSegmentationName,
-     flag_descriptions::kQueryTilesSegmentationDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(query_tiles::features::kQueryTilesSegmentation)},
-    {"query-tiles-swap-trending",
-     flag_descriptions::kQueryTilesSwapTrendingName,
-     flag_descriptions::kQueryTilesSwapTrendingDescription, kOsAndroid,
-     FEATURE_VALUE_TYPE(
-         query_tiles::features::kQueryTilesRemoveTrendingTilesAfterInactivity)},
     {"video-tutorials", flag_descriptions::kVideoTutorialsName,
      flag_descriptions::kVideoTutorialsDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(video_tutorials::features::kVideoTutorials)},
@@ -6771,13 +6670,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kRecoverFromNeverSaveAndroidDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(
          password_manager::features::kRecoverFromNeverSaveAndroid)},
-    {"photo-picker-video-support",
-     flag_descriptions::kPhotoPickerVideoSupportName,
-     flag_descriptions::kPhotoPickerVideoSupportDescription, kOsAndroid,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(
-         photo_picker::features::kPhotoPickerVideoSupport,
-         kPhotoPickerVideoSupportFeatureVariations,
-         "PhotoPickerVideoSupportFeatureVariations")},
 #endif  // BUILDFLAG(IS_ANDROID)
 
     {"full-user-agent", flag_descriptions::kFullUserAgentName,

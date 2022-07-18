@@ -11,7 +11,6 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.media.AudioManager;
 import android.view.KeyEvent;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +34,6 @@ import org.chromium.chrome.browser.fullscreen.FullscreenManager;
 import org.chromium.chrome.browser.fullscreen.FullscreenOptions;
 import org.chromium.chrome.browser.init.ChromeActivityNativeDelegate;
 import org.chromium.chrome.browser.media.PictureInPicture;
-import org.chromium.chrome.browser.night_mode.WebContentsDarkModeController;
 import org.chromium.chrome.browser.notifications.WebPlatformNotificationMetrics;
 import org.chromium.chrome.browser.policy.PolicyAuditor;
 import org.chromium.chrome.browser.policy.PolicyAuditor.AuditEvent;
@@ -49,7 +47,6 @@ import org.chromium.chrome.browser.tabmodel.TabCreatorManager;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
-import org.chromium.chrome.browser.tasks.tab_management.TabUiFeatureUtilities;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.ui.base.WindowAndroid;
 import org.chromium.ui.modaldialog.DialogDismissalCause;
@@ -76,7 +73,6 @@ public class ActivityTabWebContentsDelegateAndroid extends TabWebContentsDelegat
     @Nullable
     private Activity mActivity;
     private final ChromeActivityNativeDelegate mChromeActivityNativeDelegate;
-    private final boolean mIsCustomTab;
     private final BrowserControlsStateProvider mBrowserControlsStateProvider;
     private final FullscreenManager mFullscreenManager;
     private final TabCreatorManager mTabCreatorManager;
@@ -85,7 +81,7 @@ public class ActivityTabWebContentsDelegateAndroid extends TabWebContentsDelegat
     private final Supplier<ModalDialogManager> mModalDialogManagerSupplier;
 
     public ActivityTabWebContentsDelegateAndroid(Tab tab, Activity activity,
-            ChromeActivityNativeDelegate chromeActivityNativeDelegate, boolean isCustomTab,
+            ChromeActivityNativeDelegate chromeActivityNativeDelegate,
             BrowserControlsStateProvider browserControlsStateProvider,
             FullscreenManager fullscreenManager, TabCreatorManager tabCreatorManager,
             @NonNull Supplier<TabModelSelector> tabModelSelectorSupplier,
@@ -94,7 +90,6 @@ public class ActivityTabWebContentsDelegateAndroid extends TabWebContentsDelegat
         mTab = tab;
         mActivity = activity;
         mChromeActivityNativeDelegate = chromeActivityNativeDelegate;
-        mIsCustomTab = isCustomTab;
         mBrowserControlsStateProvider = browserControlsStateProvider;
         mFullscreenManager = fullscreenManager;
         mTabCreatorManager = tabCreatorManager;
@@ -177,8 +172,7 @@ public class ActivityTabWebContentsDelegateAndroid extends TabWebContentsDelegat
 
         if (success) {
             if (disposition == WindowOpenDisposition.NEW_FOREGROUND_TAB) {
-                if (TabUiFeatureUtilities.ENABLE_TAB_GROUP_AUTO_CREATION.getValue()
-                        && mTabModelSelectorSupplier.hasValue()
+                if (mTabModelSelectorSupplier.hasValue()
                         && mTabModelSelectorSupplier.get()
                                         .getTabModelFilterProvider()
                                         .getCurrentTabModelFilter()
@@ -255,21 +249,6 @@ public class ActivityTabWebContentsDelegateAndroid extends TabWebContentsDelegat
 
     @Override
     public boolean takeFocus(boolean reverse) {
-        if (mActivity == null) return false;
-        if (reverse) {
-            View menuButton = mActivity.findViewById(R.id.menu_button);
-            if (menuButton != null && menuButton.isShown()) {
-                return menuButton.requestFocus();
-            }
-
-            View tabSwitcherButton = mActivity.findViewById(R.id.tab_switcher_button);
-            if (tabSwitcherButton != null && tabSwitcherButton.isShown()) {
-                return tabSwitcherButton.requestFocus();
-            }
-        } else {
-            View urlBar = mActivity.findViewById(R.id.url_bar);
-            if (urlBar != null) return urlBar.requestFocus();
-        }
         return false;
     }
 
@@ -407,14 +386,12 @@ public class ActivityTabWebContentsDelegateAndroid extends TabWebContentsDelegat
         if (profile == null) {
             return false;
         }
-        return isNightModeEnabled()
-                && WebContentsDarkModeController.isEnabledForUrl(
-                        profile, webContents.getVisibleUrl());
+        return isNightModeEnabled();
     }
 
     @Override
     protected boolean isCustomTab() {
-        return mIsCustomTab;
+        return false;
     }
 
     private void showRepostFormWarningTabModalDialog() {
@@ -425,6 +402,7 @@ public class ActivityTabWebContentsDelegateAndroid extends TabWebContentsDelegat
             mTab.getWebContents().getNavigationController().cancelPendingReload();
             return;
         }
+        // TODO 确认是否重新提交表单
 
         ModalDialogManager modalDialogManager = mModalDialogManagerSupplier.get();
         ModalDialogProperties.Controller dialogController =
