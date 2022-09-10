@@ -19,6 +19,7 @@ import androidx.annotation.VisibleForTesting;
 
 import com.ark.browser.ArkBrowserActivity;
 import com.ark.browser.ArkWindowAndroid;
+import com.ark.browser.core.UserAgentManager;
 import com.ark.browser.utils.ArkLogger;
 
 import org.chromium.base.ContextUtils;
@@ -26,13 +27,12 @@ import org.chromium.base.ObserverList;
 import org.chromium.base.ObserverList.RewindableIterator;
 import org.chromium.base.TraceEvent;
 import org.chromium.base.UserDataHost;
-import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.supplier.ObservableSupplierImpl;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.WarmupManager;
 import org.chromium.chrome.browser.WebContentsFactory;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
-import org.chromium.chrome.browser.content.ContentUtils;
+import com.ark.browser.core.utils.ContentUtils;
 import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.incognito.IncognitoUtils;
@@ -54,7 +54,6 @@ import org.chromium.chrome.browser.tab.TabObserver;
 import org.chromium.chrome.browser.tab.TabSelectionType;
 import org.chromium.chrome.browser.tab.TabState;
 import org.chromium.chrome.browser.tab.TabThemeColorHelper;
-import org.chromium.chrome.browser.tab.TabUserAgent;
 import org.chromium.chrome.browser.tab.TabUtils;
 import org.chromium.chrome.browser.tab.TabViewAndroidDelegate;
 import org.chromium.chrome.browser.tab.TabViewManager;
@@ -74,7 +73,6 @@ import org.chromium.components.security_state.SecurityStateModel;
 import org.chromium.components.url_formatter.UrlFormatter;
 import org.chromium.components.version_info.VersionInfo;
 import org.chromium.content_public.browser.ChildProcessImportance;
-import org.chromium.content_public.browser.ContentFeatureList;
 import org.chromium.content_public.browser.LoadUrlParams;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.content_public.browser.WebContentsAccessibility;
@@ -492,6 +490,10 @@ public class ArkTabImpl implements Tab, TabObscuringHandler.Observer {
         params.setUrl(fixedUrl.getSpec());
 //        params.setOverrideUserAgent(UserAgentOverrideOption.TRUE);
 //        mWebContents.setUserAgentOverride("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36 Edg/100.0.1185.29");
+
+//        mWebContents.setUserAgentOverride(UserAgentManager.getUserAgentByUrl(fixedUrl));
+        ContentUtils.setUserAgentOverride(mWebContents, UserAgentManager.getUserAgentByUrl(fixedUrl));
+
         mWebContents.getNavigationController().loadUrl(params);
         return TabLoadStatus.DEFAULT_PAGE_LOAD;
     }
@@ -1283,7 +1285,8 @@ public class ArkTabImpl implements Tab, TabObscuringHandler.Observer {
 
             mWebContents.setImportance(mImportance);
 
-            mWebContents.setUserAgentOverride("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.60 Safari/537.36 Edg/100.0.1185.29");
+//            mWebContents.setUserAgentOverride(UserAgentManager.getUserAgentByUrl(getUrl()));
+            ContentUtils.setUserAgentOverride(mWebContents, UserAgentManager.getUserAgentByUrl(getUrl()));
 
 //            ContentUtils.setUserAgentOverride(mWebContents,
 //                    calculateUserAgentOverrideOption() == UserAgentOverrideOption.TRUE);

@@ -2,7 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.content;
+package com.ark.browser.core.utils;
+
+import com.ark.browser.core.UserAgentManager;
 
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.content_public.browser.WebContents;
@@ -28,9 +30,14 @@ public class ContentUtils {
         ContentUtilsJni.get().setUserAgentOverride(webContents, overrideInNewTabs);
     }
 
+    public static void setUserAgentOverride(WebContents webContents, UserAgentManager.UserAgent userAgent) {
+        ContentUtilsJni.get().setUserAgent(webContents, userAgent.getString(), userAgent.isMobile());
+    }
+
     @NativeMethods
     interface Natives {
         String getBrowserUserAgent();
         void setUserAgentOverride(WebContents webContents, boolean overrideInNewTabs);
+        void setUserAgent(WebContents webContents, String ua, boolean isMobile);
     }
 }
