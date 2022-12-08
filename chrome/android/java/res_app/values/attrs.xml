@@ -5,6 +5,20 @@
         <attr name="drawable_tint_color" format="color" />
     </declare-styleable>
 
+    <declare-styleable name="DialogHeaderLayout">
+        <attr name="dialog_header_title" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="CheckLayout">
+        <attr name="check_title" format="string"/>
+        <attr name="check_content" format="string" />
+        <attr name="check_icon" format="reference" />
+        <attr name="content_text_color" format="color"/>
+        <attr name="content_text_size" format="integer"/>
+        <attr name="title_text_color" format="color"/>
+        <attr name="title_text_size" format="integer"/>
+    </declare-styleable>
+
     <declare-styleable name="ShadowLayout">
         <!--阴影的圆角大小-->
 
@@ -43,6 +57,12 @@
         <!--控件区域是否对称，默认是对称。不对称的话，那么控件区域随着阴影区域走-->
         <attr name="hl_isSym" format="boolean" />
 
+    </declare-styleable>
+
+    <declare-styleable name="CoolIndicator">
+        <attr name="wrapShiftDrawable" format="boolean"/>
+        <attr name="shiftDuration" format="reference"/>
+        <attr name="shiftInterpolator" format="reference"/>
     </declare-styleable>
 
 
