@@ -293,58 +293,60 @@ public class MediaSessionHelper implements MediaImageCallback {
         };
     }
 
-    public void setWebContents(@NonNull WebContents webContents) {
+    public void setWebContents(WebContents webContents) {
         if (mWebContents == webContents) return;
 
         mWebContents = webContents;
 
         if (mWebContentsObserver != null) mWebContentsObserver.destroy();
-        mWebContentsObserver = new WebContentsObserver(webContents) {
-            @Override
-            public void didFinishNavigation(NavigationHandle navigation) {
-                if (!navigation.hasCommitted() || !navigation.isInPrimaryMainFrame()
-                        || navigation.isSameDocument()) {
-                    return;
+        if (webContents != null) {
+            mWebContentsObserver = new WebContentsObserver(webContents) {
+                @Override
+                public void didFinishNavigation(NavigationHandle navigation) {
+                    if (!navigation.hasCommitted() || !navigation.isInPrimaryMainFrame()
+                            || navigation.isSameDocument()) {
+                        return;
+                    }
+
+                    mOrigin = UrlFormatter.formatUrlForDisplayOmitSchemeOmitTrivialSubdomains(
+                            webContents.getVisibleUrl().getOrigin().getSpec());
+                    mFavicon = null;
+                    mPageMediaImage = null;
+                    mPageMetadata = null;
+                    // |mCurrentMetadata| selects either |mPageMetadata| or |mFallbackTitle|. As
+                    // there is no guarantee {@link #titleWasSet()} will be called before or
+                    // after this method, |mFallbackTitle| is not reset in this callback, i.e.
+                    // relying solely on
+                    // {@link #titleWasSet()}. The following assignment is to keep
+                    // |mCurrentMetadata| up to date as |mPageMetadata| may have changed.
+                    mCurrentMetadata = getMetadata();
+                    mMediaSessionActions = Collections.emptySet();
+
+                    if (isNotificationHidingOrHidden()) return;
+
+                    mNotificationInfoBuilder.setOrigin(mOrigin);
+                    mNotificationInfoBuilder.setNotificationLargeIcon(mFavicon);
+                    mNotificationInfoBuilder.setMediaSessionImage(mPageMediaImage);
+                    mNotificationInfoBuilder.setMetadata(mCurrentMetadata);
+                    mNotificationInfoBuilder.setMediaSessionActions(mMediaSessionActions);
+                    showNotification();
                 }
 
-                mOrigin = UrlFormatter.formatUrlForDisplayOmitSchemeOmitTrivialSubdomains(
-                        webContents.getVisibleUrl().getOrigin().getSpec());
-                mFavicon = null;
-                mPageMediaImage = null;
-                mPageMetadata = null;
-                // |mCurrentMetadata| selects either |mPageMetadata| or |mFallbackTitle|. As
-                // there is no guarantee {@link #titleWasSet()} will be called before or
-                // after this method, |mFallbackTitle| is not reset in this callback, i.e.
-                // relying solely on
-                // {@link #titleWasSet()}. The following assignment is to keep
-                // |mCurrentMetadata| up to date as |mPageMetadata| may have changed.
-                mCurrentMetadata = getMetadata();
-                mMediaSessionActions = Collections.emptySet();
-
-                if (isNotificationHidingOrHidden()) return;
-
-                mNotificationInfoBuilder.setOrigin(mOrigin);
-                mNotificationInfoBuilder.setNotificationLargeIcon(mFavicon);
-                mNotificationInfoBuilder.setMediaSessionImage(mPageMediaImage);
-                mNotificationInfoBuilder.setMetadata(mCurrentMetadata);
-                mNotificationInfoBuilder.setMediaSessionActions(mMediaSessionActions);
-                showNotification();
-            }
-
-            @Override
-            public void titleWasSet(String title) {
-                String newFallbackTitle = sanitizeMediaTitle(title);
-                if (!TextUtils.equals(mFallbackTitle, newFallbackTitle)) {
-                    mFallbackTitle = newFallbackTitle;
-                    updateNotificationMetadata();
+                @Override
+                public void titleWasSet(String title) {
+                    String newFallbackTitle = sanitizeMediaTitle(title);
+                    if (!TextUtils.equals(mFallbackTitle, newFallbackTitle)) {
+                        mFallbackTitle = newFallbackTitle;
+                        updateNotificationMetadata();
+                    }
                 }
-            }
 
-            @Override
-            public void wasShown() {
-                mDelegate.activateAndroidMediaSession();
-            }
-        };
+                @Override
+                public void wasShown() {
+                    mDelegate.activateAndroidMediaSession();
+                }
+            };
+        }
 
         MediaSession mediaSession = getMediaSession(webContents);
         if (mMediaSessionObserver != null
@@ -425,6 +427,9 @@ public class MediaSessionHelper implements MediaImageCallback {
      * @return The sanitized tab title, e.g. "Foo - Bar"
      */
     private String sanitizeMediaTitle(String title) {
+        if (title == null) {
+            return "";
+        }
         title = title.trim();
         return title.startsWith(UNICODE_PLAY_CHARACTER) ? title.substring(1).trim() : title;
     }
@@ -608,6 +613,9 @@ public class MediaSessionHelper implements MediaImageCallback {
     }
 
     private MediaSession getMediaSession(WebContents contents) {
+        if (contents == null) {
+            return null;
+        }
         return (sOverriddenMediaSession != null) ? sOverriddenMediaSession
                                                  : MediaSession.fromWebContents(contents);
     }
